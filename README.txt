@@ -10,6 +10,21 @@ an image. This would mean that simple illustrations could be embedded as
 ASCII art in the reST source and still look nice when converted to e.g. HTML
 
 
+Installation
+============
+
+To install aafigure, you need to have administrator rights on your
+system (be root), and ``setuptools`` (often packaged as
+``python-setuptools``) must be installed.
+
+Type "``python setup.py install``" to install aafigure.
+Alternatively, type "``python setup.py develop``" to only install a
+reference to the aafigure source directory.  This is useful if you
+want to hack the source.
+
+After that, the ``aafigure`` directive will be available site-wide.
+
+
 Implementation
 ==============
 

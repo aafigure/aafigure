@@ -32,7 +32,7 @@ def decode_color(color_string):
     return r,g,b
 
 
-def AAFigureDrective(name, arguments, options, content, lineno,
+def AAFigureDirective(name, arguments, options, content, lineno,
                   content_offset, block_text, state, state_machine):
     text = '\n'.join(content)
     
@@ -113,9 +113,9 @@ def AAFigureDrective(name, arguments, options, content, lineno,
     
     return result
 
-AAFigureDrective.content = True
-#~ AAFigureDrective.arguments = (1, 1, 1)
-AAFigureDrective.options = {
+AAFigureDirective.content = True
+#~ AAFigureDirective.arguments = (1, 1, 1)
+AAFigureDirective.options = {
     'scale': float,
     'line_width': float,
     'format': str,
@@ -128,4 +128,4 @@ AAFigureDrective.options = {
 }
 
 def register():
-    register_directive('aafigure', AAFigureDrective)
+    register_directive('aafigure', AAFigureDirective)
