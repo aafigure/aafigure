@@ -6,7 +6,7 @@
 from setuptools import setup, find_packages
 setup(
     name = 'docutils-aafigure',
-    version = '0.2',
+    version = '0.3',
     description = "ASCII art figures for reStructuredText",
     long_description = """\
 This package provides a docutils directive that allows to integrate ASCII art
