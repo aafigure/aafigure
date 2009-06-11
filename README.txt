@@ -5,37 +5,43 @@
 Overview
 ========
 
-The idea is to parse ASCII art images, embedded in reST documents and output
-an image. This would mean that simple illustrations could be embedded as
-ASCII art in the reST source and still look nice when converted to e.g. HTML
+The original idea was to parse ASCII art images, embedded in reST documents and
+output an image. This would mean that simple illustrations could be embedded as
+ASCII art in the reST source and still look nice when converted to e.g. HTML.
 
+Since then the aafigure application also grew into a standalone application
+providing a command line tool for ASCII art to image conversion.
 
 Installation
 ============
 
-To install aafigure, you need to have administrator rights on your
-system (be root), and ``setuptools`` (often packaged as
-``python-setuptools``) must be installed.
+The package
+-----------
+To install aafigure, you need to have administrator rights on your system (be
+root). Type ``python setup.py install`` to install aafigure.
 
-Type "``python setup.py install``" to install aafigure.
-Alternatively, type "``python setup.py develop``" to only install a
-reference to the aafigure source directory.  This is useful if you
-want to hack the source.
+This installs a package that can be used from python (``import aafigure``) and
+a command line script called ``aafigure``.
 
-After that, the ``aafigure`` directive will be available site-wide.
+The Python Imaging Library (PIL) needs to be installed when support for bitmap
+formats is desired and it will need ReportLab for PDF output.
+
+The docutils plugin
+-------------------
+The docutils-aafigure extension depends on the aafigure package also requires
+``setuptools`` (often packaged as ``python-setuptools``) and docutils itself
+(0.5 or newer) must be installed.
+
+After that, the ``aafigure`` directive will be available.
 
 
 Implementation
 ==============
 
-Files:
+Files in the ``aafigure`` package:
 
 ``aafigure.py``
     ASCII art parser. This is the main module.
-
-``aafigure_directive.py``
-    Implmements the ``aafigure`` Docutils directive that takes these
-    ASCII art figures and generates a drawing.
 
 ``aa.py``
     ASCII art output backend. Intended for tests, not for the end user.
@@ -46,20 +52,36 @@ Files:
 ``pil.py``
     Bitmap output backend. Using PIL, it can write PNG, JPEG and more formats.
 
-``rst2html.py``
-    Patched version that adds the ``aafigure`` Docutils directive.
-
 ``svg.py``
     SVG output backend.
 
 
+Files in the ``docutils`` directory:
+
+``aafigure_directive.py``
+    Implements the ``aafigure`` Docutils directive that takes these
+    ASCII art figures and generates a drawing.
+
 The ``aafigure`` module contains code to parse ASCII art figures and create
-a list of of shapes. The different output modules can walk trough a list of
+a list of of shapes. The different output modules can walk through a list of
 shapes and write image files.
 
 
 Usage
 =====
+Command line tool
+-----------------
+::
+
+    aafigure test.txt -t png -o test.png
+
+The tool can also read from standard in and supports many options. Please look
+at the command's help::
+
+    aafigure --help
+
+Within reStructured text
+------------------------
 ::
 
     ./rst2html.py README.txt >README.html
@@ -68,8 +90,7 @@ This results in the ``README.html`` file and a ``.svg`` file for each
 ``aafigure``.
 
 Display the resulting ``README.html`` file in a SVG capable browser. It has
-been tested with Firefox 1.5.
-
+been tested with Firefox 1.5, 2.0 and 3.0.
 
 
 Short introduction
@@ -78,7 +99,7 @@ This code in a reST document that is processed with the enhanced ``rst2html.py``
 looks like this::
 
     .. aafigure::
-   
+
         -->
 
 Which results in an image like this:
@@ -119,7 +140,7 @@ The ``aafigure`` directive has the following options:
   The stretching is done before drawing arrows or circles, so that they are
   still good looking.
 
-- ``:proportional: <flag>``  use a proportional font instead of a monospaced
+- ``:proportional: <flag>``  use a proportional font instead of a mono-spaced
   one.
 
 
@@ -146,15 +167,15 @@ tough. Not all cases work as expected.
 
 .. aafigure::
 
-                                     +       
+                                     +
       |  -  +   |  -  +   |  -  +   /               -
      /  /  /   /  /  /   /  /  /   /     --     |/| /    +
-    |  |  |   +  +  +   -  -  -   /     /  \        -   \|/  |\ 
+    |  |  |   +  +  +   -  -  -   /     /  \        -   \|/  |\
                                  +     +    +          +-+-+ | +
-    |  |  |   +  +  +   -  -  -   \     \  /        -   /|\  |/ 
+    |  |  |   +  +  +   -  -  -   \     \  /        -   /|\  |/
      \  \  \   \  \  \   \  \  \   \     --     |\| \    +
       |  -  +   |  -  +   |  -  +   \               -
-                                     +         
+                                     +
 
 And drawing longer diagonal lines with different angles looks ugly...
 
@@ -208,20 +229,20 @@ Fills must be at least two characters wide or high. (This reduces the chance
 that it is detected as Fill instead of a string)
 
 .. aafigure::
-    
-    A   B   C   D   E   F   G   H   I   J   K   L   M   
-     AA  BB  CC  DD  EE  FF  GG  HH  II  JJ  KK  LL  MM 
-     AA  BB  CC  DD  EE  FF  GG  HH  II  JJ  KK  LL  MM 
-                                                        
-     aa  bb  cc  dd  ee  ff  gg  hh  ii  jj  kk  ll  mm 
-     aa  bb  cc  dd  ee  ff  gg  hh  ii  jj  kk  ll  mm 
-                                                        
-    N   O   P   Q   R   S   T   U   V   W   X   Y   Z   
-     NN  OO  PP  QQ  RR  SS  TT  UU  VV  WW  XX  YY  ZZ 
-     NN  OO  PP  QQ  RR  SS  TT  UU  VV  WW  XX  YY  ZZ 
-                                                        
-     nn  oo  pp  qq  rr  ss  tt  uu  vv  ww  xx  yy  zz 
-     nn  oo  pp  qq  rr  ss  tt  uu  vv  ww  xx  yy  zz 
+
+    A   B   C   D   E   F   G   H   I   J   K   L   M
+     AA  BB  CC  DD  EE  FF  GG  HH  II  JJ  KK  LL  MM
+     AA  BB  CC  DD  EE  FF  GG  HH  II  JJ  KK  LL  MM
+
+     aa  bb  cc  dd  ee  ff  gg  hh  ii  jj  kk  ll  mm
+     aa  bb  cc  dd  ee  ff  gg  hh  ii  jj  kk  ll  mm
+
+    N   O   P   Q   R   S   T   U   V   W   X   Y   Z
+     NN  OO  PP  QQ  RR  SS  TT  UU  VV  WW  XX  YY  ZZ
+     NN  OO  PP  QQ  RR  SS  TT  UU  VV  WW  XX  YY  ZZ
+
+     nn  oo  pp  qq  rr  ss  tt  uu  vv  ww  xx  yy  zz
+     nn  oo  pp  qq  rr  ss  tt  uu  vv  ww  xx  yy  zz
 
 Complex shapes can be filled:
 
@@ -237,7 +258,7 @@ The images may contain text too. There are different styles to enter text:
 
 *direct*
 
-Bby default are repeated characters detected as fill::
+By default are repeated characters detected as fill::
 
     Hello World  dd d
                     d
@@ -261,7 +282,7 @@ Text between quotes has priority over any graphical meaning::
 
 ``"``, ``'`` and ``\``` are all valid quotation marks. The quotes are not
 visible in the resulting image. This not only disables fills (see below), it
-also treats ``-``, ``|`` etc as text.
+also treats ``-``, ``|`` etc. as text.
 
 *textual option*
 
@@ -304,7 +325,7 @@ TODO
 - Search for ways to bring in color. Ideas:
 
     - have an :option: to set color tags. Shapes that touch such a tag
-      inhertit it's color. The tag would be visible in the ASCII source tough::
+      inherit it's color. The tag would be visible in the ASCII source tough::
 
         .. aafigure::
             :colortag: 1:red, 2:blue
@@ -331,11 +352,21 @@ TODO
 - Path optimizer, it happens that many small lines are output where a long
   line could be used.
 
+Authors and Contact
+===================
+
+- Chris Liechti: original author
+- Leandro Lucarella: provided many patches
+
+The project page is at https://launchpad.net/aafigure
+It should be used to report bugs and feature requests.
+
 
 License
 =======
 
 BSD
+
 
 Tests
 =====
@@ -443,7 +474,7 @@ No not really, yet. But you get the idea.
     | draw    +<--------+ start   +----O+ x       |
     | move    +<-+      | end     |     | y       |
     +---------+   \     +---------+     +---------+
-                   \                  
+                   \
                     \   +---------+
                      +--+ Circle  |
                         +---------+
@@ -471,11 +502,11 @@ It would be cool if it could display simple schematics.
     :fill: #fff
 
           Iin +-----+      Iout
-        O->---+ R1  +---o-->-----O 
-       |      +-----+   |         | 
+        O->---+ R1  +---o-->-----O
+       |      +-----+   |         |
     Vin|       100k   ----- C1    | Vout
-       |              ----- 100n  | 
-       v                |         v 
+       |              ----- 100n  |
+       v                |         v
         O---------------o--------O
 
 .. - Resistor should not be filled -> can be solved by symbol detection
@@ -486,11 +517,11 @@ It would be cool if it could display simple schematics.
 .. aafigure::
 
        |/|       |\|       | |     +---+       e|
-    ---+ +---  --+ +--   --+ +--  -+   +-    b|/ 
-       |\|       |/|       | |     +---+    --+  
+    ---+ +---  --+ +--   --+ +--  -+   +-    b|/
+       |\|       |/|       | |     +---+    --+
                                               |\
        |        |           |        |         c|
-      -+-      -+-         -+-      +++     
+      -+-      -+-         -+-      +++
       / \      \ /                  | |    -   -
       -+-      -+-         -+-      | |    c\ /e
        |        |           |       +++     -+-
@@ -537,13 +568,13 @@ Here is a complete circuit with different parts:
                 |     |    |   C1     |           |   C2
                =+=    |  ----- 1u     |         ----- 10u
                       |  ----- 5V +---+---+     ----- 16V
-                      |    |      |  GND  |       |            D1|/|   
+                      |    |      |  GND  |       |            D1|/|
                       +----o------+out  in+-------o----------o---+ +---O RTS/RS232
                                   |  3V   |                  |   |\|
-                                  +-------+                  | 
-                                   IC2                       | D2|/|   
+                                  +-------+                  |
+                                   IC2                       | D2|/|
                                                              +---+ +---O DTR/RS232
-                                                                 |\|   
+                                                                 |\|
 
 
 Timing diagrams
@@ -553,7 +584,7 @@ Timing diagrams
 
       ^    ___     ___           ____
     A |___|   |___|   |_________|    |______
-      |      ___        ___           __   
+      |      ___        ___           __
     B |_____|   |______|   |________XX  XX__
       |
       +-------------------------------------> t
