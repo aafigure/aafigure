@@ -1060,7 +1060,7 @@ def main():
     )
 
     parser.add_option("-t", "--type",
-        dest = "type",
+        dest = "format",
         help = "filetype: png, jpg, svg",
         default = DEFAULT_OPTIONS['format'],
     )
