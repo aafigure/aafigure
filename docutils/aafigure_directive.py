@@ -4,7 +4,7 @@ Implement aafigure directive for docutils.
 
 import os
 #~ import cStringIO
-import aafigure
+from aafigure import aafigure
 
 from docutils import nodes
 from docutils.parsers.rst.directives import register_directive, flag

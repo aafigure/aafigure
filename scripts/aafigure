@@ -1,0 +1,7 @@
+#!/usr/bin/env python
+
+# command line stub for aafigure
+# https://launchpad.net/aafigure
+
+import aafigure.aafigure
+aafigure.aafigure.main()

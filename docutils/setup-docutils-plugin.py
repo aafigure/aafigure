@@ -3,19 +3,18 @@
 # Author: Chris Liechti <cliechti@gmx.net>
 # Copyright: This file has been placed in the public domain.
 
-from distutils.core import setup
-
+from setuptools import setup, find_packages
 setup(
-    name = 'aafigure',
+    name = 'docutils-aafigure',
     version = '0.2',
-    description = "ASCII art to image converter",
-    url = 'http://launchpad.net/aafigure',
-    license = 'BSD',
+    description = "ASCII art figures for reStructuredText",
     long_description = """\
-This package provides a module ``aafigure``, that can be used from other
-programs, and a command line tool ``aafigure``.
+This package provides a docutils directive that allows to integrate ASCII art
+figures directly into the text.
 
-Example, test.txt::
+reST example::
+
+    .. aafigure::
 
             +-----+   ^
             |     |   |
@@ -23,17 +22,18 @@ Example, test.txt::
             |     |   |
             +-----+   V
 
-Command::
-
-    aafigure test.txt -t svg -o test.svg
-
 Please see README.txt for examples.
+
+requires docutils (>= 0.5).
+
 """,
     author = 'Chris Liechti',
     author_email = 'cliechti@gmx.net',
+    install_requires = ['aafigure>=0.2', 'docutils>=0.5'],
     classifiers = [
         'Development Status :: 4 - Beta',
         'Environment :: Console',
+        'Environment :: Web Environment',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
@@ -42,6 +42,11 @@ Please see README.txt for examples.
         'Topic :: Utilities',
     ],
     platforms = 'any',
-    packages = ['aafigure'],
-    scripts = ['scripts/aafigure'],
+    py_modules = [ 'aafigure_directive'],
+    entry_points = {
+        'docutils.parsers.rst.directives': [
+            'aafigure = aafigure_directive:AAFigureDirective'
+        ],
+    },
+
 )
