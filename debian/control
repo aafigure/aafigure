@@ -1,0 +1,15 @@
+Source: aafigure
+Section: python
+Priority: optional
+Maintainer: Chris Liechti <cliechti@gmx.net>
+Build-Depends: debhelper (>= 5)
+Build-Depends-Indep: python-dev, python-central
+XS-Python-Version: all
+Standards-Version: 3.8.0
+
+Package: python-aafigure
+Architecture: all
+Depends: ${python:Depends}
+Suggests:
+XB-Python-Version: ${python:Versions}
+Description: aafigure - ASCII art to image converter

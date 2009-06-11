@@ -1,0 +1,11 @@
+=============================
+ Change history for aafigure
+=============================
+
+aafigure 0.2    2009-06-12
+    Separated into standalone project. Previously it was found in the docutils
+    sandbox. The docutils plugin for the aafigure directive is separated and
+    aafigure is now a standalone package and command line tool. The plugin is
+    still available as separate package that uses aafigure as dependency.
+
+    Added debian control files to build a package.

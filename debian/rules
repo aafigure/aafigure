@@ -1,0 +1,68 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# GNU copyright 1997 to 1999 by Joey Hess.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+PY_INTERPRETER = /usr/bin/python
+
+build: build-stamp
+
+build-stamp:
+	dh_testdir
+	python setup.py build
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp
+	rm -rf build
+	-find . -name '*.py[co]' | xargs rm -f
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k 
+	dh_installdirs
+	python setup.py install --prefix=$(CURDIR)/debian/python-aafigure/usr
+	dh_pycentral
+	rm -rf debian/python-aafigure/usr/lib/python*
+
+# Build architecture-independent files here.
+binary-indep: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs CHANGES.txt
+	dh_installdocs README.txt
+	#dh_installexamples examples/*
+	dh_installman
+	: # Replace all '#!' calls to python with $(PY_INTERPRETER)
+	: # and make them executable
+	for i in `find debian -mindepth 3 -type f`; do \
+	  sed '1s,#!.*python[^ ]*\(.*\),#! $(PY_INTERPRETER)\1,' \
+	        $$i > $$i.temp; \
+	  if cmp --quiet $$i $$i.temp; then \
+	    rm -f $$i.temp; \
+	  else \
+	    mv -f $$i.temp $$i; \
+	    chmod 755 $$i; \
+	    echo "fixed interpreter: $$i"; \
+	  fi; \
+	done
+	dh_compress -X.py -X.wxg
+	dh_fixperms
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+# Build architecture-dependent files here.
+binary-arch: build install
+# We have nothing to do by default.
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install configure
