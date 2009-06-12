@@ -10,6 +10,6 @@ Standards-Version: 3.8.0
 Package: python-aafigure
 Architecture: all
 Depends: ${python:Depends}
-Suggests:
+Suggests: python-imaging, python-reportlab
 XB-Python-Version: ${python:Versions}
 Description: aafigure - ASCII art to image converter
