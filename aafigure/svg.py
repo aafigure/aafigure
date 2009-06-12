@@ -2,6 +2,9 @@
 SVG renderer for the aafigure package.
 
 (C) 2006 Chris Liechti <cliechti@gmx.net>
+
+This is open source software under the BSD license. See LICENSE.txt for more
+details.
 """
 
 import sys
@@ -175,5 +178,4 @@ class SVGOutputVisitor:
         self.visit_shapes(group.shapes)
         self.indent = old_indent
         self.file_like.write("</g>\n")
-
 

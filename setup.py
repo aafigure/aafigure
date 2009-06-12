@@ -1,7 +1,10 @@
-# $Id$
-# Author: Lea Wiemann <LeWiemann@gmail.com>
+# This is a setup script for pythons distutils. It will install the aafigure
+# extension when run as: python setup.py install
+
 # Author: Chris Liechti <cliechti@gmx.net>
-# Copyright: This file has been placed in the public domain.
+#
+# This is open source software under the BSD license. See LICENSE.txt for more
+# details.
 
 from distutils.core import setup
 

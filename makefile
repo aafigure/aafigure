@@ -1,4 +1,4 @@
-# this makefile is for my convenience beacuse my editor has a handy shortcut to
+# this makefile is for my convenience because my editor has a handy shortcut to
 # run make
 
 # aafigure must have been installed before running this makefile.

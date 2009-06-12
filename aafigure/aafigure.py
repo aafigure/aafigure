@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 """\
 ASCII art to image converter.
 
@@ -6,6 +8,9 @@ This is the main module that contains the parser.
 See svg.py and aa.py for output modules, that can render the parsed structure.
 
 (C) 2006 Chris Liechti <cliechti@gmx.net>
+
+This is open source software under the BSD license. See LICENSE.txt for more
+details.
 """
 
 NOMINAL_SIZE = 2

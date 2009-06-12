@@ -2,6 +2,9 @@
 PDF renderer for the aafigure package.
 
 (C) 2008 Chris Liechti <cliechti@gmx.net>
+
+This is open source software under the BSD license. See LICENSE.txt for more
+details.
 """
 
 import sys
@@ -121,5 +124,4 @@ class PDFOutputVisitor:
     def visit_group(self, group):
         # XXX could add a group to the PDF file
         self.visit_shapes(group.shapes)
-
 

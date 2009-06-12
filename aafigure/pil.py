@@ -2,6 +2,9 @@
 Bitmap renderer for the aafigure package, using the Python Imaging Library.
 
 (C) 2006 Chris Liechti <cliechti@gmx.net>
+
+This is open source software under the BSD license. See LICENSE.txt for more
+details.
 """
 
 import sys, Image, ImageDraw, ImageFont
@@ -122,4 +125,3 @@ class PILOutputVisitor:
             fill=self.foreground,
             font=ImageFont.truetype(self.font, int(self.aa_image.nominal_size*1.1*self.scale))
         )
-
