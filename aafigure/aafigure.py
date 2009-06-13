@@ -1177,38 +1177,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     else:
         input = sys.stdin
 
-    #~ def render(text, output, options):
-        #~ """helper function for tests. scan the given image and create svg output"""
-        #~ import pprint
-        #~ aaimg = AsciiArtImage(text)
-        #~ print text
-        #~ aaimg.recognize()
-        #~ aav = aa.AsciiOutputVisitor()
-        #~ pprint.pprint(aaimg.shapes)
-        #~ aav.visit(aaimg)
-        #~ print aav
-        #~ svgout = svg.SVGOutputVisitor(
-            #~ file('aafigure_%x.svg' % (long(hash(text)) & 0xffffffffL,), 'w'),
-            #~ scale = 10
-        #~ )
-        #~ svgout.visit(aaimg)
-
-    #~ aaimg = AsciiArtImage("""
-        #~ ---> | ^|   |
-        #~ <--- | || --+--
-        #~ <--> | |V   |
-     #~ __             __
-    #~ |  |__  +---+  |__|
-            #~ |box|   ..
-            #~ +---+  Xenophon
-    #~ """)
-    #~ print aaimg
-    #~ aaimg.recognize()
-    #~ print "%r" % aaimg
-    #~ aav = aa.AsciiOutputVisitor()
-    #~ aav.visit(aaimg)
-    #~ print aav
-
     if hasattr(options, 'output'):
         output = file(options.output, 'wb')
         delattr(options, 'output')

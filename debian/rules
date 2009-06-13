@@ -39,7 +39,7 @@ binary-indep: build install
 	dh_installchangelogs CHANGES.txt
 	dh_installdocs README.txt
 	dh_installman aafigure.1
-	#dh_installexamples examples/*
+	dh_installexamples examples/*
 	dh_installman
 	: # Replace all '#!' calls to python with $(PY_INTERPRETER)
 	: # and make them executable
