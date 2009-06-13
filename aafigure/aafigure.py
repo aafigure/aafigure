@@ -7,7 +7,7 @@ This is the main module that contains the parser.
 
 See svg.py and aa.py for output modules, that can render the parsed structure.
 
-(C) 2006 Chris Liechti <cliechti@gmx.net>
+(C) 2006-2009 Chris Liechti <cliechti@gmx.net>
 
 This is open source software under the BSD license. See LICENSE.txt for more
 details.
@@ -234,7 +234,7 @@ class AsciiArtImage:
                             if (self.get(x+1,y) == character or self.get(x,y+1) == character):
                                 self.shapes.extend(self._follow_fill(character, x, y))
 
-        #search for short strings too
+        # search for short strings too
         for y in range(self.height):
             for x in range(self.width):
                 character = self.image[y][x]
@@ -1055,7 +1055,27 @@ def main():
     import optparse
 
     parser = optparse.OptionParser(
-        usage = "%prog [options] [file]"
+        usage = "%prog [options] [file]",
+        version = """\
+%prog 0.2
+
+Copyright (C) 2006-2009 aafigure-team
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted under the terms of the BSD License.
+
+THIS SOFTWARE IS PROVIDED BY THE AAFIGURE-TEAM ''AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE AAFIGURE-TEAM BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+""",
+    description = "ASCII art to image (SVG, PNG, JPEG, PDF and more) converter."
     )
 
     parser.add_option("-o", "--output",
