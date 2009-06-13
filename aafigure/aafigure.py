@@ -1000,7 +1000,7 @@ def render(input, output=None, options=None):
         except ImportError:
             if close_output:
                 output.close()
-            raise UnsupportedFormatError('please install reportlab (python-reportlab) to get support for PDF')
+            raise UnsupportedFormatError('please install Reportlab to get PDF output support')
         visitor = pdf.PDFOutputVisitor(
             output,
             scale = options['scale'],
@@ -1025,7 +1025,7 @@ def render(input, output=None, options=None):
         except ImportError:
             if close_output:
                 output.close()
-            raise UnsupportedFormatError('please install PIL (python-imaging) to get support bitmap formats')
+            raise UnsupportedFormatError('please install PIL to get bitmaps output support')
         visitor = pil.PILOutputVisitor(
             output,
             scale = options['scale']*7,
@@ -1183,9 +1183,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     else:
         output = sys.stdout
 
-    (visitor, output) = render(input, output, options.as_dict())
-    output.close()
+    try:
+        (visitor, output) = render(input, output, options.as_dict())
+        output.close()
+    except UnsupportedFormatError, e:
+        print "Can't output format '%s': %s" % (options.format, e)
 
 # when module is run, run the command line tool
 if __name__ == '__main__':
     main()
+
