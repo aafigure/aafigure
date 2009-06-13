@@ -37,10 +37,19 @@ For a release:
 6. Upload to PPA: ``dput aafigure-ppa ./aafigure_0.2_source.changes``.
 7. Wait... Then check https://launchpad.net/~aafigure-team/+archive/ppa
 8. Don't forget to ``bzr push``.
+9. PyPi rellease done?
 
 For a local test, ``debuild`` respectively ``debuild -S`` can be run in the
 ``aafigure`` directory. The resulting debian package is placed in the parent
 directory.
+
+
+PyPi Release
+============
+See debian package release and ensure that version numbers are correct.
+
+1. ``python setup.py register``
+2. ``python setup.py sdist upload``
 
 
 dput settings
