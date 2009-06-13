@@ -2,6 +2,7 @@ Source: aafigure
 Section: python
 Priority: optional
 Maintainer: Chris Liechti <cliechti@gmx.net>
+Homepage: http://launchpad.net/aafigure
 Build-Depends: debhelper (>= 5)
 Build-Depends-Indep: python-dev, python-central
 XS-Python-Version: all
@@ -12,4 +13,12 @@ Architecture: all
 Depends: ${python:Depends}
 Suggests: python-imaging, python-reportlab
 XB-Python-Version: ${python:Versions}
-Description: aafigure - ASCII art to image converter
+Description: aafigure - ASCII art to image converter.
+ aafigure is a command line tool that converts drawings in text files to
+ imgages. Several output formats are supported (SVG, PDF, PNG, JPG).
+ .
+ PDF output requires python-reportlab and bitmap formats require
+ python-imaging.
+ .
+ As Python package is also installed, so that the conversion can also be
+ used by Python programs.

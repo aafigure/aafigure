@@ -12,7 +12,7 @@ README.html: README.txt *.py aafigure/*.py
 # Run the version in the working copy and not any installed version.
 update-manpage:  aafigure.1
 aafigure.1: FORCE
-	PYTHONPATH=. help2man "python ./scripts/aafigure" --no-info >$@
+	PYTHONPATH=. help2man "python ./scripts/aafigure" --no-info -n aafigure -i help2man.include >$@
 
 # Get a preview of the man page.
 show-manpage: aafigure.1
