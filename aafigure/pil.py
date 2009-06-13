@@ -33,8 +33,8 @@ class PILOutputVisitor:
             self.font = 'Courier_New.ttf'
 
     def visit_image(self, aa_image):
-        """Process the given ASCIIArtFigure and output the shapes in
-           the SVG file
+        """Process the given ASCIIArtFigure and draw the shapes in
+           the bitmap file
         """
         self.aa_image = aa_image        # save for later XXX not optimal to do it here
         self.width = (aa_image.width+1)*aa_image.nominal_size*aa_image.aspect_ratio

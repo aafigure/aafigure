@@ -1000,7 +1000,7 @@ def render(input, output=None, options=None):
         except ImportError:
             if close_output:
                 output.close()
-            raise UnsupportedFormatError('install reportlab to get PDF support')
+            raise UnsupportedFormatError('please install reportlab (python-reportlab) to get support for PDF')
         visitor = pdf.PDFOutputVisitor(
             output,
             scale = options['scale'],
@@ -1025,8 +1025,7 @@ def render(input, output=None, options=None):
         except ImportError:
             if close_output:
                 output.close()
-            raise UnsupportedFormatError('install PIL to get bitmap formats '
-                    'support')
+            raise UnsupportedFormatError('please install PIL (python-imaging) to get support bitmap formats')
         visitor = pil.PILOutputVisitor(
             output,
             scale = options['scale']*7,
@@ -1053,6 +1052,7 @@ def main():
     """implent an useful main for use as command line program"""
     import sys
     import optparse
+    import os.path
 
     parser = optparse.OptionParser(
         usage = "%prog [options] [file]",
@@ -1086,8 +1086,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     parser.add_option("-t", "--type",
         dest = "format",
-        help = "filetype: png, jpg, svg",
-        default = DEFAULT_OPTIONS['format'],
+        help = "filetype: png, jpg, svg (by default autodetect from filename)",
+        default = None,
     )
 
     parser.add_option("-D", "--debug",
@@ -1165,6 +1165,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     if len(args) > 1:
         parser.error("too many arguments")
+
+    if not hasattr(options, 'format'):
+        if hasattr(options, 'output'):
+            options.format = os.path.splitext(options.output)[1][1:]
+        else:
+            parser.error("Please specify output format with --type")
 
     if args:
         input = file(args[0])
