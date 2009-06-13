@@ -2,6 +2,10 @@
  Change history for aafigure
 =============================
 
+aafigure 0.3    2009-06-13
+    Added type detection by filename. Added examples and man page and did some
+    internal cleanups.
+
 aafigure 0.2    2009-06-12
     Separated into standalone project. Previously it was found in the docutils
     sandbox. The docutils plugin for the aafigure directive is separated and

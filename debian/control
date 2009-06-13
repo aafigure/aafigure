@@ -15,10 +15,10 @@ Suggests: python-imaging, python-reportlab
 XB-Python-Version: ${python:Versions}
 Description: aafigure - ASCII art to image converter
  aafigure is a command line tool that converts drawings in text files to
- imgages. Several output formats are supported (SVG, PDF, PNG, JPG).
+ images. Several output formats are supported (SVG, PDF, PNG, JPG and more).
  .
- PDF output requires python-reportlab and bitmap formats require
- python-imaging.
- .
- As Python package is also installed, so that the conversion can also be
+ A Python package is also installed, so that the conversion can also be
  used by Python programs.
+ .
+ Note on dependency on other packages: PDF output requires python-reportlab and
+ bitmap formats require python-imaging.

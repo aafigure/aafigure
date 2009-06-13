@@ -15,7 +15,7 @@ aafigure.1: FORCE
 	PYTHONPATH=. help2man "python ./scripts/aafigure" --no-info -n aafigure -i help2man.include >$@
 
 # Get a preview of the man page.
-show-manpage: aafigure.1
-	groff -man -Tascii $^
+show-manpage:
+	groff -man -Tascii aafigure.1
 
 .PHONY: FORCE
