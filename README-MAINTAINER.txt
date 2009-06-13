@@ -28,13 +28,14 @@ For a release:
 1. Make sure the branch is up-to date and all changes are committed.
 2. Ensure the version is incremented:
    - setup.py  must be updated
-   - CHANGES.txt must contain a summary of the changes
-   - debian/changes must be updated with (may use ``dch``)
+   - aafigure/aafigure.py  must be updated, see version at end of file
+   - CHANGES.txt  must contain a summary of the changes
+   - debian/changes  must be updated with (may use ``dch``)
 3. Tag the sources.
-4. Build a source package: ``bzr builddeb -S``
-3. Upload to PPA: ``dput aafigure-ppa ./aafigure_0.2_source.changes``
+4. Build a source package: ``bzr builddeb -S``.
+3. Upload to PPA: ``dput aafigure-ppa ./aafigure_0.2_source.changes``.
 4. Wait... Then check https://launchpad.net/~aafigure-team/+archive/ppa
-4. Don't forget to bzr push
+4. Don't forget to ``bzr push``.
 
 For a local test, ``debuild`` respectively ``debuild -S`` can be run in the
 ``aafigure`` directory. The resulting debian package is placed in the parent
