@@ -53,6 +53,14 @@ foreground color default=foreground
 .TP
 \fB\-b\fR BACKGROUND, \fB\-\-background\fR=\fIBACKGROUND\fR
 foreground color default=#ffffff
+.SH EXAMPLES
+Convert a drawing to a PDF file:
+
+    aafigure drawing.txt -o drawing.pdf
+
+Read from stdin and output a PNG image on stdout:
+
+    aafigure -t png
 .SH AUTHOR
 aafigure-team: http://launchpad.net/aafigure
 .SH "REPORTING BUGS"
