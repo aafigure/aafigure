@@ -25,6 +25,19 @@ class PDFOutputVisitor:
                  foreground =  (0, 0, 0), background = (255, 255, 255), fillcolor = (0, 0, 0),
                  proportional = False
         ):
+        """\
+            Dual use as PDF file writer or as Reportlab Drawing generator.
+
+            files:
+                file_like is not None. The PDF file is written there.
+
+            Drawing:
+                file_like is None. No output is generated. The Drawing can be
+                used for example::
+
+                    visitor = PDFOutputVisitor(None, ...)
+                    do_something(renderPDF.GraphicsFlowable(visitor.drawing))
+        """
         self.file_like = file_like
         self.scale = 3.33*scale
         self.line_width = 0.4*line_width
@@ -53,8 +66,9 @@ class PDFOutputVisitor:
         self.height = (aa_image.height)*aa_image.nominal_size
         self.drawing = Drawing(self._num(self.width), self._num(self.height))
         self.visit_shapes(aa_image.shapes)
-        renderPDF.drawToFile(self.drawing, self.file_like, '')
-        #~ return renderPDF.GraphicsFlowable(self.drawing)
+        # if file is given, write
+        if self.file_like is not None:
+            renderPDF.drawToFile(self.drawing, self.file_like, '')
 
     def visit_shapes(self, shapes):
         for shape in shapes:
