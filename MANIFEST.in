@@ -1,0 +1,8 @@
+include README.txt
+include LICENSE.txt
+include CHANGES.txt
+include setup.py
+include aafigure/*.py
+include examples/*.py
+include examples/*.txt
+include scripts/aafigure
