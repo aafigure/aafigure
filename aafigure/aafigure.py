@@ -1093,7 +1093,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         (visitor, output) = render(input, output, options.as_dict())
         output.close()
     except UnsupportedFormatError, e:
-        print "Can't output format '%s': %s" % (options.format, e)
+        print "ERROR: Can't output format '%s': %s" % (options.format, e)
 
 # when module is run, run the command line tool
 if __name__ == '__main__':

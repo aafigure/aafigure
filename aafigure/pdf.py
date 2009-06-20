@@ -22,7 +22,7 @@ class PDFOutputVisitor:
     """Render a list of shapes as PDF vector image."""
 
     def __init__(self, file_like, scale = 1, line_width = 1,
-                 foreground=  (0, 0, 0), background = (255, 255, 255), fillcolor = (0, 0, 0),
+                 foreground =  (0, 0, 0), background = (255, 255, 255), fillcolor = (0, 0, 0),
                  proportional = False
         ):
         self.file_like = file_like

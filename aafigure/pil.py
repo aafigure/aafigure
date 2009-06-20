@@ -16,6 +16,7 @@ except ImportError:
         output.close()
     raise UnsupportedFormatError('please install PIL to get bitmaps output support')
 
+
 class PILOutputVisitor:
     """Render a list of shapes as bitmap.
     """
