@@ -1,8 +1,11 @@
 """\
-Simple ASCII output of the rendered image.
-Think of it as a low resolution black and white image.
+Simple ASCII output of the rendered image.  Think of it as a low resolution
+black and white image.
 
 (C) 2006 Chris Liechti <cliechti@gmx.net>
+
+This is open source software under the BSD license. See LICENSE.txt for more
+details.
 """
 
 import sys
@@ -12,12 +15,14 @@ class AsciiOutputVisitor:
        Scaled, think of it as a low resolution black and white image
     """
 
-    def __init__(self, scale=3):
+    def __init__(self, file_like, scale=3):
+        self.file_like = file_like
         self.image = {}
         self.scale = scale
 
     def visit_image(self, aa_image):
         self.visit_shapes(aa_image.shapes)
+        self.file_like.write(str(self))
 
     def visit_shapes(self, shapes):
         for shape in shapes:
@@ -93,4 +98,4 @@ class AsciiOutputVisitor:
             for x in range(min_x, max_x+1):
                 line.append(self.image.get((x,y), '.'))
             result.append(''.join(line))
-        return '\n'.join(result)
+        return '%s\n' % '\n'.join(result)

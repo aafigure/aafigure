@@ -7,7 +7,14 @@ This is open source software under the BSD license. See LICENSE.txt for more
 details.
 """
 
-import sys, Image, ImageDraw, ImageFont
+import sys
+from error import UnsupportedFormatError
+try:
+    import Image, ImageDraw, ImageFont
+except ImportError:
+    if close_output:
+        output.close()
+    raise UnsupportedFormatError('please install PIL to get bitmaps output support')
 
 class PILOutputVisitor:
     """Render a list of shapes as bitmap.
@@ -57,7 +64,11 @@ class PILOutputVisitor:
 
         self.visit_shapes(aa_image.shapes)
         del self.draw
-        image.save(self.file_like, self.file_type)
+        try:
+            image.save(self.file_like, self.file_type)
+        except KeyError:
+            raise UnsupportedFormatError("PIL doesn't support image format %r" %
+                    self.file_type)
 
     def visit_shapes(self, shapes):
         for shape in shapes:

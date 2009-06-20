@@ -8,10 +8,15 @@ details.
 """
 
 import sys
-import reportlab
-from reportlab.lib import colors
-from reportlab.graphics.shapes import *
-from reportlab.graphics import renderPDF
+from error import UnsupportedFormatError
+try:
+    import reportlab
+    from reportlab.lib import colors
+    from reportlab.graphics.shapes import *
+    from reportlab.graphics import renderPDF
+except ImportError:
+    raise UnsupportedFormatError('please install Reportlab to get PDF output support')
+
 
 class PDFOutputVisitor:
     """Render a list of shapes as PDF vector image."""
@@ -49,6 +54,7 @@ class PDFOutputVisitor:
         self.drawing = Drawing(self._num(self.width), self._num(self.height))
         self.visit_shapes(aa_image.shapes)
         renderPDF.drawToFile(self.drawing, self.file_like, '')
+        #~ return renderPDF.GraphicsFlowable(self.drawing)
 
     def visit_shapes(self, shapes):
         for shape in shapes:

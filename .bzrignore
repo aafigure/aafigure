@@ -1,1 +1,10 @@
 build
+debian/python-aafigure
+dist
+debian/files
+debian/python-aafigure.debhelper.log
+debian/python-aafigure.postinst.debhelper
+debian/python-aafigure.preinst.debhelper
+debian/python-aafigure.prerm.debhelper
+debian/python-aafigure.substvars
+build-stamp

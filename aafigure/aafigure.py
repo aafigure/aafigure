@@ -13,6 +13,10 @@ This is open source software under the BSD license. See LICENSE.txt for more
 details.
 """
 
+from error import UnsupportedFormatError
+from shapes import *
+import sys
+
 NOMINAL_SIZE = 2
 
 CLASS_LINE = 'line'
@@ -32,91 +36,6 @@ DEFAULT_OPTIONS = dict(
     textual      = False,
     proportional = False,
 )
-
-# - - - - - - - - - - - - - - Shapes - - - - - - - - - - - - - - -
-def point(object):
-    """return a Point instance.
-       - if object is already a Point instance it's returned as is
-       - complex numbers are converted to Points
-       - a tuple with two elements (x,y)
-    """
-    if isinstance(object, Point):
-        return object
-    #~ print type(object), object.__class__
-    if type(object) is complex:
-        return Point(object.real, object.imag)
-    if type(object) is tuple and len(object) == 2:
-        return Point(object[0], object[1])
-    raise ValueError('can not convert %r to a Point')
-
-
-def group(list_of_shapes):
-    """return a group if the number of shapes is greater than one"""
-    if len(list_of_shapes) > 1:
-        return [Group(list_of_shapes)]
-    else:
-        return list_of_shapes
-
-
-class Point:
-    """A single point. This class primary use is to represent coordinates
-       for the other shapes.
-    """
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-
-    def __repr__(self):
-        return 'Point(%r, %r)' % (self.x, self.y)
-
-
-class Line:
-    """Line with starting and ending point. Both ends can have arrows"""
-    def __init__(self, start, end, thick=False):
-        self.thick = thick
-        self.start = point(start)
-        self.end = point(end)
-
-    def __repr__(self):
-        return 'Line(%r, %r)' % (self.start, self.end)
-
-
-class Rectangle:
-    """Rectangle with two edge coordinates."""
-    def __init__(self, p1, p2):
-        self.p1 = point(p1)
-        self.p2 = point(p2)
-    def __repr__(self):
-        return 'Rectangle(%r, %r)' % (self.p1, self.p2)
-
-
-class Circle:
-    """Circle with center coordinates and radius."""
-    def __init__(self, center, radius):
-        self.center = point(center)
-        self.radius = radius
-
-    def __repr__(self):
-        return 'Circle(%r, %r)' % (self.center, self.radius)
-
-
-class Label:
-    """A text label at a position"""
-    def __init__(self, position, text):
-        self.position = position
-        self.text = text
-    def __repr__(self):
-        return 'Label(%r, %r)' % (self.position, self.text)
-
-
-class Group:
-    """A group of shapes"""
-    def __init__(self, shapes=None):
-        if shapes is None: shapes = []
-        self.shapes = shapes
-    def __repr__(self):
-        return 'Group(%r)' % (self.shapes,)
-
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -865,8 +784,7 @@ class AsciiArtImage:
             self.tag([(x,y)], CLASS_JOIN)
         return group(result)
 
-class UnsupportedFormatError(Exception):
-    pass
+
 
 def render(input, output=None, options=None):
     """Render an ASCII art figure.
@@ -953,18 +871,19 @@ def render(input, output=None, options=None):
         # XXX add a list of named colors
         return r,g,b
 
-    def merge(dst, src):
-        for (k, v) in src.items():
-            if k not in dst:
-                dst[k] = v
+    # remember user options (don't want to rename function parameter above)
+    user_options = options
+    # start with a copy of the defaults
+    options = DEFAULT_OPTIONS.copy()
+    if user_options is not None:
+        # override with settings passed by caller
+        options.update(user_options)
 
-    if options is None:
-        options = dict()
-
-    merge(options, DEFAULT_OPTIONS)
     if 'fill' not in options or options['fill'] is None:
         options['fill'] = options['foreground']
 
+    # if input is a file like object, read from it (otherwise it is assumed to
+    # be a string)
     if hasattr(input, 'read'):
         input = input.read()
 
@@ -980,71 +899,58 @@ def render(input, output=None, options=None):
     if isinstance(output, basestring):
         output = file(output, 'wb')
         close_output = True
-
-    if options['format'].lower() == 'svg':
-        import svg
-        visitor = svg.SVGOutputVisitor(
-            output,
-            scale = options['scale']*7,
-            line_width = options['line_width'],
-            foreground = decode_color(options['foreground']),
-            background = decode_color(options['background']),
-            fillcolor = decode_color(options['fill']),
-            proportional = options['proportional'],
-            #~ debug = options['debug'],
-        )
-        visitor.visit_image(aaimg)
-    elif options['format'].lower() == 'pdf':
-        try:
+    try:
+        # late import of visitor classes to not cause any import errors for
+        # unsupported backends (this would happen when a library a backend
+        # depends on is not installed)
+        if options['format'].lower() == 'svg':
+            import svg
+            visitor = svg.SVGOutputVisitor(
+                output,
+                scale = options['scale']*7,
+                line_width = options['line_width'],
+                foreground = decode_color(options['foreground']),
+                background = decode_color(options['background']),
+                fillcolor = decode_color(options['fill']),
+                proportional = options['proportional'],
+                #~ debug = options['debug'],
+            )
+        elif options['format'].lower() == 'pdf':
             import pdf
-        except ImportError:
-            if close_output:
-                output.close()
-            raise UnsupportedFormatError('please install Reportlab to get PDF output support')
-        visitor = pdf.PDFOutputVisitor(
-            output,
-            scale = options['scale'],
-            line_width = options['line_width'],
-            foreground = decode_color(options['foreground']),
-            background = decode_color(options['background']),
-            fillcolor = decode_color(options['fill']),
-            proportional = options['proportional'],
-            #~ debug = options['debug'],
-        )
-        visitor.visit_image(aaimg)
-    elif options['format'].lower() == 'ascii':
-        import aa
-        visitor = aa.AsciiOutputVisitor(
-            scale = options['scale'],
-        )
-        visitor.visit_image(aaimg)
-        output.write(str(visitor))
-    else:
-        try:
+            visitor = pdf.PDFOutputVisitor(
+                output,
+                scale = options['scale'],
+                line_width = options['line_width'],
+                foreground = decode_color(options['foreground']),
+                background = decode_color(options['background']),
+                fillcolor = decode_color(options['fill']),
+                proportional = options['proportional'],
+                #~ debug = options['debug'],
+            )
+        elif options['format'].lower() == 'ascii':
+            import aa
+            visitor = aa.AsciiOutputVisitor(
+                output,
+                scale = options['scale'],
+            )
+        else:
             import pil
-        except ImportError:
-            if close_output:
-                output.close()
-            raise UnsupportedFormatError('please install PIL to get bitmaps output support')
-        visitor = pil.PILOutputVisitor(
-            output,
-            scale = options['scale']*7,
-            line_width = options['line_width'],
-            foreground = decode_color(options['foreground']),
-            background = decode_color(options['background']),
-            fillcolor = decode_color(options['fill']),
-            proportional = options['proportional'],
-            file_type = options['format'],
-            #~ debug = options['debug'],
-        )
-        try:
-            visitor.visit_image(aaimg)
-        except KeyError:
-            if close_output:
-                output.close()
-            raise UnsupportedFormatError("PIL doesn't support image format %r" %
-                    options['format'])
-
+            visitor = pil.PILOutputVisitor(
+                output,
+                scale = options['scale']*7,
+                line_width = options['line_width'],
+                foreground = decode_color(options['foreground']),
+                background = decode_color(options['background']),
+                fillcolor = decode_color(options['fill']),
+                proportional = options['proportional'],
+                file_type = options['format'],
+                #~ debug = options['debug'],
+            )
+        # now render and output the image
+        visitor.visit_image(aaimg)
+    finally:
+        if close_output:
+            output.close()
     return (visitor, output)
 
 

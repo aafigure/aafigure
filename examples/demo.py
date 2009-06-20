@@ -2,6 +2,7 @@
 Demonstarion code for aafigure use as python module.
 """
 
+import sys
 import aafigure
 import aafigure.aa
 
@@ -24,9 +25,8 @@ aaimg.recognize()
 
 # For fun, output the ASCII version in the console.
 print " output ".center(78, '=')
-aav = aafigure.aa.AsciiOutputVisitor(scale=2)
+aav = aafigure.aa.AsciiOutputVisitor(sys.stdout, scale=2)
 aav.visit_image(aaimg)
-print aav
 print "="*78
 
 # Writing an SVG file would be possible in a similar way, but there is the much
