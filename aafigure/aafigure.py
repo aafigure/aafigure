@@ -42,7 +42,17 @@ DEFAULT_OPTIONS = dict(
 class AsciiArtImage:
     """This class hold a ASCII art figure and has methods to parse it.
        The resulting list of shapes is also stored here.
+
+       The image is parsed in 2 steps:
+       1. horizontal string detection.
+       2. generic shape detection
+
+       Each character that is used in a shape or string is tagged. So that
+       further searches don't include it again (e.g. text in a string touching
+       a fill), respectively can use it correctly (e.g. join characters when
+       two or more lines hit).
     """
+
     QUOTATION_CHARACTERS = list('"\'`')
 
     def __init__(self, text, aspect_ratio=1, textual=False):
@@ -50,7 +60,7 @@ class AsciiArtImage:
         self.aspect_ratio = float(aspect_ratio)
         self.textual = textual
         # XXX TODO tab expansion
-        # detect size of input image
+        # detect size of input image, store as list of lines
         self.image = []
         max_x = 0
         for y, line in enumerate(text.splitlines()):
@@ -58,7 +68,7 @@ class AsciiArtImage:
             self.image.append(line)
         self.width = max_x
         self.height = y+1
-        # make sure it's rectangular
+        # make sure it's rectangular (extend short lines to max width)
         for y, line in enumerate(self.image):
             if len(line) < max_x:
                 self.image[y] = line + ' '*(max_x-len(line))
@@ -137,11 +147,8 @@ class AsciiArtImage:
                         self.shapes.extend(self._follow_horizontal_line(x, y, thick=True))
                     elif character in '\\/':
                         self.shapes.extend(self._follow_rounded_edge(x, y))
-                    if character == '+':
+                    elif character == '+':
                         self.shapes.extend(self._plus_joiner(x, y))
-                    #~ if character in self.FILL_CHARACTERS \
-                        #~ and ((self.get(x+1,y) == character and self.get(x+2,y) == character) \
-                             #~ or self.get(x,y+1) == character):
                     elif character in self.FIXED_CHARACTERS:
                         self.shapes.extend(self.get_fixed_character(character)(x, y))
                         self.tag([(x,y)], CLASS_FIXED)
@@ -162,7 +169,12 @@ class AsciiArtImage:
                         self.shapes.extend(self._follow_horizontal_string(x, y, accept_anything=True))
 
     # - - - - - - - - - helper function for some shapes - - - - - - - - -
-    # use complex numbers as 2D vectors as that means easy transformations like
+    # Arrow drawing functions return the (new) starting point of the line and a
+    # list of shapes that draw the arrow. The line itself is not included in
+    # the list of shapes. The stating point is p1, possibly modified to match
+    # the shape of the arrow head.
+    #
+    # Use complex numbers as 2D vectors as that means easy transformations like
     # scaling, rotation and translation
 
     # - - - - - - - - - arrows - - - - - - - - -
@@ -244,6 +256,7 @@ class AsciiArtImage:
         ('#',  0, -1, '_rectangular_head'),
         ('#',  0,  1, '_rectangular_head'),
     ]
+
     ARROW_HEADS = list('<>AVv^oO#')
 
     def get_arrow(self, character, dx, dy):
@@ -253,16 +266,18 @@ class AsciiArtImage:
                 return getattr(self, function_name)
 
     # - - - - - - - - - fills - - - - - - - - -
+    # Fill functions return a list of shapes. Each one if covering one cell
+    # size.
 
-    def _hatch_left(self, x, y): return self._n_hatch_diagonal(x,y,1,True)
-    def _hatch_right(self, x, y): return self._n_hatch_diagonal(x,y,1,False)
-    def _cross_hatch(self, x, y): return self._n_hatch_diagonal(x,y,1,True) + self._n_hatch_diagonal(x,y,1,False)
-    def _double_hatch_left(self, x, y): return self._n_hatch_diagonal(x,y,2,True)
-    def _double_hatch_right(self, x, y): return self._n_hatch_diagonal(x,y,2,False)
-    def _double_cross_hatch(self, x, y): return self._n_hatch_diagonal(x,y,2,True) + self._n_hatch_diagonal(x,y,2,False)
-    def _triple_hatch_left(self, x, y): return self._n_hatch_diagonal(x,y,3,True)
-    def _triple_hatch_right(self, x, y): return self._n_hatch_diagonal(x,y,3,False)
-    def _triple_cross_hatch(self, x, y): return self._n_hatch_diagonal(x,y,3,True) + self._n_hatch_diagonal(x,y,3,False)
+    def _hatch_left(self, x, y): return self._n_hatch_diagonal(x, y, 1, True)
+    def _hatch_right(self, x, y): return self._n_hatch_diagonal(x, y, 1, False)
+    def _cross_hatch(self, x, y): return self._n_hatch_diagonal(x, y, 1, True) + self._n_hatch_diagonal(x, y, 1, False)
+    def _double_hatch_left(self, x, y): return self._n_hatch_diagonal(x, y, 2, True)
+    def _double_hatch_right(self, x, y): return self._n_hatch_diagonal(x, y, 2, False)
+    def _double_cross_hatch(self, x, y): return self._n_hatch_diagonal(x, y, 2, True) + self._n_hatch_diagonal(x, y, 2, False)
+    def _triple_hatch_left(self, x, y): return self._n_hatch_diagonal(x, y, 3, True)
+    def _triple_hatch_right(self, x, y): return self._n_hatch_diagonal(x, y, 3, False)
+    def _triple_cross_hatch(self, x, y): return self._n_hatch_diagonal(x, y, 3, True) + self._n_hatch_diagonal(x, y, 3, False)
 
     def _n_hatch_diagonal(self, x, y, n, left=False):
         """hatch generator function"""
@@ -397,6 +412,7 @@ class AsciiArtImage:
         ('Y', '_fill_triangles'),
         ('Z', '_fill_background'),
     ]
+
     FILL_CHARACTERS = ''.join([t+t.lower() for (t,f) in FILL_TYPES])
 
     def get_fill(self, character):
@@ -620,17 +636,6 @@ class AsciiArtImage:
                 elif border:
                     result.append(Line(Point(self.left(x), self.top(y)), Point(self.right(x), self.top(y))))
         return group(result)
-            #~ for x in range(start_x, x+1):
-                #~ result.extend(fill(x,i))
-        #~ # [Rectangle(
-            #~ # Point(self.left(start_x), self.top(start_y)),
-            #~ # Point(self.right(x), self.bottom(y)),
-        #~ # )]
-        #~ for i in range(start_y, y+1):
-            #~ self.tag([(x, i) for x in range(start_x, x+1)], CLASS_RECTANGLE)
-            #~ for x in range(start_x, x+1):
-                #~ result.extend(fill(x,i))
-        #~ return result
 
     def _follow_horizontal_string(self, start_x, y, accept_anything=False, quoted=False):
         """find a string. may contain single spaces, but the detection is
@@ -934,6 +939,8 @@ def render(input, output=None, options=None):
                 scale = options['scale'],
             )
         else:
+            # for all other formats, it may be a bitmap type. let
+            # PIL decide if it can write a file of that type.
             import pil
             visitor = pil.PILOutputVisitor(
                 output,
@@ -955,7 +962,7 @@ def render(input, output=None, options=None):
 
 
 def main():
-    """implent an useful main for use as command line program"""
+    """implement an useful main for use as command line program"""
     import sys
     import optparse
     import os.path
@@ -1094,6 +1101,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         output.close()
     except UnsupportedFormatError, e:
         print "ERROR: Can't output format '%s': %s" % (options.format, e)
+
 
 # when module is run, run the command line tool
 if __name__ == '__main__':
