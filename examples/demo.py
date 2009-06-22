@@ -1,5 +1,7 @@
+#!/usr/bin/env python
+
 """\
-Demonstarion code for aafigure use as python module.
+Demonstration code for aafigure use as python module.
 """
 
 import sys
@@ -25,7 +27,7 @@ aaimg.recognize()
 
 # For fun, output the ASCII version in the console.
 print " output ".center(78, '=')
-aav = aafigure.aa.AsciiOutputVisitor(sys.stdout, scale=2)
+aav = aafigure.aa.AsciiOutputVisitor({'file_like':sys.stdout, 'scale':2})
 aav.visit_image(aaimg)
 print "="*78
 
@@ -35,3 +37,16 @@ print "="*78
 # A stringIO object is returned for the output when the output parameter is not
 # given. If it were, the output would be directly written to that object.
 visitor, output = aafigure.render(ascii_art, options={'format':'svg'})
+
+# The process method can be used for a lower level access. The visitor class
+# has to be specified by the user in this case.  To get output, a file like
+# object has to be passed in the options:
+# {'file_like' = open("somefile.svg", "wb")}
+import aafigure.svg
+import StringIO
+fl = StringIO.StringIO()
+visitor = aafigure.process(
+    ascii_art,
+    aafigure.svg.SVGOutputVisitor,
+    options={'file_like': fl}
+)
