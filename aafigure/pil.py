@@ -23,7 +23,7 @@ class PILOutputVisitor:
 
     def __init__(self, options):
         self.options = options
-        self.scale = options['scale']*7
+        self.scale = options['scale']*8
         self.debug = options['debug']
         self.line_width = options['line_width']
         self.file_type = options['format']
