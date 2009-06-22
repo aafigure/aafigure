@@ -794,18 +794,6 @@ class AsciiArtImage:
 def process(input, visitor_class, options=None):
     """Parse input and render using the given visitor class."""
 
-    def decode_color(color_string):
-        if color_string[0] == '#':          # HTML like color syntax
-            if len(color_string) == 4:      # #rgb format
-                r,g,b = [int(c+c, 16) for c in color_string[1:]]
-            elif len(color_string) == 7:      # #rrggbb format
-                r,g,b = [int(color_string[n:n+2], 16)
-                                for n in range(1, len(color_string), 2)]
-            else:
-                raise ValueError('not a valid color: %r' % color_string)
-        # XXX add a list of named colors
-        return r,g,b
-
     # remember user options (don't want to rename function parameter above)
     user_options = options
     # start with a copy of the defaults
@@ -816,10 +804,6 @@ def process(input, visitor_class, options=None):
 
     if 'fill' not in options or options['fill'] is None:
         options['fill'] = options['foreground']
-
-    # ensure all color parameters are in (R, G, B) format
-    for color in ('foreground', 'background', 'fill'):
-        options[color] = decode_color(options[color])
 
     # if input is a file like object, read from it (otherwise it is assumed to
     # be a string)
@@ -907,8 +891,8 @@ def render(input, output=None, options=None):
             when shapes must have the same look when drawn horizontally or
             vertically.  However, 0.5 looks more like the original ASCII and
             even smaller factors may be useful for timing diagrams and such.
-            But there is a risk that text is cropped or is draw over an object
-            beside it.
+            But there is a risk that text is cropped or is drawn over an object
+            besides it.
 
             The stretching is done before drawing arrows or circles, so that
             they are still good looking (default: 1.0).
@@ -1094,8 +1078,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     else:
         output = sys.stdout
 
+    options_dict = options.as_dict()
+
+    # ensure all color parameters start with a '#'
+    # this is for the convenience of the user as typing the shell comment
+    # character isn't for everyone ;-)
+    for color in ('foreground', 'background', 'fill'):
+        if color in options_dict and options_dict[color][0] != '#':
+            options_dict[color] = '#%s' % options_dict[color]
+
     try:
-        (visitor, output) = render(input, output, options.as_dict())
+        (visitor, output) = render(input, output, options_dict)
         output.close()
     except UnsupportedFormatError, e:
         print "ERROR: Can't output format '%s': %s" % (options.format, e)

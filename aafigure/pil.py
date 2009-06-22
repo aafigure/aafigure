@@ -26,7 +26,6 @@ class PILOutputVisitor:
         self.scale = options['scale']*8
         self.debug = options['debug']
         self.line_width = options['line_width']
-        self.file_type = options['format']
         self.foreground = options['foreground']
         self.background = options['background']
         self.fillcolor = options['fill']
@@ -62,12 +61,14 @@ class PILOutputVisitor:
 
         self.visit_shapes(aa_image.shapes)
         del self.draw
+        file_type = self.options['format'].lower()
+        if file_type == 'jpg': file_type = 'jpeg' # alias
         try:
             if 'file_like' in self.options:
-                self.image.save(self.options['file_like'], self.file_type)
+                self.image.save(self.options['file_like'], file_type)
         except KeyError:
             raise UnsupportedFormatError("PIL doesn't support image format %r" %
-                    self.file_type)
+                    file_type)
 
     def visit_shapes(self, shapes):
         for shape in shapes:

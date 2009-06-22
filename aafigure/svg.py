@@ -36,10 +36,6 @@ class SVGOutputVisitor:
         """helper to format numbers with unit for svg output"""
         return "%d%s" % (number, self.unit)
 
-    def _color(self, color):
-        r,g,b = color
-        return '#%02x%02x%02x' % (r,g,b)
-
     def get_size_attrs(self):
         """get image size as svg text"""
         #this function is here beacuse of a hack. the rst2html converter
@@ -97,7 +93,7 @@ class SVGOutputVisitor:
             self._num(y1),
             self._num(x2),
             self._num(y2),
-            self._color(self.foreground),
+            self.foreground,
             self._unit(self.line_width*(1+bool(thick)))))
 
     def _rectangle(self, x1, y1, x2, y2, style=''):
@@ -112,9 +108,9 @@ class SVGOutputVisitor:
             self.indent,
             self._num(x1), self._num(y1),
             self._num(x2-x1), self._num(y2-y1),
-            #~ self._color(self.foreground), #stroke:%s;
-            self._color(self.fillcolor), #stroke:%s;
-            self._color(self.fillcolor),
+            #~ self.foreground, #stroke:%s;
+            self.fillcolor, #stroke:%s;
+            self.fillcolor,
             self._unit(self.line_width),
             style
         ))
@@ -128,7 +124,7 @@ class SVGOutputVisitor:
         self.indent,
         self._num(point.x), self._num(point.y),
         self._num(0.2),
-        self._color(self.foreground), self._color(self.foreground),
+        self.foreground, self.foreground,
         self._unit(self.line_width)))
 
     def visit_line(self, line):
@@ -145,13 +141,14 @@ class SVGOutputVisitor:
 
     def visit_circle(self, circle):
         self.file_like.write("""\
-%s<circle cx="%s" cy="%s" r="%s" style="stroke:%s; stroke-width:%s;" />
+%s<circle cx="%s" cy="%s" r="%s" style="stroke:%s; stroke-width:%s;fill:%s" />
 """ % (
         self.indent,
         self._num(circle.center.x), self._num(circle.center.y),
         self._num(circle.radius),
-        self._color(self.foreground),
-        self._unit(self.line_width)))
+        self.foreground,
+        self._unit(self.line_width),
+        self.fillcolor))
 
     def visit_label(self, label):
         #  font-weight="bold"   style="stroke:%s"
@@ -164,7 +161,7 @@ class SVGOutputVisitor:
         self._num(label.position.x), self._num(label.position.y-0.3), # XXX static offset not good in all situations
         self.font,
         self._num(self.aa_image.nominal_size),
-        self._color(self.foreground),
+        self.foreground,
         escape(label.text.encode('utf8')),
         self.indent
         ))

@@ -50,8 +50,7 @@ class PDFOutputVisitor:
         return number*self.scale
 
     def _color(self, color):
-        r,g,b = color
-        return colors.HexColor('#%02x%02x%02x' % (r,g,b))
+        return colors.HexColor(color)
 
     def visit_image(self, aa_image):
         """Process the given ASCIIArtFigure and output the shapes in
@@ -80,10 +79,10 @@ class PDFOutputVisitor:
     def _line(self, x1, y1, x2, y2, thick):
         """Draw a line, coordinates given as four decimal numbers"""
         self.drawing.add(Line(
-            self._num(x1),  self._num(self.height-y1),
-            self._num(x2),  self._num(self.height-y2),
-            strokeColor=self._color(self.foreground),
-            strokeWidth=self.line_width*(1+0.5*bool(thick))
+            self._num(x1),  self._num(self.height - y1),
+            self._num(x2),  self._num(self.height - y2),
+            strokeColor = self._color(self.foreground),
+            strokeWidth = self.line_width*(1 + 0.5*bool(thick))
         ))
 
     def _rectangle(self, x1, y1, x2, y2, style=''):
@@ -91,20 +90,20 @@ class PDFOutputVisitor:
         if x1 > x2: x1, x2 = x2, x1
         if y1 > y2: y1, y2 = y2, y1
         self.drawing.add(Rect(
-            self._num(x1),  self._num(self.height-y2),
-            self._num(x2-x1),  self._num(y2-y1),
-            fillColor=self._color(self.fillcolor),
-            strokeWidth=self.line_width
+            self._num(x1),  self._num(self.height - y2),
+            self._num(x2-x1),  self._num(y2 - y1),
+            fillColor = self._color(self.fillcolor),
+            strokeWidth = self.line_width
         ))
 
     # - - - - - - visitor function for the different shape types - - - - - - -
 
     def visit_point(self, point):
         self.drawing.add(Circle(
-            self._num(point.x),  self._num(self.height-point.y),
+            self._num(point.x),  self._num(self.height - point.y),
             self._num(0.2),
-            fillColor=self._color(self.foreground),
-            strokeWidth=self.line_width
+            fillColor = self._color(self.foreground),
+            strokeWidth = self.line_width
         ))
 
     def visit_line(self, line):
@@ -121,20 +120,21 @@ class PDFOutputVisitor:
 
     def visit_circle(self, circle):
         self.drawing.add(Circle(
-            self._num(circle.center.x), self._num(self.height-circle.center.y),
+            self._num(circle.center.x), self._num(self.height - circle.center.y),
             self._num(circle.radius),
-            fillColor=self._color(self.foreground),
-            strokeWidth=self.line_width
+            strokeColor = self._color(self.foreground),
+            fillColor = self._color(self.fillcolor),
+            strokeWidth = self.line_width
         ))
 
     def visit_label(self, label):
         #  font-weight="bold"   style="stroke:%s"
         self.drawing.add(String(
-            self._num(label.position.x), self._num(self.height-label.position.y),
+            self._num(label.position.x), self._num(self.height - label.position.y),
             label.text,
-            fontSize=self._num(self.aa_image.nominal_size),
-            fontName=self.font,
-            fillColor=self._color(self.foreground),
+            fontSize = self._num(self.aa_image.nominal_size),
+            fontName = self.font,
+            fillColor = self._color(self.foreground),
         ))
 
     def visit_group(self, group):
