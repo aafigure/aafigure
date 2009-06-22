@@ -23,10 +23,14 @@ class SVGOutputVisitor:
         self.background = options['background']
         self.fillcolor = options['fill']
         self.indent = ''
-        if options['proportional']:
-            self.font = 'sans-serif'
+        # if front is given explicit, use it instead of textual/proportional flags
+        if 'font' in options:
+            self.font = options['font']
         else:
-            self.font = 'monospace'
+            if options['proportional']:
+                self.font = 'sans-serif'
+            else:
+                self.font = 'monospace'
 
     def _num(self, number):
         """helper to format numbers with scale and unit for svg output"""

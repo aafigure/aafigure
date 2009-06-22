@@ -29,12 +29,16 @@ class PILOutputVisitor:
         self.foreground = options['foreground']
         self.background = options['background']
         self.fillcolor = options['fill']
-        # XXX find a good way to locate font files... as the following does not
-        # work on all platforms
-        if options['proportional']:
-            self.font = 'Arial.ttf'
+        # if front is given explicit, use it instead of textual/proportional flags
+        if 'font' in options:
+            self.font = options['font']
         else:
-            self.font = 'Courier_New.ttf'
+            # XXX find a good way to locate font files... as the following does not
+            # work on all platforms
+            if options['proportional']:
+                self.font = 'Arial.ttf'
+            else:
+                self.font = 'Courier_New.ttf'
 
     def visit_image(self, aa_image):
         """Process the given ASCIIArtFigure and draw the shapes in

@@ -40,10 +40,14 @@ class PDFOutputVisitor:
         self.foreground = options['foreground']
         self.background = options['background']
         self.fillcolor = options['fill']
-        if options['proportional']:
-            self.font = 'Helvetica'
+        # if front is given explicit, use it instead of textual/proportional flags
+        if 'font' in options:
+            self.font = options['font']
         else:
-            self.font = 'Courier'
+            if options['proportional']:
+                self.font = 'Helvetica'
+            else:
+                self.font = 'Courier'
 
     def _num(self, number):
         """helper to format numbers with scale for PDF output"""

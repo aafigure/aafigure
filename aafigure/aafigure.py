@@ -812,7 +812,7 @@ def process(input, visitor_class, options=None):
 
     aaimg = AsciiArtImage(input, options['aspect'], options['textual'])
     if options['debug']:
-        sys.stderr.write(str(aaimg) + '\n')
+        sys.stderr.write('%s\n' % (aaimg,))
     aaimg.recognize()
 
     visitor = visitor_class(options)
@@ -1051,17 +1051,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         default = DEFAULT_OPTIONS['background'],
     )
 
-    class Values:
-        def as_dict(self):
-            return dict(((k, getattr(self,k)) for k in dir(self)
-                        if not k.startswith('__') and k != 'as_dict'))
-    options = Values()
-    (options, args) = parser.parse_args(values=options)
+    parser.add_option("-O", "--option",
+        dest = "_extra_options",
+        action = "append",
+        help = "pass special options to backends (expert user)",
+    )
+
+    (options, args) = parser.parse_args()
 
     if len(args) > 1:
         parser.error("too many arguments")
 
-    if not hasattr(options, 'format'):
+    if options.format is None:
         if hasattr(options, 'output'):
             options.format = os.path.splitext(options.output)[1][1:]
         else:
@@ -1074,18 +1075,34 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     if hasattr(options, 'output'):
         output = file(options.output, 'wb')
-        delattr(options, 'output')
     else:
         output = sys.stdout
 
-    options_dict = options.as_dict()
-
+    # explicit copying of parameters to the options dictionary
+    options_dict = {}
+    for key in ('textual', 'proportional',
+                'linewidth', 'aspect', 'scale',
+                'format', 'debug'):
+        options_dict[key] = getattr(options, key)
     # ensure all color parameters start with a '#'
     # this is for the convenience of the user as typing the shell comment
     # character isn't for everyone ;-)
     for color in ('foreground', 'background', 'fill'):
-        if color in options_dict and options_dict[color][0] != '#':
-            options_dict[color] = '#%s' % options_dict[color]
+        value = getattr(options, color)
+        if value is not None:
+            if value[0] != '#':
+                options_dict[color] = '#%s' % value
+            else:
+                options_dict[color] = value
+    # copy extra options
+    for keyvalue in options._extra_options:
+        try:
+            key, value = keyvalue.split('=')
+        except ValueError:
+            parser.error('--option must be in the format <key>=<value> (not %r)' % (keyvalue,))
+        options_dict[key] = value
+    if options.debug:
+        sys.stderr.write('options=%r\n' % (options_dict,))
 
     try:
         (visitor, output) = render(input, output, options_dict)
