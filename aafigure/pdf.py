@@ -21,30 +21,26 @@ except ImportError:
 class PDFOutputVisitor:
     """Render a list of shapes as PDF vector image."""
 
-    def __init__(self, file_like, scale = 1, line_width = 1,
-                 foreground =  (0, 0, 0), background = (255, 255, 255), fillcolor = (0, 0, 0),
-                 proportional = False
-        ):
+    def __init__(self, options):
         """\
             Dual use as PDF file writer or as Reportlab Drawing generator.
 
-            files:
-                file_like is not None. The PDF file is written there.
+            files: file_like or filname is given in the options:
+                The PDF file is written there.
 
-            Drawing:
-                file_like is None. No output is generated. The Drawing can be
-                used for example::
+            Drawing: file_like and filname are missing in the options:
+                No output is generated. The Drawing can be used for example::
 
                     visitor = PDFOutputVisitor(None, ...)
                     do_something(renderPDF.GraphicsFlowable(visitor.drawing))
         """
-        self.file_like = file_like
-        self.scale = 3.33*scale
-        self.line_width = 0.4*line_width
-        self.foreground = foreground
-        self.background = background
-        self.fillcolor = fillcolor
-        if proportional:
+        self.options = options
+        self.scale = 3.33*options['scale']
+        self.line_width = 0.4*options['line_width']
+        self.foreground = options['foreground']
+        self.background = options['background']
+        self.fillcolor = options['fill']
+        if options['proportional']:
             self.font = 'Helvetica'
         else:
             self.font = 'Courier'
@@ -67,8 +63,8 @@ class PDFOutputVisitor:
         self.drawing = Drawing(self._num(self.width), self._num(self.height))
         self.visit_shapes(aa_image.shapes)
         # if file is given, write
-        if self.file_like is not None:
-            renderPDF.drawToFile(self.drawing, self.file_like, '')
+        if 'file_like' in self.options:
+            renderPDF.drawToFile(self.drawing, self.options['file_like'], '')
 
     def visit_shapes(self, shapes):
         for shape in shapes:

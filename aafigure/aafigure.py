@@ -791,78 +791,8 @@ class AsciiArtImage:
 
 
 
-def render(input, output=None, options=None):
-    """Render an ASCII art figure.
-
-    If ``input`` is a basestring subclass (str or unicode), the text contained
-    in ``input`` is rendered. If ``input is a file-like object, the text to
-    render is taken using ``input.read()``. If no ``output`` is specified, the
-    resulting rendered image is returned as a string. If output is a basestring
-    subclass, a file with the name of ``output`` contents is created and the
-    rendered image is saved there. If ``output`` is a file-like object,
-    ``output.write()`` is used to save the rendered image.
-
-    This function returns a tuple ``(visitor, output)``, where ``visitor`` is
-    visitor instance that rendered the image and ``output`` is the image as
-    requested by the ``output`` parameter (a ``str`` if it was ``None``, or
-    a file-like object otherwise, which you should ``close()`` if needed).
-
-    ``options`` are... optional. You can provide a dictionary with options.
-    Valid keys (and their defaults) are:
-
-    background <str>:
-        background color in the form ``#rgb`` or ``#rrggbb``, *not* for SVG
-        output (default: ``#000000``).
-
-    foreground <str>:
-        foreground color in the form ``#rgb`` or ``#rrggbb`` (default:
-        ``#ffffff``).
-
-    fill <str>:
-        fill color in the form ``#rgb`` or ``#rrggbb`` (default: same as
-        ``foreground`` color).
-
-    line_width <float>:
-        change line with, SVG only currently (default: 2.0).
-
-    scale <float>:
-        enlarge or shrink image (default: 1.0).
-
-    aspect <float>:
-        change aspect ratio. Effectively it is the width of the image that is
-        multiplied by this factor. The default setting ``1`` is useful when
-        shapes must have the same look when drawn horizontally or vertically.
-        However, 0.5 looks more like the original ASCII and even smaller
-        factors may be useful for timing diagrams and such. But there is a risk
-        that text is cropped or is draw over an object beside it.
-
-        The stretching is done before drawing arrows or circles, so that they
-        are still good looking (default: 1.0).
-
-    format <str>:
-        choose backend/output format: 'svg', 'pdf', 'png' and all bitmap
-        formats that PIL supports can be used but only few make sense. Line
-        drawings have a good compression and better quality when saved as PNG
-        rather than a JPEG. The best quality will be achieved with SVG, tough
-        not all browsers support this vector image format at this time
-        (default: 'svg').
-
-    debug <bool>:
-        for now, it only prints the original ASCII art figure text (default:
-        False).
-
-    textual <bool>:
-        disables horizontal fill detection. Fills are only detected when they
-        are vertically at least 2 characters high (default: False).
-
-    proportional <bool>:
-        use a proportional font. Proportional fonts are general better looking
-        than monospace fonts but they can mess the figure if you need them to
-        look as similar as possible to the ASCII art (default: False).
-
-    This function can raise an UnsupportedFormatError exception if the
-    specified format is not supported.
-    """
+def process(input, visitor_class, options=None):
+    """Parse input and render using the given visitor class."""
 
     def decode_color(color_string):
         if color_string[0] == '#':          # HTML like color syntax
@@ -887,6 +817,10 @@ def render(input, output=None, options=None):
     if 'fill' not in options or options['fill'] is None:
         options['fill'] = options['foreground']
 
+    # ensure all color parameters are in (R, G, B) format
+    for color in ('foreground', 'background', 'fill'):
+        options[color] = decode_color(options[color])
+
     # if input is a file like object, read from it (otherwise it is assumed to
     # be a string)
     if hasattr(input, 'read'):
@@ -897,68 +831,132 @@ def render(input, output=None, options=None):
         sys.stderr.write(str(aaimg) + '\n')
     aaimg.recognize()
 
+    visitor = visitor_class(options)
+    visitor.visit_image(aaimg)
+    return visitor
+
+
+def render(input, output=None, options=None):
+    """Render an ASCII art figure.
+
+    If ``input`` is a basestring subclass (str or unicode), the text contained
+    in ``input`` is rendered. If ``input is a file-like object, the text to
+    render is taken using ``input.read()``. If no ``output`` is specified, the
+    resulting rendered image is returned as a string. If output is a basestring
+    subclass, a file with the name of ``output`` contents is created and the
+    rendered image is saved there. If ``output`` is a file-like object,
+    ``output.write()`` is used to save the rendered image.
+
+    This function returns a tuple ``(visitor, output)``, where ``visitor`` is
+    visitor instance that rendered the image and ``output`` is the image as
+    requested by the ``output`` parameter (a ``str`` if it was ``None``, or
+    a file-like object otherwise, which you should ``close()`` if needed).
+
+    ``options`` are... optional. You can provide a dictionary with options.
+    Valid keys (and their defaults) are:
+
+    Defining the output:
+
+        file_like <str>:
+            use the given file like object to write the output. The object
+            needs to support a ``.write(data)`` method.
+
+        format <str>:
+            choose backend/output format: 'svg', 'pdf', 'png' and all bitmap
+            formats that PIL supports can be used but only few make sense. Line
+            drawings have a good compression and better quality when saved as
+            PNG rather than a JPEG. The best quality will be achieved with SVG,
+            tough not all browsers support this vector image format at this
+            time (default: 'svg').
+
+    Options influencing how an image is parsed:
+
+        textual <bool>:
+            disables horizontal fill detection. Fills are only detected when
+            they are vertically at least 2 characters high (default: False).
+
+        proportional <bool>:
+            use a proportional font. Proportional fonts are general better
+            looking than monospace fonts but they can mess the figure if you
+            need them to look as similar as possible to the ASCII art (default:
+            False).
+
+    Visual properties:
+
+        background <str>:
+            background color in the form ``#rgb`` or ``#rrggbb``, *not* for SVG
+            output (default: ``#000000``).
+
+        foreground <str>:
+            foreground color in the form ``#rgb`` or ``#rrggbb`` (default:
+            ``#ffffff``).
+
+        fill <str>:
+            fill color in the form ``#rgb`` or ``#rrggbb`` (default: same as
+            ``foreground`` color).
+
+        line_width <float>:
+            change line with, SVG only currently (default: 2.0).
+
+        scale <float>:
+            enlarge or shrink image (default: 1.0).
+
+        aspect <float>:
+            change aspect ratio. Effectively it is the width of the image that
+            is multiplied by this factor. The default setting ``1`` is useful
+            when shapes must have the same look when drawn horizontally or
+            vertically.  However, 0.5 looks more like the original ASCII and
+            even smaller factors may be useful for timing diagrams and such.
+            But there is a risk that text is cropped or is draw over an object
+            beside it.
+
+            The stretching is done before drawing arrows or circles, so that
+            they are still good looking (default: 1.0).
+
+    Miscellaneous options:
+
+        debug <bool>:
+            for now, it only prints the original ASCII art figure text
+            (default: False).
+
+    This function can raise an UnsupportedFormatError exception if the
+    specified format is not supported.
+    """
+
+
     close_output = False
     if output is None:
         import StringIO
-        output = StringIO.StringIO()
-    if isinstance(output, basestring):
-        output = file(output, 'wb')
+        options['file_like'] = StringIO.StringIO()
+    elif isinstance(output, basestring):
+        options['file_like'] = file(output, 'wb')
         close_output = True
+    else:
+        options['file_like'] = output
     try:
         # late import of visitor classes to not cause any import errors for
         # unsupported backends (this would happen when a library a backend
         # depends on is not installed)
         if options['format'].lower() == 'svg':
             import svg
-            visitor = svg.SVGOutputVisitor(
-                output,
-                scale = options['scale']*7,
-                line_width = options['line_width'],
-                foreground = decode_color(options['foreground']),
-                background = decode_color(options['background']),
-                fillcolor = decode_color(options['fill']),
-                proportional = options['proportional'],
-                #~ debug = options['debug'],
-            )
+            visitor_class = svg.SVGOutputVisitor
         elif options['format'].lower() == 'pdf':
             import pdf
-            visitor = pdf.PDFOutputVisitor(
-                output,
-                scale = options['scale'],
-                line_width = options['line_width'],
-                foreground = decode_color(options['foreground']),
-                background = decode_color(options['background']),
-                fillcolor = decode_color(options['fill']),
-                proportional = options['proportional'],
-                #~ debug = options['debug'],
-            )
+            visitor_class = pdf.PDFOutputVisitor
         elif options['format'].lower() == 'ascii':
             import aa
-            visitor = aa.AsciiOutputVisitor(
-                output,
-                scale = options['scale'],
-            )
+            visitor_class = aa.AsciiOutputVisitor
         else:
             # for all other formats, it may be a bitmap type. let
             # PIL decide if it can write a file of that type.
             import pil
-            visitor = pil.PILOutputVisitor(
-                output,
-                scale = options['scale']*7,
-                line_width = options['line_width'],
-                foreground = decode_color(options['foreground']),
-                background = decode_color(options['background']),
-                fillcolor = decode_color(options['fill']),
-                proportional = options['proportional'],
-                file_type = options['format'],
-                #~ debug = options['debug'],
-            )
+            visitor_class = pil.PILOutputVisitor
         # now render and output the image
-        visitor.visit_image(aaimg)
+        visitor = process(input, visitor_class, options)
     finally:
         if close_output:
-            output.close()
-    return (visitor, output)
+            options['file_like'].close()
+    return (visitor, options['file_like'])
 
 
 def main():

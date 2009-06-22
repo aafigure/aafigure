@@ -21,21 +21,18 @@ class PILOutputVisitor:
     """Render a list of shapes as bitmap.
     """
 
-    def __init__(self, file_like, scale = 1, line_width = 1, debug = False, file_type = 'png',
-                 foreground=  (0, 0, 0), background = (255, 255, 255), fillcolor = (0, 0, 0),
-                 proportional = False
-    ):
-        self.file_like = file_like
-        self.scale = scale
-        self.debug = debug
-        self.line_width = line_width
-        self.file_type = file_type
-        self.foreground = foreground
-        self.background = background
-        self.fillcolor = fillcolor
+    def __init__(self, options):
+        self.options = options
+        self.scale = options['scale']*7
+        self.debug = options['debug']
+        self.line_width = options['line_width']
+        self.file_type = options['format']
+        self.foreground = options['foreground']
+        self.background = options['background']
+        self.fillcolor = options['fill']
         # XXX find a good way to locate font files... as the following does not
         # work on all platforms
-        if proportional:
+        if options['proportional']:
             self.font = 'Arial.ttf'
         else:
             self.font = 'Courier_New.ttf'
@@ -48,12 +45,12 @@ class PILOutputVisitor:
         self.width = (aa_image.width+1)*aa_image.nominal_size*aa_image.aspect_ratio
         self.height = (aa_image.height+1)*aa_image.nominal_size
 
-        image = Image.new(
+        self.image = Image.new(
             'RGB',
             (int(self.width*self.scale), int(self.height*self.scale)),
             self.background
         )
-        self.draw = ImageDraw.Draw(image)
+        self.draw = ImageDraw.Draw(self.image)
 
         #~ if self.debug:
             #~ #draw a rectangle around entire image
@@ -66,7 +63,8 @@ class PILOutputVisitor:
         self.visit_shapes(aa_image.shapes)
         del self.draw
         try:
-            image.save(self.file_like, self.file_type)
+            if 'file_like' in self.options:
+                self.image.save(self.options['file_like'], self.file_type)
         except KeyError:
             raise UnsupportedFormatError("PIL doesn't support image format %r" %
                     self.file_type)

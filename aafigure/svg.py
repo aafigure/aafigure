@@ -13,19 +13,17 @@ from xml.sax.saxutils import escape
 class SVGOutputVisitor:
     """Render a list of shapes as SVG image."""
 
-    def __init__(self, file_like, scale = 1, line_width = 1, unit = '',
-                 foreground = (0 ,0, 0), background = (255, 255, 255), fillcolor = (0, 0, 0),
-                 proportional = False
-        ):
-        self.file_like = file_like
-        self.scale = scale
-        self.unit = unit
-        self.line_width = line_width
-        self.foreground = foreground
-        self.background = background
-        self.fillcolor = fillcolor
+    def __init__(self, options):
+        self.options = options
+        self.file_like = options['file_like']
+        self.scale = options['scale']*7
+        self.unit = 'px'
+        self.line_width = options['line_width']
+        self.foreground = options['foreground']
+        self.background = options['background']
+        self.fillcolor = options['fill']
         self.indent = ''
-        if proportional:
+        if options['proportional']:
             self.font = 'sans-serif'
         else:
             self.font = 'monospace'

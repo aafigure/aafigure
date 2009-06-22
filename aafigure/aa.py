@@ -12,17 +12,17 @@ import sys
 
 class AsciiOutputVisitor:
     """Render a list of shapes as ASCII art.
-       Scaled, think of it as a low resolution black and white image
+       Scaled, think of it as a low resolution black and white image.
     """
 
-    def __init__(self, file_like, scale=3):
-        self.file_like = file_like
+    def __init__(self, options):
+        self.options = options
         self.image = {}
-        self.scale = scale
+        self.scale = options['scale']
 
     def visit_image(self, aa_image):
         self.visit_shapes(aa_image.shapes)
-        self.file_like.write(str(self))
+        self.options['file_like'].write(str(self))
 
     def visit_shapes(self, shapes):
         for shape in shapes:
