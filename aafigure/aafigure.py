@@ -44,8 +44,9 @@ class AsciiArtImage:
        The resulting list of shapes is also stored here.
 
        The image is parsed in 2 steps:
+
        1. horizontal string detection.
-       2. generic shape detection
+       2. generic shape detection.
 
        Each character that is used in a shape or string is tagged. So that
        further searches don't include it again (e.g. text in a string touching
@@ -105,14 +106,14 @@ class AsciiArtImage:
 
     # Coordinate conversion and shifting
     def left(self, x):          return x*NOMINAL_SIZE*self.aspect_ratio
-    def hcenter(self, x):       return (x+0.5)*NOMINAL_SIZE*self.aspect_ratio
-    def right(self, x):         return (x+1)*NOMINAL_SIZE*self.aspect_ratio
+    def hcenter(self, x):       return (x + 0.5)*NOMINAL_SIZE*self.aspect_ratio
+    def right(self, x):         return (x + 1)*NOMINAL_SIZE*self.aspect_ratio
     def top(self, y):           return y*NOMINAL_SIZE
-    def vcenter(self, y):       return (y+0.5)*NOMINAL_SIZE
-    def bottom(self, y):        return (y+1)*NOMINAL_SIZE
+    def vcenter(self, y):       return (y + 0.5)*NOMINAL_SIZE
+    def bottom(self, y):        return (y + 1)*NOMINAL_SIZE
 
     def recognize(self):
-        """Try to convert ASCII art to vector graphics."""
+        """Try to convert ASCII art to vector graphics. The result is stored in ``self.shapes``."""
         # XXX search for symbols
         #~ #search for long strings
         #~ for y in range(self.height):
@@ -792,7 +793,23 @@ class AsciiArtImage:
 
 
 def process(input, visitor_class, options=None):
-    """Parse input and render using the given visitor class."""
+    """\
+    Parse input and render using the given visitor class.
+
+    :param input: String or file like object with the image as text.
+
+    :param visitor_class: A class object, it will be used to render the
+        resulting image.
+
+    :param options: A dictionary containing the settings. When ``None`` is
+        given, defaults are used.
+
+    :returns: instantiated ``visitor_class`` and the image has already been
+        processed with the visitor.
+
+    :exception: This function can raise an ``UnsupportedFormatError`` exception
+        if the specified format is not supported.
+    """
 
     # remember user options (don't want to rename function parameter above)
     user_options = options
@@ -821,90 +838,30 @@ def process(input, visitor_class, options=None):
 
 
 def render(input, output=None, options=None):
-    """Render an ASCII art figure.
+    """
+    Render an ASCII art figure to a file or file-like.
 
-    If ``input`` is a basestring subclass (str or unicode), the text contained
-    in ``input`` is rendered. If ``input is a file-like object, the text to
-    render is taken using ``input.read()``. If no ``output`` is specified, the
-    resulting rendered image is returned as a string. If output is a basestring
-    subclass, a file with the name of ``output`` contents is created and the
-    rendered image is saved there. If ``output`` is a file-like object,
-    ``output.write()`` is used to save the rendered image.
+    :param input: If ``input`` is a basestring subclass (str or unicode), the
+        text contained in ``input`` is rendered. If ``input is a file-like
+        object, the text to render is taken using ``input.read()``.
 
-    This function returns a tuple ``(visitor, output)``, where ``visitor`` is
-    visitor instance that rendered the image and ``output`` is the image as
-    requested by the ``output`` parameter (a ``str`` if it was ``None``, or
-    a file-like object otherwise, which you should ``close()`` if needed).
+    :param output: If no ``output`` is specified, the resulting rendered image
+        is returned as a string. If output is a basestring subclass, a file
+        with the name of ``output`` contents is created and the rendered image
+        is saved there. If ``output`` is a file-like object, ``output.write()``
+        is used to save the rendered image.
 
-    ``options`` are... optional. You can provide a dictionary with options.
-    Valid keys (and their defaults) are:
+    :param options: A dictionary containing the settings. When ``None`` is
+        given, defaults are used.
 
-    Defining the output:
+    :returns: This function returns a tuple ``(visitor, output)``, where
+        ``visitor`` is visitor instance that rendered the image and ``output``
+        is the image as requested by the ``output`` parameter (a ``str`` if it
+        was ``None``, or a file-like object otherwise, which you should
+        ``close()`` if needed).
 
-        file_like <str>:
-            use the given file like object to write the output. The object
-            needs to support a ``.write(data)`` method.
-
-        format <str>:
-            choose backend/output format: 'svg', 'pdf', 'png' and all bitmap
-            formats that PIL supports can be used but only few make sense. Line
-            drawings have a good compression and better quality when saved as
-            PNG rather than a JPEG. The best quality will be achieved with SVG,
-            tough not all browsers support this vector image format at this
-            time (default: 'svg').
-
-    Options influencing how an image is parsed:
-
-        textual <bool>:
-            disables horizontal fill detection. Fills are only detected when
-            they are vertically at least 2 characters high (default: False).
-
-        proportional <bool>:
-            use a proportional font. Proportional fonts are general better
-            looking than monospace fonts but they can mess the figure if you
-            need them to look as similar as possible to the ASCII art (default:
-            False).
-
-    Visual properties:
-
-        background <str>:
-            background color in the form ``#rgb`` or ``#rrggbb``, *not* for SVG
-            output (default: ``#000000``).
-
-        foreground <str>:
-            foreground color in the form ``#rgb`` or ``#rrggbb`` (default:
-            ``#ffffff``).
-
-        fill <str>:
-            fill color in the form ``#rgb`` or ``#rrggbb`` (default: same as
-            ``foreground`` color).
-
-        line_width <float>:
-            change line with, SVG only currently (default: 2.0).
-
-        scale <float>:
-            enlarge or shrink image (default: 1.0).
-
-        aspect <float>:
-            change aspect ratio. Effectively it is the width of the image that
-            is multiplied by this factor. The default setting ``1`` is useful
-            when shapes must have the same look when drawn horizontally or
-            vertically.  However, 0.5 looks more like the original ASCII and
-            even smaller factors may be useful for timing diagrams and such.
-            But there is a risk that text is cropped or is drawn over an object
-            besides it.
-
-            The stretching is done before drawing arrows or circles, so that
-            they are still good looking (default: 1.0).
-
-    Miscellaneous options:
-
-        debug <bool>:
-            for now, it only prints the original ASCII art figure text
-            (default: False).
-
-    This function can raise an UnsupportedFormatError exception if the
-    specified format is not supported.
+    :exception: This function can raise an ``UnsupportedFormatError`` exception
+        if the specified format is not supported.
     """
 
 

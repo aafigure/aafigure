@@ -24,6 +24,9 @@ import sys, os
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinx.ext.autodoc', 'sphinxcontrib.aafig']
 
+# ensure our local copy of the module is used, not a installed one on the system
+sys.path.insert(0, '..')
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 

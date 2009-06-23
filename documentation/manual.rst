@@ -2,6 +2,8 @@
  Manual
 ========
 
+.. image:: ../branding/aafigure-logo.png
+
 Overview
 ========
 
@@ -17,24 +19,38 @@ Since then aafigure also grew into a standalone application providing a command
 line tool for ASCII art to image conversion.
 
 
+ASCII Art
+---------
+The term "ASCII Art" describes a `wide field`_.
+
+* (small) drawings found in email signatures
+* smileys :-)
+* raster images (this was popular to print images on text only printers a *few*
+  years ago)
+* simple diagrams using lines, rectangles, arrows
+
+aafigure aims to parse the last type of diagrams.
+
+.. _`wide field`: http://en.wikipedia.org/wiki/ASCII_art
+
+
 Other text to image tools
 -------------------------
 There are of course also a lot of other tools doing text to image conversions
 of some sort. One of the main differences is typically that other tools use a
 description language to generate images from rules. This is a major difference
-to aafigure which aims to convert good looking diagrams/images etc in text
-files to better looking images.
+to aafigure which aims to convert good looking diagrams/images etc. in text
+files to better looking images as bitmap or vector graphics.
 
 Graphviz
-~~~~~~~~
-Graphviz is a very popular tool that is excellent for displaying graphs and
-networks. It does this by reading a list of relations between nodes and it
-automatically finds the best way to place all the nodes in a visually appealing
-way.
+    Graphviz is a very popular tool that is excellent for displaying graphs and
+    networks. It does this by reading a list of relations between nodes and it
+    automatically finds the best way to place all the nodes in a visually
+    appealing way.
 
-This is quite different from aafigure and both have their strengths. Graphviz
-is very well suited to document state machines, class hierarchies and other
-graphs.
+    This is quite different from aafigure and both have their strengths.
+    Graphviz is very well suited to document state machines, class hierarchies
+    and other graphs.
 
 
 Usage

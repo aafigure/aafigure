@@ -1,11 +1,12 @@
-"""\
-Common shapes for the aafigure package.
-
-(C) 2009 Chris Liechti <cliechti@gmx.net>
-
-This is open source software under the BSD license. See LICENSE.txt for more
-details.
-"""
+# Common shapes for the aafigure package.
+#
+# (C) 2009 Chris Liechti <cliechti@gmx.net>
+#
+# This is open source software under the BSD license. See LICENSE.txt for more
+# details.
+#
+# This intentionally is no doc comment to make it easier to include the module
+# in Sphinx ``.. automodule::``
 
 def point(object):
     """return a Point instance.
@@ -89,4 +90,3 @@ class Group:
         self.shapes = shapes
     def __repr__(self):
         return 'Group(%r)' % (self.shapes,)
-
