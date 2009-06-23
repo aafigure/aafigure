@@ -35,7 +35,7 @@ class PDFOutputVisitor:
                     do_something(renderPDF.GraphicsFlowable(visitor.drawing))
         """
         self.options = options
-        self.scale = 3.33*options['scale']
+        self.scale = 4*options['scale']
         self.line_width = 0.4*options['line_width']
         self.foreground = options['foreground']
         self.background = options['background']
@@ -134,7 +134,7 @@ class PDFOutputVisitor:
     def visit_label(self, label):
         #  font-weight="bold"   style="stroke:%s"
         self.drawing.add(String(
-            self._num(label.position.x), self._num(self.height - label.position.y),
+            self._num(label.position.x), self._num(self.height - label.position.y + self.aa_image.nominal_size*0.2),
             label.text,
             fontSize = self._num(self.aa_image.nominal_size),
             fontName = self.font,
