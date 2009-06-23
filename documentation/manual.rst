@@ -59,7 +59,7 @@ A ``:aafigure:`` directive is provided that allows to insert images.
     ./rst2html.py README.txt >README.html
 
 This results in the ``README.html`` file and a ``.svg`` fiel (or the specified
-file type) for each ``:aafigure:``.
+file type) for each ``aafigure``.
 
 The resulting ``README.html`` file can be viewed a SVG capable browser. It has
 been tested with Firefox 1.5, 2.0 and 3.0.
@@ -70,7 +70,7 @@ In ``conf.py`` add::
 
     extensions = ['sphinxcontrib.aafig']
 
-Diagrams can now be inserted with a ``:aafig:`` directive. The output format is
+Diagrams can now be inserted with a ``aafig`` directive. The output format is
 automatically chosen depending on the generated document format (e.h. HTML or
 PDF).
 
