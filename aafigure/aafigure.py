@@ -1095,12 +1095,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             else:
                 options_dict[color] = value
     # copy extra options
-    for keyvalue in options._extra_options:
-        try:
-            key, value = keyvalue.split('=')
-        except ValueError:
-            parser.error('--option must be in the format <key>=<value> (not %r)' % (keyvalue,))
-        options_dict[key] = value
+    if options._extra_options is not None:
+        for keyvalue in options._extra_options:
+            try:
+                key, value = keyvalue.split('=')
+            except ValueError:
+                parser.error('--option must be in the format <key>=<value> (not %r)' % (keyvalue,))
+            options_dict[key] = value
+
     if options.debug:
         sys.stderr.write('options=%r\n' % (options_dict,))
 
