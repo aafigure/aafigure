@@ -19,4 +19,15 @@ aafigure.1: FORCE
 show-manpage:
 	groff -man -Tascii aafigure.1
 
+# Sphinx docs
+doc-html:
+	cd documentation; $(MAKE) html
+
+doc-pdf:
+	cd documentation; $(MAKE) latex
+	cd documentation/_build/latex; $(MAKE)
+
+doc-clean:
+	cd documentation; $(MAKE) clean
+
 .PHONY: FORCE
