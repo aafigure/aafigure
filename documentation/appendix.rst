@@ -2,6 +2,45 @@
  Appendix
 ==========
 
+Implementation
+==============
+
+Files in the ``aafigure`` package:
+
+``aafigure.py``
+    ASCII art parser. This is the main module.
+
+``shapes.py``
+    Defines a class hierachy for geometric shapes such as lines, circles etc.
+
+``error.py``
+    Define common exception classes.
+
+``aa.py``
+    ASCII art output backend. Intended for tests, not really useful for the end
+    user.
+
+``pdf.py``
+    PDF output backend. Depends on reportlab.
+
+``pil.py``
+    Bitmap output backend. Using PIL, it can write PNG, JPEG and more formats.
+
+``svg.py``
+    SVG output backend.
+
+
+Files in the ``docutils`` directory:
+
+``aafigure_directive.py``
+    Implements the ``aafigure`` Docutils directive that takes these
+    ASCII art figures and generates a drawing.
+
+The ``aafigure`` module contains code to parse ASCII art figures and create
+a list of of shapes. The different output modules can walk through a list of
+shapes and write image files.
+
+
 TODO
 ====
 
@@ -35,12 +74,15 @@ TODO
   underlines in strings are tricky to detect...
 
 - Dotted lines? ``...``
+  e.g. for ``---...---`` insert a dashed line instead of 3 textual dots.
+  Vertical dashed lines should also work with ``:``.
 
 - Group shapes that belong to an object, so that it's easier to import and
-  change the graphics in a vector drawing program.
+  change the graphics in a vector drawing program. [partly done]
 
 - Path optimizer, it happens that many small lines are output where a long
   line could be used.
+
 
 Authors and Contact
 ===================

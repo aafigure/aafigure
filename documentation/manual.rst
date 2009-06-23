@@ -9,8 +9,33 @@ The original idea was to parse ASCII art images, embedded in reST documents and
 output an image. This would mean that simple illustrations could be embedded as
 ASCII art in the reST source and still look nice when converted to e.g. HTML.
 
-Since then the aafigure application also grew into a standalone application
-providing a command line tool for ASCII art to image conversion.
+aafigure can be used to write documents that contain drawings in plain text
+documents and these drawings are converted to appropriate formats for e.g. HTML
+or PDF versions of the same document.
+
+Since then aafigure also grew into a standalone application providing a command
+line tool for ASCII art to image conversion.
+
+
+Other text to image tools
+-------------------------
+There are of course also a lot of other tools doing text to image conversions
+of some sort. One of the main differences is typically that other tools use a
+description language to generate images from rules. This is a major difference
+to aafigure which aims to convert good looking diagrams/images etc in text
+files to better looking images.
+
+Graphviz
+~~~~~~~~
+Graphviz is a very popular tool that is excellent for displaying graphs and
+networks. It does this by reading a list of relations between nodes and it
+automatically finds the best way to place all the nodes in a visually appealing
+way.
+
+This is quite different from aafigure and both have their strengths. Graphviz
+is very well suited to document state machines, class hierarchies and other
+graphs.
+
 
 Usage
 -----
@@ -21,28 +46,40 @@ Command line tool
     aafigure test.txt -t png -o test.png
 
 The tool can also read from standard in and supports many options. Please look
-at the command's help::
+at the command's help (or man page)::
 
     aafigure --help
 
-Within reStructured text
-~~~~~~~~~~~~~~~~~~~~~~~~
+Within Docutils
+~~~~~~~~~~~~~~~
+A ``:aafigure:`` directive is provided that allows to insert images.
+
 ::
 
     ./rst2html.py README.txt >README.html
 
-This results in the ``README.html`` file and a ``.svg`` file for each
-``aafigure``.
+This results in the ``README.html`` file and a ``.svg`` fiel (or the specified
+file type) for each ``:aafigure:``.
 
-Display the resulting ``README.html`` file in a SVG capable browser. It has
+The resulting ``README.html`` file can be viewed a SVG capable browser. It has
 been tested with Firefox 1.5, 2.0 and 3.0.
+
+Within Sphinx
+~~~~~~~~~~~~~
+In ``conf.py`` add::
+
+    extensions = ['sphinxcontrib.aafig']
+
+Diagrams can now be inserted with a ``:aafig:`` directive. The output format is
+automatically chosen depending on the generated document format (e.h. HTML or
+PDF).
 
 
 Installation
 ============
 
-The package
------------
+aafigure
+--------
 To install aafigure, you need to have administrator rights on your system (be
 root). Type ``python setup.py install`` to install aafigure.
 
@@ -51,6 +88,16 @@ a command line script called ``aafigure``.
 
 The Python Imaging Library (PIL) needs to be installed when support for bitmap
 formats is desired and it will need ReportLab for PDF output.
+
+Alternatively it can be installed from PyPy, either manually downloading the
+files and installing as described above or using::
+
+    easy_install -U aafigure
+
+There are also packaged versions for:
+* Ubuntu (https://launchpad.net/~aafigure-team/+archive/ppa)
+* Arch Linux ("aafigure" or "aafigure-bzr" in category "unsupported")
+
 
 Docutils plugin
 ---------------
@@ -62,16 +109,17 @@ After that, the ``aafigure`` directive will be available.
 
 Sphinx plugin
 -------------
-sphinxcontrib-aafig is a plugin similar to the Docutils plugin, but it
+sphinxcontrib-aafig_ is a plugin similar to the Docutils plugin, but it
 automatically selects the image format depending on the output format.
 
 XXX elaborate
 
+.. _sphinxcontrib-aafig: http://pypi.python.org/pypi/sphinxcontrib-aafig
+
 
 Short introduction
 ==================
-This code in a reST document that is processed with the enhanced ``rst2html.py``
-looks like this::
+In a Sphinx document an image can be inserted like this::
 
     .. aafig::
 
@@ -83,6 +131,11 @@ Which results in an image like this:
 
     -->
 
+The same contents could also have been placed in a file and then be converted
+with the aafigure command line tool.
+
+Docutils directive
+------------------
 The ``aafigure`` directive has the following options:
 
 - ``:scale: <float>``   enlarge or shrink image
@@ -117,6 +170,13 @@ The ``aafigure`` directive has the following options:
 
 - ``:proportional: <flag>``  use a proportional font instead of a mono-spaced
   one.
+
+
+Sphinx directive
+----------------
+It is called ``aafig``. The same options as for the docutils directive apply
+with the exception of ``format``. That option is not supported as the format
+is automatically determined.
 
 
 Lines
