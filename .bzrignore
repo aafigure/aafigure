@@ -9,3 +9,4 @@ debian/python-aafigure.prerm.debhelper
 debian/python-aafigure.substvars
 build-stamp
 MANIFEST
+documentation/_build
