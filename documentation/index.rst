@@ -10,6 +10,7 @@ aafigure Documentation
     :maxdepth: 2
 
     manual
+    shortintro
     examples
     appendix
 
