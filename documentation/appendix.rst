@@ -153,8 +153,15 @@ Example stub class:
             ...
         etc...
 
-Files
------
+Source tree
+-----------
+The sources can be checked out using bazaar_::
+
+    bzr lp:aafigure
+
+.. _bazaar: http://bazaar-vcs.org
+
+
 Files in the ``aafigure`` package:
 
 ``aafigure.py``

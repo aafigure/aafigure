@@ -2,8 +2,6 @@
  Manual
 ========
 
-.. image:: ../branding/aafigure-logo.png
-
 Overview
 ========
 
