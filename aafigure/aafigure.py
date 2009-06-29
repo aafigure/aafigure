@@ -64,11 +64,13 @@ class AsciiArtImage:
         # detect size of input image, store as list of lines
         self.image = []
         max_x = 0
-        for y, line in enumerate(text.splitlines()):
+        y = 0
+        for line in text.splitlines():
             max_x = max(max_x, len(line))
             self.image.append(line)
+            y += 1
         self.width = max_x
-        self.height = y+1
+        self.height = y
         # make sure it's rectangular (extend short lines to max width)
         for y, line in enumerate(self.image):
             if len(line) < max_x:
@@ -827,6 +829,8 @@ def process(input, visitor_class, options=None):
     if hasattr(input, 'read'):
         input = input.read()
 
+    if options['debug']:
+        sys.stderr.write('%r\n' % (input,))
     aaimg = AsciiArtImage(input, options['aspect'], options['textual'])
     if options['debug']:
         sys.stderr.write('%s\n' % (aaimg,))
@@ -864,6 +868,8 @@ def render(input, output=None, options=None):
         if the specified format is not supported.
     """
 
+    if options is None:
+        options = {}
 
     close_output = False
     if output is None:
