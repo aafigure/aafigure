@@ -40,7 +40,7 @@ class Parser:
 
     def render(self, formatter):
         """text to image conversion"""
-        key = cache.key(self.request, itemname=self.pagename, content="%s%s" % (self.raw, self.args))
+        key = 'aafigure_%s' % (cache.key(self.request, itemname=self.pagename, content="%s%s" % (self.raw, self.args)),)
         if not cache.exists(self.request, key) or not cache.exists(self.request, key+'_size'):
             # not in cache, regenerate image
             options = {}
