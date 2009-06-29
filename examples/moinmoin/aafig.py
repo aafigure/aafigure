@@ -17,7 +17,6 @@
 """
 import aafigure
 from MoinMoin.action import cache
-from cStringIO import StringIO
 
 def sanitizte_color(value):
     """clean string for color codes. the sting is inserted directly in the SVG
