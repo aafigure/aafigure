@@ -98,11 +98,15 @@ Windows
 
 Docutils plugin
 ---------------
-The docutils-aafigure extension depends on the aafigure package also requires
-``setuptools`` (often packaged as ``python-setuptools``) and docutils itself
+The `docutils-aafigure`_ extension depends on the aafigure package also requires
+``setuptools`` (often packaged as ``python-setuptools``) and Docutils_ itself
 (0.5 or newer) must be installed.
 
 After that, the ``aafigure`` directive will be available.
+
+.. _`docutils-aafigure`: http://pypi.python.org/pypi/aafigure
+.. _Docutils: http://docutils.sf.net
+
 
 Sphinx plugin
 -------------
@@ -112,6 +116,14 @@ automatically selects the image format depending on the output format.
 XXX elaborate
 
 .. _sphinxcontrib-aafig: http://pypi.python.org/pypi/sphinxcontrib-aafig
+
+
+MoinMoin plugin
+---------------
+Copy the file ``aafig.py`` from ``examples/moinmoin`` to
+``wiki/data/plugin/parser`` of your wiki. The aafigure module itself needs to
+be installed for the Python version that is used to run MoinMoin (see above for
+instructions).
 
 
 Usage
@@ -139,11 +151,11 @@ A ``aafigure`` directive is provided that allows to insert images::
 
     ./rst2html.py README.txt >README.html
 
-This results in the ``README.html`` file and a ``.svg`` fiel (or the specified
+This results in the ``README.html`` file and a ``.svg`` file (or the specified
 file type) for each ``aafigure``.
 
-The resulting ``README.html`` file can be viewed a SVG capable browser. It has
-been tested with Firefox 1.5, 2.0 and 3.0.
+The resulting ``README.html`` file can be viewed with a SVG capable browser. It
+has been tested with Firefox 1.5, 2.0 and 3.0.
 
 Within Sphinx
 -------------
@@ -160,3 +172,32 @@ This provides the ``aafig`` directive::
 The output format is automatically chosen depending on the generated document
 format (e.g. HTML or PDF).
 
+Within MoinMoin
+---------------
+ASCII Art figures can be inserted into a Moin WikiText page the following way::
+
+    {{{#!aafig scale=1.5 foreground=#ff1010
+    DD --->
+    }}}
+
+The parser name is ``aafig`` and options are appended, separated with spaces.
+Options that require a value take that after a ``=`` without any whitespace
+between option and value.  Supported options are:
+
+    - ``scale=<float>``
+    - ``aspect=<float>``
+    - ``textual``
+    - ``proportional``
+    - ``linewidth=<float>``
+    - ``foreground=#rrggbb``
+    - ``fill=#rrggbb``
+
+There is no ``background`` as the SVG backend ignores that. And it is not possible
+to pass generic options.
+
+The images are generated and stored in MoinMoin's internal cache. So there is
+no mess with attached files on the page. Each change on an image generates a
+new cache entry so the cache may grow over time. However the files can be
+deleted with no problem as they can be rebuilt when the page is viewed again
+(the old files are not automatically deleted as they are still used when older
+revision of a page is displayed).
