@@ -22,7 +22,7 @@ ASCII Art
 The term "ASCII Art" describes a `wide field`_.
 
 * (small) drawings found in email signatures
-* smileys :-)
+* smilies :-)
 * raster images (this was popular to print images on text only printers a *few*
   years ago)
 * simple diagrams using lines, rectangles, arrows
@@ -96,21 +96,21 @@ Windows
     the extension on http://pypi.python.org/pypi/aafigure
 
 
-Docutils plugin
----------------
-The `docutils-aafigure`_ extension depends on the aafigure package also requires
+Docutils plug-in
+----------------
+The docutils-aafigure_ extension depends on the aafigure package also requires
 ``setuptools`` (often packaged as ``python-setuptools``) and Docutils_ itself
 (0.5 or newer) must be installed.
 
 After that, the ``aafigure`` directive will be available.
 
-.. _`docutils-aafigure`: http://pypi.python.org/pypi/aafigure
+.. _docutils-aafigure: http://pypi.python.org/pypi/aafigure
 .. _Docutils: http://docutils.sf.net
 
 
-Sphinx plugin
--------------
-sphinxcontrib-aafig_ is a plugin similar to the Docutils plugin, but it
+Sphinx plug-in
+--------------
+sphinxcontrib-aafig_ is a plug-in similar to the Docutils_ plug-in, but it
 automatically selects the image format depending on the output format.
 
 XXX elaborate
@@ -118,12 +118,21 @@ XXX elaborate
 .. _sphinxcontrib-aafig: http://pypi.python.org/pypi/sphinxcontrib-aafig
 
 
-MoinMoin plugin
----------------
+MoinMoin plug-in
+----------------
+MoinMoin_ is a popular Wiki engine. The plug-in allows to use aafigure drawings
+within wiki pages.
+
 Copy the file ``aafig.py`` from ``examples/moinmoin`` to
-``wiki/data/plugin/parser`` of your wiki. The aafigure module itself needs to
-be installed for the Python version that is used to run MoinMoin (see above for
+``wiki/data/plugin/parser`` of the wiki. The aafigure module itself needs to
+be installed for the Python version that is used to run MoinMoin_ (see above for
 instructions).
+
+Tested with MoinMoin 1.8.
+
+See also: http://moinmo.in/ParserMarket/AaFigure
+
+.. _MoinMoin: http://moinmo.in
 
 
 Usage
@@ -174,7 +183,8 @@ format (e.g. HTML or PDF).
 
 Within MoinMoin
 ---------------
-ASCII Art figures can be inserted into a Moin WikiText page the following way::
+ASCII Art figures can be inserted into a MoinMoin_ WikiText page the following
+way::
 
     {{{#!aafig scale=1.5 foreground=#ff1010
     DD --->
