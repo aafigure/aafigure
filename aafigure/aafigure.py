@@ -1026,20 +1026,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         parser.error("too many arguments")
 
     if options.format is None:
-        if hasattr(options, 'output'):
-            options.format = os.path.splitext(options.output)[1][1:]
-        else:
+        if options.output is None:
             parser.error("Please specify output format with --type")
+        else:
+            options.format = os.path.splitext(options.output)[1][1:]
 
     if args:
         input = file(args[0])
     else:
         input = sys.stdin
 
-    if hasattr(options, 'output'):
-        output = file(options.output, 'wb')
-    else:
+    if options.output is None:
         output = sys.stdout
+    else:
+        output = file(options.output, 'wb')
 
     # explicit copying of parameters to the options dictionary
     options_dict = {}
