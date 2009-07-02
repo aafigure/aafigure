@@ -107,15 +107,29 @@ class AsciiArtImage:
             return 'outside'
 
     # Coordinate conversion and shifting
-    def left(self, x):          return x*NOMINAL_SIZE*self.aspect_ratio
-    def hcenter(self, x):       return (x + 0.5)*NOMINAL_SIZE*self.aspect_ratio
-    def right(self, x):         return (x + 1)*NOMINAL_SIZE*self.aspect_ratio
-    def top(self, y):           return y*NOMINAL_SIZE
-    def vcenter(self, y):       return (y + 0.5)*NOMINAL_SIZE
-    def bottom(self, y):        return (y + 1)*NOMINAL_SIZE
+    def left(self, x):
+        return x*NOMINAL_SIZE*self.aspect_ratio
+
+    def hcenter(self, x):
+        return (x + 0.5)*NOMINAL_SIZE*self.aspect_ratio
+
+    def right(self, x):
+        return (x + 1)*NOMINAL_SIZE*self.aspect_ratio
+
+    def top(self, y):
+        return y*NOMINAL_SIZE
+
+    def vcenter(self, y):
+        return (y + 0.5)*NOMINAL_SIZE
+
+    def bottom(self, y):
+        return (y + 1)*NOMINAL_SIZE
 
     def recognize(self):
-        """Try to convert ASCII art to vector graphics. The result is stored in ``self.shapes``."""
+        """
+        Try to convert ASCII art to vector graphics. The result is stored in
+        ``self.shapes``.
+        """
         # XXX search for symbols
         #~ #search for long strings
         #~ for y in range(self.height):
@@ -123,14 +137,17 @@ class AsciiArtImage:
                 #~ character = self.image[y][x]
                 #~ if self.classification[y][x] is None:
                     #~ if character.isalnum():
-                        #~ self.shapes.extend(self._follow_horizontal_string(x, y))
+                        #~ self.shapes.extend(
+                            #~ self._follow_horizontal_string(x, y)
+                        #~ )
         # search for quoted texts
         for y in range(self.height):
             for x in range(self.width):
                 #if not yet classified, check for a line
                 character = self.image[y][x]
                 if character in self.QUOTATION_CHARACTERS:
-                    self.shapes.extend(self._follow_horizontal_string(x, y, quoted=True))
+                    self.shapes.extend(
+                        self._follow_horizontal_string(x, y, quoted=True))
 
         # search for standard shapes
         for y in range(self.height):
@@ -154,13 +171,13 @@ class AsciiArtImage:
                         self.shapes.extend(self._plus_joiner(x, y))
                     elif character in self.FIXED_CHARACTERS:
                         self.shapes.extend(self.get_fixed_character(character)(x, y))
-                        self.tag([(x,y)], CLASS_FIXED)
+                        self.tag([(x, y)], CLASS_FIXED)
                     elif character in self.FILL_CHARACTERS:
                         if self.textual:
-                            if self.get(x,y+1) == character:
+                            if self.get(x, y+1) == character:
                                 self.shapes.extend(self._follow_fill(character, x, y))
                         else:
-                            if (self.get(x+1,y) == character or self.get(x,y+1) == character):
+                            if (self.get(x+1, y) == character or self.get(x, y+1) == character):
                                 self.shapes.extend(self._follow_fill(character, x, y))
 
         # search for short strings too
@@ -272,15 +289,35 @@ class AsciiArtImage:
     # Fill functions return a list of shapes. Each one if covering one cell
     # size.
 
-    def _hatch_left(self, x, y): return self._n_hatch_diagonal(x, y, 1, True)
-    def _hatch_right(self, x, y): return self._n_hatch_diagonal(x, y, 1, False)
-    def _cross_hatch(self, x, y): return self._n_hatch_diagonal(x, y, 1, True) + self._n_hatch_diagonal(x, y, 1, False)
-    def _double_hatch_left(self, x, y): return self._n_hatch_diagonal(x, y, 2, True)
-    def _double_hatch_right(self, x, y): return self._n_hatch_diagonal(x, y, 2, False)
-    def _double_cross_hatch(self, x, y): return self._n_hatch_diagonal(x, y, 2, True) + self._n_hatch_diagonal(x, y, 2, False)
-    def _triple_hatch_left(self, x, y): return self._n_hatch_diagonal(x, y, 3, True)
-    def _triple_hatch_right(self, x, y): return self._n_hatch_diagonal(x, y, 3, False)
-    def _triple_cross_hatch(self, x, y): return self._n_hatch_diagonal(x, y, 3, True) + self._n_hatch_diagonal(x, y, 3, False)
+    def _hatch_left(self, x, y):
+        return self._n_hatch_diagonal(x, y, 1, True)
+
+    def _hatch_right(self, x, y):
+        return self._n_hatch_diagonal(x, y, 1, False)
+
+    def _cross_hatch(self, x, y):
+        return self._n_hatch_diagonal(x, y, 1, True) + \
+               self._n_hatch_diagonal(x, y, 1, False)
+
+    def _double_hatch_left(self, x, y):
+        return self._n_hatch_diagonal(x, y, 2, True)
+
+    def _double_hatch_right(self, x, y):
+        return self._n_hatch_diagonal(x, y, 2, False)
+
+    def _double_cross_hatch(self, x, y):
+        return self._n_hatch_diagonal(x, y, 2, True) + \
+               self._n_hatch_diagonal(x, y, 2, False)
+
+    def _triple_hatch_left(self, x, y):
+        return self._n_hatch_diagonal(x, y, 3, True)
+
+    def _triple_hatch_right(self, x, y):
+        return self._n_hatch_diagonal(x, y, 3, False)
+
+    def _triple_cross_hatch(self, x, y):
+        return self._n_hatch_diagonal(x, y, 3, True) + \
+               self._n_hatch_diagonal(x, y, 3, False)
 
     def _n_hatch_diagonal(self, x, y, n, left=False):
         """hatch generator function"""
@@ -304,15 +341,35 @@ class AsciiArtImage:
                     result.append(Line(Point(self.left(x+d*i), self.bottom(y)), Point(self.right(x), self.top(y+d*i))))
         return result
 
-    def _hatch_v(self, x, y): return self._n_hatch_straight(x,y,1,True)
-    def _hatch_h(self, x, y): return self._n_hatch_straight(x,y,1,False)
-    def _hv_hatch(self, x, y): return self._n_hatch_straight(x,y,1,True) + self._n_hatch_straight(x,y,1,False)
-    def _double_hatch_v(self, x, y): return self._n_hatch_straight(x,y,2,True)
-    def _double_hatch_h(self, x, y): return self._n_hatch_straight(x,y,2,False)
-    def _double_hv_hatch(self, x, y): return self._n_hatch_straight(x,y,2,True) + self._n_hatch_straight(x,y,2,False)
-    def _triple_hatch_v(self, x, y): return self._n_hatch_straight(x,y,3,True)
-    def _triple_hatch_h(self, x, y): return self._n_hatch_straight(x,y,3,False)
-    def _triple_hv_hatch(self, x, y): return self._n_hatch_straight(x,y,3,True) + self._n_hatch_straight(x,y,3,False)
+    def _hatch_v(self, x, y):
+        return self._n_hatch_straight(x, y, 1, True)
+
+    def _hatch_h(self, x, y):
+        return self._n_hatch_straight(x, y, 1, False)
+
+    def _hv_hatch(self, x, y):
+        return self._n_hatch_straight(x, y, 1, True) + \
+               self._n_hatch_straight(x, y, 1, False)
+
+    def _double_hatch_v(self, x, y):
+        return self._n_hatch_straight(x, y, 2, True)
+
+    def _double_hatch_h(self, x, y):
+        return self._n_hatch_straight(x, y, 2, False)
+
+    def _double_hv_hatch(self, x, y):
+        return self._n_hatch_straight(x, y, 2, True) + \
+               self._n_hatch_straight(x, y, 2, False)
+
+    def _triple_hatch_v(self, x, y):
+        return self._n_hatch_straight(x, y, 3, True)
+
+    def _triple_hatch_h(self, x, y):
+        return self._n_hatch_straight(x, y, 3, False)
+
+    def _triple_hv_hatch(self, x, y):
+        return self._n_hatch_straight(x, y, 3, True) + \
+               self._n_hatch_straight(x, y, 3, False)
 
     def _n_hatch_straight(self, x, y, n, vertical=False):
         """hatch generator function"""
@@ -359,12 +416,14 @@ class AsciiArtImage:
             )
         ]
 
-    def _fill_background(self, x, y): return []
+    def _fill_background(self, x, y):
+        return []
 
     def _fill_small_circle(self, x, y):
         return [
             Circle(Point(self.left(x+0.5), self.top(y+0.5)), 0.2)
         ]
+
     def _fill_medium_circle(self, x, y):
         return [
             Circle(Point(self.left(x+0.5), self.top(y+0.5)), 0.4)
@@ -416,7 +475,7 @@ class AsciiArtImage:
         ('Z', '_fill_background'),
     ]
 
-    FILL_CHARACTERS = ''.join([t+t.lower() for (t,f) in FILL_TYPES])
+    FILL_CHARACTERS = ''.join([t+t.lower() for (t, f) in FILL_TYPES])
 
     def get_fill(self, character):
         """return fill function"""
@@ -461,7 +520,7 @@ class AsciiArtImage:
         ('}', '_open_triangle_right'),
         ('*', '_circle'),
     ]
-    FIXED_CHARACTERS = ''.join([t for (t,f) in FIXED_TYPES])
+    FIXED_CHARACTERS = ''.join([t for (t, f) in FIXED_TYPES])
 
     def get_fixed_character(self, character):
         """return fill function"""
@@ -480,15 +539,15 @@ class AsciiArtImage:
         _, start_y, line_start_style = self._follow_line(x, y, dy=-1, line_character='|')
         # if a '+' follows a line, then the line is stretched to hit the '+' center
         start_y_fix = end_y_fix = 0
-        if self.get(x, start_y-1) == '+':
+        if self.get(x, start_y - 1) == '+':
             start_y_fix = -0.5
-        if self.get(x, end_y+1) == '+':
+        if self.get(x, end_y + 1) == '+':
             end_y_fix = 0.5
         # tag characters as used (not the arrow heads)
-        self.tag([(x, y) for y in range(start_y, end_y+1)], CLASS_LINE)
+        self.tag([(x, y) for y in range(start_y, end_y + 1)], CLASS_LINE)
         # return the new shape object with arrows etc.
-        p1 = complex(self.hcenter(x), self.top(start_y+start_y_fix))
-        p2 = complex(self.hcenter(x), self.bottom(end_y+end_y_fix))
+        p1 = complex(self.hcenter(x), self.top(start_y + start_y_fix))
+        p2 = complex(self.hcenter(x), self.bottom(end_y + end_y_fix))
         shapes = []
         if line_start_style:
             p1, arrow_shapes = line_start_style(p1, p2)
@@ -510,14 +569,14 @@ class AsciiArtImage:
         # follow line to the left
         start_x, _, line_start_style = self._follow_line(x, y, dx=-1, line_character=line_character)
         start_x_fix = end_x_fix = 0
-        if self.get(start_x-1, y) == '+':
+        if self.get(start_x - 1, y) == '+':
             start_x_fix = -0.5
-        if self.get(end_x+1, y) == '+':
+        if self.get(end_x + 1, y) == '+':
             end_x_fix = 0.5
         self.tag([(x, y) for x in range(start_x, end_x+1)], CLASS_LINE)
         # return the new shape object with arrows etc.
-        p1 = complex(self.left(start_x+start_x_fix), self.vcenter(y))
-        p2 = complex(self.right(end_x+end_x_fix), self.vcenter(y))
+        p1 = complex(self.left(start_x + start_x_fix), self.vcenter(y))
+        p2 = complex(self.right(end_x + end_x_fix), self.vcenter(y))
         shapes = []
         if line_start_style:
             p1, arrow_shapes = line_start_style(p1, p2)
@@ -569,7 +628,7 @@ class AsciiArtImage:
             y += dy
         if arrows:
             # check for arrow head
-            following_character = self.get(x+dx, y+dy)
+            following_character = self.get(x + dx, y + dy)
             if following_character in self.ARROW_HEADS:
                 line_end_style = self.get_arrow(following_character, dx, dy)
                 if line_end_style:
@@ -593,13 +652,13 @@ class AsciiArtImage:
         #~ for dx, dy in ((1,0), (-1,0), (0,1), (0,-1)):
         # looking right and down is sufficient as the scan is done from left to
         # right, top to bottom
-        for dx, dy in ((1,0), (0,1)):
-            if self.get(x+dx, y+dy) == '+':
+        for dx, dy in ((1, 0), (0, 1)):
+            if self.get(x + dx, y + dy) == '+':
                 result.append(Line(
                     Point(self.hcenter(x), self.vcenter(y)),
-                    Point(self.hcenter(x+dx), self.vcenter(y+dy))
+                    Point(self.hcenter(x + dx), self.vcenter(y + dy))
                 ))
-        self.tag([(x,y)], CLASS_JOIN)
+        self.tag([(x, y)], CLASS_JOIN)
         return result
 
 
@@ -617,27 +676,39 @@ class AsciiArtImage:
         coordinates = []
         to_scan = [(start_x, start_y)]
         while to_scan:
-            x,y = to_scan.pop()
+            x, y = to_scan.pop()
             if self.cls(x, y) is None:
                 if self.get(x, y) == character:
                     result.extend(fill(x, y))
-                    self.tag([(x,y)], CLASS_RECTANGLE)
-                if self.get(x+1, y) == character:
-                    if self.cls(x+1, y) is None: to_scan.append((x+1, y))
+                    self.tag([(x, y)], CLASS_RECTANGLE)
+                if self.get(x + 1, y) == character:
+                    if self.cls(x + 1, y) is None:
+                        to_scan.append((x + 1, y))
                 elif border:
-                    result.append(Line(Point(self.right(x), self.top(y)), Point(self.right(x), self.bottom(y))))
-                if self.get(x-1, y) == character:
-                    if self.cls(x-1, y) is None: to_scan.append((x-1, y))
+                    result.append(Line(
+                        Point(self.right(x), self.top(y)),
+                        Point(self.right(x), self.bottom(y))))
+                if self.get(x - 1, y) == character:
+                    if self.cls(x - 1, y) is None:
+                        to_scan.append((x - 1, y))
                 elif border:
-                    result.append(Line(Point(self.left(x), self.top(y)), Point(self.left(x), self.bottom(y))))
-                if self.get(x, y+1) == character:
-                    if self.cls(x, y+1) is None: to_scan.append((x, y+1))
+                    result.append(Line(
+                        Point(self.left(x), self.top(y)),
+                        Point(self.left(x), self.bottom(y))))
+                if self.get(x, y + 1) == character:
+                    if self.cls(x, y + 1) is None:
+                        to_scan.append((x, y + 1))
                 elif border:
-                    result.append(Line(Point(self.left(x), self.bottom(y)), Point(self.right(x), self.bottom(y))))
-                if self.get(x, y-1) == character:
-                    if self.cls(x, y-1) is None: to_scan.append((x, y-1))
+                    result.append(Line(
+                        Point(self.left(x), self.bottom(y)),
+                        Point(self.right(x), self.bottom(y))))
+                if self.get(x, y - 1) == character:
+                    if self.cls(x, y - 1) is None:
+                        to_scan.append((x, y - 1))
                 elif border:
-                    result.append(Line(Point(self.left(x), self.top(y)), Point(self.right(x), self.top(y))))
+                    result.append(Line(
+                        Point(self.left(x), self.top(y)),
+                        Point(self.right(x), self.top(y))))
         return group(result)
 
     def _follow_horizontal_string(self, start_x, y, accept_anything=False, quoted=False):
@@ -652,7 +723,7 @@ class AsciiArtImage:
         # follow line from left to right
         if quoted:
             quotation_character = self.get(start_x, y)
-            x = start_x+1
+            x = start_x + 1
         else:
             quotation_character = None
             x = start_x
@@ -661,11 +732,11 @@ class AsciiArtImage:
             text.append(self.get(x, y))
             self.tag([(x, y)], CLASS_STRING)
             is_first_space = True
-            while 0 <= x+1 < self.width and self.cls(x+1, y) is None:
+            while 0 <= x+1 < self.width and self.cls(x + 1, y) is None:
                 if not quoted:
-                    if self.get(x+1, y) == ' ' and not is_first_space:
+                    if self.get(x + 1, y) == ' ' and not is_first_space:
                         break
-                    if not accept_anything and not self.get(x+1, y).isalnum():
+                    if not accept_anything and not self.get(x + 1, y).isalnum():
                         break
                 x += 1
                 character = self.get(x, y)
@@ -679,7 +750,7 @@ class AsciiArtImage:
             if text[-1] == ' ':
                 del text[-1]
                 x -= 1
-            self.tag([(x, y) for x in range(start_x, x+1)], CLASS_STRING)
+            self.tag([(x, y) for x in range(start_x, x + 1)], CLASS_STRING)
             return [Label(
                 Point(self.left(start_x), self.bottom(y)),
                 ''.join(text)
@@ -696,12 +767,12 @@ class AsciiArtImage:
         if self.get(x, y) == '/':
             # rounded rectangles
             # XXX return Arc shapes, not Lines
-            if (self.get(x+1, y) == '-' and self.get(x, y+1) == '|'):
+            if (self.get(x + 1, y) == '-' and self.get(x, y + 1) == '|'):
                 result.append(Line(
                     Point(self.hcenter(x), self.bottom(y)),
                     Point(self.right(x), self.vcenter(y))
                 ))
-            if self.get(x-1, y) == '-' and self.get(x, y-1) == '|':
+            if self.get(x - 1, y) == '-' and self.get(x, y - 1) == '|':
                 result.append(Line(
                     Point(self.hcenter(x), self.top(y)),
                     Point(self.left(x), self.vcenter(y))
@@ -709,31 +780,31 @@ class AsciiArtImage:
             if not result:
                 # if used as diagonal line
                 p1 = p2 = None
-                if self.get(x+1, y-1) == '|':
-                    p1 = Point(self.hcenter(x+1), self.top(y))
-                elif self.get(x+1, y-1) == '+':
-                    p1 = Point(self.hcenter(x+1), self.vcenter(y-1))
-                elif self.get(x+1, y-1) == '-':
-                    p1 = Point(self.right(x), self.vcenter(y-1))
-                elif self.get(x+1, y-1) == '/':
+                if self.get(x + 1, y - 1) == '|':
+                    p1 = Point(self.hcenter(x + 1), self.top(y))
+                elif self.get(x + 1, y - 1) == '+':
+                    p1 = Point(self.hcenter(x + 1), self.vcenter(y - 1))
+                elif self.get(x + 1, y - 1) == '-':
+                    p1 = Point(self.right(x), self.vcenter(y - 1))
+                elif self.get(x + 1, y - 1) == '/':
                     p1 = Point(self.right(x), self.top(y))
-                elif self.get(x+1, y) == '|':
-                    p1 = Point(self.hcenter(x+1), self.top(y))
-                elif self.get(x, y-1) == '-':
-                    p1 = Point(self.right(x), self.vcenter(y-1))
+                elif self.get(x + 1, y) == '|':
+                    p1 = Point(self.hcenter(x + 1), self.top(y))
+                elif self.get(x, y - 1) == '-':
+                    p1 = Point(self.right(x), self.vcenter(y - 1))
 
-                if self.get(x-1, y+1) == '|':
-                    p2 = Point(self.hcenter(x-1), self.top(y+1))
-                elif self.get(x-1, y+1) == '+':
-                    p2 = Point(self.hcenter(x-1), self.vcenter(y+1))
-                elif self.get(x-1, y+1) == '-':
-                    p2 = Point(self.left(x), self.vcenter(y+1))
-                elif self.get(x-1, y+1) == '/':
+                if self.get(x - 1, y + 1) == '|':
+                    p2 = Point(self.hcenter(x - 1), self.top(y + 1))
+                elif self.get(x - 1, y + 1) == '+':
+                    p2 = Point(self.hcenter(x - 1), self.vcenter(y + 1))
+                elif self.get(x - 1, y + 1) == '-':
+                    p2 = Point(self.left(x), self.vcenter(y + 1))
+                elif self.get(x - 1, y + 1) == '/':
                     p2 = Point(self.left(x), self.bottom(y))
-                elif self.get(x-1, y) == '|':
-                    p2 = Point(self.hcenter(x-1), self.bottom(y))
-                elif self.get(x, y+1) == '-':
-                    p2 = Point(self.left(x), self.vcenter(y+1))
+                elif self.get(x - 1, y) == '|':
+                    p2 = Point(self.hcenter(x - 1), self.bottom(y))
+                elif self.get(x, y + 1) == '-':
+                    p2 = Point(self.left(x), self.vcenter(y + 1))
 
                 if p1 or p2:
                     if not p1:
@@ -743,12 +814,12 @@ class AsciiArtImage:
                     result.append(Line(p1, p2))
         else: # '\'
             # rounded rectangles
-            if self.get(x-1, y) == '-' and self.get(x, y+1) == '|':
+            if self.get(x-1, y) == '-' and self.get(x, y + 1) == '|':
                 result.append(Line(
                     Point(self.hcenter(x), self.bottom(y)),
                     Point(self.left(x), self.vcenter(y))
                 ))
-            if self.get(x+1, y) == '-' and self.get(x, y-1) == '|':
+            if self.get(x+1, y) == '-' and self.get(x, y - 1) == '|':
                 result.append(Line(
                     Point(self.hcenter(x), self.top(y)),
                     Point(self.right(x), self.vcenter(y))
@@ -756,31 +827,31 @@ class AsciiArtImage:
             if not result:
                 # if used as diagonal line
                 p1 = p2 = None
-                if self.get(x-1, y-1) == '|':
+                if self.get(x - 1, y - 1) == '|':
                     p1 = Point(self.hcenter(x-1), self.top(y))
-                elif self.get(x-1, y-1) == '+':
-                    p1 = Point(self.hcenter(x-1), self.vcenter(y-1))
-                elif self.get(x-1, y-1) == '-':
+                elif self.get(x - 1, y - 1) == '+':
+                    p1 = Point(self.hcenter(x-1), self.vcenter(y - 1))
+                elif self.get(x - 1, y - 1) == '-':
                     p1 = Point(self.left(x), self.vcenter(y-1))
-                elif self.get(x-1, y-1) == '\\':
+                elif self.get(x - 1, y - 1) == '\\':
                     p1 = Point(self.left(x), self.top(y))
-                elif self.get(x-1, y) == '|':
+                elif self.get(x - 1, y) == '|':
                     p1 = Point(self.hcenter(x-1), self.top(y))
-                elif self.get(x, y-1) == '-':
-                    p1 = Point(self.left(x), self.hcenter(y-1))
+                elif self.get(x, y - 1) == '-':
+                    p1 = Point(self.left(x), self.hcenter(y - 1))
 
-                if self.get(x+1, y+1) == '|':
-                    p2 = Point(self.hcenter(x+1), self.top(y+1))
-                elif self.get(x+1, y+1) == '+':
-                    p2 = Point(self.hcenter(x+1), self.vcenter(y+1))
-                elif self.get(x+1, y+1) == '-':
-                    p2 = Point(self.right(x), self.vcenter(y+1))
-                elif self.get(x+1, y+1) == '\\':
+                if self.get(x + 1, y + 1) == '|':
+                    p2 = Point(self.hcenter(x+1), self.top(y + 1))
+                elif self.get(x + 1, y + 1) == '+':
+                    p2 = Point(self.hcenter(x+1), self.vcenter(y + 1))
+                elif self.get(x + 1, y + 1) == '-':
+                    p2 = Point(self.right(x), self.vcenter(y + 1))
+                elif self.get(x + 1, y + 1) == '\\':
                     p2 = Point(self.right(x), self.bottom(y))
-                elif self.get(x+1, y) == '|':
+                elif self.get(x + 1, y) == '|':
                     p2 = Point(self.hcenter(x+1), self.bottom(y))
-                elif self.get(x, y+1) == '-':
-                    p2 = Point(self.right(x), self.vcenter(y+1))
+                elif self.get(x, y + 1) == '-':
+                    p2 = Point(self.right(x), self.vcenter(y + 1))
 
                 if p1 or p2:
                     if not p1:
@@ -789,9 +860,8 @@ class AsciiArtImage:
                         p2 = Point(self.right(x), self.bottom(y))
                     result.append(Line(p1, p2))
         if result:
-            self.tag([(x,y)], CLASS_JOIN)
+            self.tag([(x, y)], CLASS_JOIN)
         return group(result)
-
 
 
 def process(input, visitor_class, options=None):
@@ -831,7 +901,9 @@ def process(input, visitor_class, options=None):
 
     if options['debug']:
         sys.stderr.write('%r\n' % (input,))
+
     aaimg = AsciiArtImage(input, options['aspect'], options['textual'])
+
     if options['debug']:
         sys.stderr.write('%s\n' % (aaimg,))
     aaimg.recognize()
@@ -1079,4 +1151,3 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 # when module is run, run the command line tool
 if __name__ == '__main__':
     main()
-

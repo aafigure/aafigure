@@ -60,7 +60,7 @@ The ``aafigure`` directive has the following options:
 
 Sphinx directive
 ----------------
-It is called ``aafig``. The same options as for the docutils directive apply
+It is called ``aafig``. The same options as for the Docutils directive apply
 with the exception of ``format``. That option is not supported as the format
 is automatically determined.
 

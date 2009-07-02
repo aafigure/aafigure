@@ -154,7 +154,7 @@ A ``aafigure`` directive is provided that allows to insert images::
 
     .. aafigure::
 
-        -->
+        DD o--->
 
 ::
 
@@ -176,7 +176,7 @@ This provides the ``aafig`` directive::
 
     .. aafig::
 
-        -->
+        DD o--->
 
 The output format is automatically chosen depending on the generated document
 format (e.g. HTML or PDF).
@@ -187,7 +187,7 @@ ASCII Art figures can be inserted into a MoinMoin_ WikiText page the following
 way::
 
     {{{#!aafig scale=1.5 foreground=#ff1010
-    DD --->
+    DD o--->
     }}}
 
 The parser name is ``aafig`` and options are appended, separated with spaces.
