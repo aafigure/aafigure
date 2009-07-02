@@ -145,7 +145,7 @@ class AsciiArtImage:
             for x in range(self.width):
                 #if not yet classified, check for a line
                 character = self.image[y][x]
-                if character in self.QUOTATION_CHARACTERS:
+                if character in self.QUOTATION_CHARACTERS and self.classification[y][x] is None:
                     self.shapes.extend(
                         self._follow_horizontal_string(x, y, quoted=True))
 
@@ -732,7 +732,7 @@ class AsciiArtImage:
             text.append(self.get(x, y))
             self.tag([(x, y)], CLASS_STRING)
             is_first_space = True
-            while 0 <= x+1 < self.width and self.cls(x + 1, y) is None:
+            while 0 <= x + 1 < self.width and self.cls(x + 1, y) is None:
                 if not quoted:
                     if self.get(x + 1, y) == ' ' and not is_first_space:
                         break
@@ -741,6 +741,7 @@ class AsciiArtImage:
                 x += 1
                 character = self.get(x, y)
                 if character == quotation_character:
+                    self.tag([(x, y)], CLASS_STRING)
                     break
                 text.append(character)
                 if character == ' ':
