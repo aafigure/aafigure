@@ -26,7 +26,7 @@ clean:
 install: build
 	dh_testdir
 	dh_testroot
-	dh_clean -k 
+	dh_clean -k
 	dh_installdirs
 	python setup.py install --prefix=$(CURDIR)/debian/python-aafigure/usr
 	dh_pycentral
@@ -37,7 +37,7 @@ binary-indep: build install
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs CHANGES.txt
-	dh_installdocs
+	dh_installdocs README.txt documentation/
 	dh_installman aafigure.1
 	dh_installexamples examples/*
 	dh_installman
