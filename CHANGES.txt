@@ -2,14 +2,21 @@
  Change history for aafigure
 =============================
 
+aafigure 0.4    2009-07-04
+    Internal code cleanups, add "process" function to external API.
+    Improved setup.py and MANIFEST.in for a more complete source distribution.
+    Documentation is done with Sphinx.
+    Command line tool: added --option.
+    Several bug fixes.
+
 aafigure 0.3    2009-06-13
     Added type detection by filename. Added examples and man page and did some
     internal cleanups.
 
 aafigure 0.2    2009-06-12
     Separated into standalone project. Previously it was found in the docutils
-    sandbox. The docutils plugin for the aafigure directive is separated and
+    sandbox. The Docutils plugin for the aafigure directive is separated and
     aafigure is now a standalone package and command line tool. The plugin is
     still available as separate package that uses aafigure as dependency.
 
-    Added debian control files to build a package.
+    Added Debian control files to build a package.

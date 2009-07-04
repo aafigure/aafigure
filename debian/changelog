@@ -1,3 +1,10 @@
+aafigure (0.4) jaunty; urgency=low
+
+  * package new release (bugfix, internal API update)
+  * add documentation
+
+ -- Chris Liechti <cliechti@gmx.net>  Sat, 04 Jul 2009 01:58:51 +0200
+
 aafigure (0.3) jaunty; urgency=low
 
   * examples and man page added

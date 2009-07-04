@@ -10,7 +10,7 @@ from distutils.core import setup
 
 setup(
     name = 'aafigure',
-    version = '0.3',
+    version = '0.4',
     description = "ASCII art to image converter",
     url = 'http://launchpad.net/aafigure',
     license = 'BSD',

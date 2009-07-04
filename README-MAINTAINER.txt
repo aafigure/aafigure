@@ -3,7 +3,7 @@
 ==========================
 
 This document contains notes for developers and packagers. End users probably
-want to read README.txt instead.
+want to read README.txt and the files in the documentation directory instead.
 
 
 What's in the branch
@@ -40,13 +40,13 @@ For a release:
 9. PyPi release done?
 
 For a local test, ``debuild`` respectively ``debuild -S`` can be run in the
-``aafigure`` directory. The resulting debian package is placed in the parent
+``aafigure`` directory. The resulting Debian package is placed in the parent
 directory.
 
 
 PyPi Release
 ============
-See debian package release and ensure that version numbers are correct.
+See Debian package release and ensure that version numbers are correct.
 
 1. ``python setup.py register``
 2. ``python setup.py sdist upload``

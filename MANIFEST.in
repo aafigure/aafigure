@@ -1,8 +1,27 @@
 include README.txt
 include LICENSE.txt
 include CHANGES.txt
+include MANIFEST.in
 include setup.py
 include aafigure/*.py
+
 include examples/*.py
 include examples/*.txt
+include examples/moinmoin/aafig.py
+
 include scripts/aafigure
+
+include docutils/aafigure_directive.py
+include docutils/setup-docutils-plugin.py
+
+include branding/aafigure-logo.png
+include branding/aafigure-logo-small.png
+include branding/aafigure-logo.svg
+
+include documentation/appendix.rst
+include documentation/conf.py
+include documentation/examples.rst
+include documentation/index.rst
+include documentation/Makefile
+include documentation/manual.rst
+include documentation/shortintro.rst
