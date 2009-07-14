@@ -12,8 +12,6 @@ from error import UnsupportedFormatError
 try:
     import Image, ImageDraw, ImageFont
 except ImportError:
-    if close_output:
-        output.close()
     raise UnsupportedFormatError('please install PIL to get bitmaps output support')
 
 
