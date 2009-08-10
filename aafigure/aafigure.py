@@ -12,9 +12,10 @@ See svg.py and aa.py for output modules, that can render the parsed structure.
 This is open source software under the BSD license. See LICENSE.txt for more
 details.
 """
-
+import codecs
 from error import UnsupportedFormatError
 from shapes import *
+from unicodedata import east_asian_width
 import sys
 
 NOMINAL_SIZE = 2
@@ -35,6 +36,8 @@ DEFAULT_OPTIONS = dict(
     debug        = False,
     textual      = False,
     proportional = False,
+    encoding     = 'utf-8',
+    widechars     = 'F,W',
 )
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -56,7 +59,7 @@ class AsciiArtImage:
 
     QUOTATION_CHARACTERS = list('"\'`')
 
-    def __init__(self, text, aspect_ratio=1, textual=False):
+    def __init__(self, text, aspect_ratio=1, textual=False, widechars='F,W'):
         """Take a ASCII art figure and store it, prepare for ``recognize``"""
         self.aspect_ratio = float(aspect_ratio)
         self.textual = textual
@@ -65,9 +68,20 @@ class AsciiArtImage:
         self.image = []
         max_x = 0
         y = 0
+        # define character widths map
+        charwidths = {}
+        for key in ['F', 'H', 'W', 'Na', 'A', 'N']:
+            if key in widechars.split(','):
+                charwidths[key] = 2
+            else:
+                charwidths[key] = 1
         for line in text.splitlines():
-            max_x = max(max_x, len(line))
-            self.image.append(line)
+            # extend length by 1 for each wide glyph
+            line_len = sum(charwidths[east_asian_width(c)] for c in line)
+            max_x = max(max_x, line_len)
+            # pad a space for each wide glyph
+            padded_line = ''.join(c+' '*(charwidths[east_asian_width(c)]-1) for c in line)
+            self.image.append(padded_line)
             y += 1
         self.width = max_x
         self.height = y
@@ -903,7 +917,7 @@ def process(input, visitor_class, options=None):
     if options['debug']:
         sys.stderr.write('%r\n' % (input,))
 
-    aaimg = AsciiArtImage(input, options['aspect'], options['textual'])
+    aaimg = AsciiArtImage(input, options['aspect'], options['textual'], options['widechars'])
 
     if options['debug']:
         sys.stderr.write('%s\n' % (aaimg,))
@@ -1009,6 +1023,20 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     description = "ASCII art to image (SVG, PNG, JPEG, PDF and more) converter."
     )
 
+    parser.add_option("-e", "--encoding",
+        dest = "encoding",
+        action = "store",
+        help = "character encoding of input text",
+        default = DEFAULT_OPTIONS['encoding'],
+    )
+
+    parser.add_option("-w", "--wide-chars",
+        dest = "widechars",
+        action = "store",
+        help = "unicode properties to be treated as wide glyph (e.g. 'F,W,A')",
+        default = DEFAULT_OPTIONS['widechars'],
+    )
+
     parser.add_option("-o", "--output",
         dest = "output",
         metavar = "FILE",
@@ -1105,9 +1133,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             options.format = os.path.splitext(options.output)[1][1:]
 
     if args:
-        input = file(args[0])
+        _input = file(args[0])
     else:
-        input = sys.stdin
+        _input = sys.stdin
+    input = codecs.getreader(options.encoding)(_input)
 
     if options.output is None:
         output = sys.stdout
@@ -1116,7 +1145,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     # explicit copying of parameters to the options dictionary
     options_dict = {}
-    for key in ('textual', 'proportional',
+    for key in ('widechars', 'textual', 'proportional',
                 'linewidth', 'aspect', 'scale',
                 'format', 'debug'):
         options_dict[key] = getattr(options, key)
