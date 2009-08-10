@@ -9,10 +9,17 @@ details.
 
 import sys
 from error import UnsupportedFormatError
+PIL_OK = False
 try:
     import Image, ImageDraw, ImageFont
+    PIL_OK = True
 except ImportError:
-    raise UnsupportedFormatError('please install PIL to get bitmaps output support')
+    pass
+if PIL_OK is False:
+    try:
+        from PIL import Image, ImageDraw, ImageFont
+    except ImportError:
+        raise UnsupportedFormatError('please install PIL to get bitmaps output support')
 
 
 class PILOutputVisitor:
