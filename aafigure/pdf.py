@@ -14,6 +14,8 @@ try:
     from reportlab.lib import colors
     from reportlab.graphics.shapes import *
     from reportlab.graphics import renderPDF
+    from reportlab.pdfbase import pdfmetrics
+    from reportlab.pdfbase.ttfonts import  TTFont
 except ImportError:
     raise UnsupportedFormatError('please install Reportlab to get PDF output support')
 
@@ -43,6 +45,9 @@ class PDFOutputVisitor:
         # if front is given explicit, use it instead of textual/proportional flags
         if 'font' in options:
             self.font = options['font']
+            if self.font.endswith('.ttf'):
+                # ttf support
+                pdfmetrics.registerFont(TTFont(self.font, self.font))
         else:
             if options['proportional']:
                 self.font = 'Helvetica'
