@@ -45,6 +45,9 @@ class PILOutputVisitor:
             else:
                 self.font = 'Courier_New.ttf'
 
+    def _num(self, number):
+        return number * self.scale
+
     def visit_image(self, aa_image):
         """Process the given ASCIIArtFigure and draw the shapes in
            the bitmap file
@@ -55,7 +58,7 @@ class PILOutputVisitor:
 
         self.image = Image.new(
             'RGB',
-            (int(self.width*self.scale), int(self.height*self.scale)),
+            (int(self._num(self.width)), int(self._num(self.height))),
             self.background
         )
         self.draw = ImageDraw.Draw(self.image)
@@ -95,13 +98,18 @@ class PILOutputVisitor:
     # - - - - - - drawing helpers - - - - - - -
     def _line(self, x1, y1, x2, y2):
         """Draw a line, coordinates given as four decimal numbers"""
-        self.draw.line((x1, y1, x2, y2), fill=self.foreground) #self.line_width
+        self.draw.line((self._num(x1), self._num(y1),
+                        self._num(x2), self._num(y2)),
+                       fill=self.foreground) #self.line_width
 
     def _rectangle(self, x1, y1, x2, y2):
         """Draw a rectangle, coordinates given as four decimal numbers.
            ``style`` is inserted in the SVG. It could be e.g. "fill:yellow"
         """
-        self.draw.rectangle((x1, y1, x2, y2), fill=self.fillcolor, outline=self.foreground) #self.line_width
+        self.draw.rectangle((self._num(x1), self._num(y1),
+                             self._num(x2), self._num(y2)),
+                            fill=self.fillcolor,
+                            outline=self.foreground) #self.line_width
 
     # - - - - - - visitor function for the different shape types - - - - - - -
 
@@ -109,8 +117,8 @@ class PILOutputVisitor:
         dotsize = 2
         self.draw.ellipse(
             (
-                point.x*self.scale-dotsize, point.y*self.scale-dotsize,
-                point.x*self.scale+dotsize, point.y*self.scale+dotsize
+                self._num(point.x)-dotsize, self._num(point.y)-dotsize,
+                self._num(point.x)+dotsize, self._num(point.y)+dotsize
             ),
             fill=self.foreground
         )
@@ -118,20 +126,20 @@ class PILOutputVisitor:
     def visit_line(self, line):
         x1, x2 = line.start.x, line.end.x
         y1, y2 = line.start.y, line.end.y
-        self._line(x1*self.scale, y1*self.scale, x2*self.scale, y2*self.scale)
+        self._line(x1, y1, x2, y2)
 
     def visit_rectangle(self, rectangle):
         self._rectangle(
-            rectangle.p1.x*self.scale, rectangle.p1.y*self.scale,
-            rectangle.p2.x*self.scale, rectangle.p2.y*self.scale,
+            rectangle.p1.x, rectangle.p1.y,
+            rectangle.p2.x, rectangle.p2.y,
         )
 
 
     def visit_circle(self, circle):
         self.draw.ellipse(
             (
-                (circle.center.x-circle.radius)*self.scale, (circle.center.y-circle.radius)*self.scale,
-                (circle.center.x+circle.radius)*self.scale, (circle.center.y+circle.radius)*self.scale
+                self._num(circle.center.x-circle.radius), self._num(circle.center.y-circle.radius),
+                self._num(circle.center.x+circle.radius), self._num(circle.center.y+circle.radius)
             ),
             fill=self.fillcolor,
             outline=self.foreground,
@@ -140,8 +148,31 @@ class PILOutputVisitor:
     def visit_label(self, label):
         #  font-weight="bold"
         self.draw.text(
-            (label.position.x*self.scale, (label.position.y-self.aa_image.nominal_size*1.1)*self.scale),
+            (self._num(label.position.x), self._num(label.position.y-self.aa_image.nominal_size*1.1)),
             label.text,
             fill=self.foreground,
-            font=ImageFont.truetype(self.font, int(self.aa_image.nominal_size*1.1*self.scale))
+            font=ImageFont.truetype(self.font, int(self._num(self.aa_image.nominal_size*1.1)))
         )
+
+    def _bezier(self, p1, c1, c2, p2, level=1):
+        # de Casteljau's algorithm
+        if self._num(p1.distance(p2)) <= 3:
+            self._line(p1.x, p1.y, p2.x, p2.y)
+        else:
+            cmid = c1.midpoint(c2)
+            lp1 = p1
+            lc1 = p1.midpoint(c1)
+            lc2 = lc1.midpoint(cmid)
+            rp2 = p2
+            rc2 = p2.midpoint(c2)
+            rc1 = rc2.midpoint(cmid)
+            lp2 = rc1.midpoint(lc2)
+            rp1 = lp2
+            self._bezier(lp1, lc1, lc2, lp2, level + 1)
+            self._bezier(rp1, rc1, rc2, rp2, level + 1)
+        
+    def visit_arc(self, arc):
+        p1, p2 = arc.start, arc.end
+        c1 = arc.start_control_point()
+        c2 = arc.end_control_point()
+        self._bezier(p1, c1, c2, p2)

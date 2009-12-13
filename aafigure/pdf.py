@@ -150,3 +150,14 @@ class PDFOutputVisitor:
         # XXX could add a group to the PDF file
         self.visit_shapes(group.shapes)
 
+    def visit_arc(self, arc):
+        p1, p2 = arc.start, arc.end
+        c1 = arc.start_control_point()
+        c2 = arc.end_control_point()
+        path = Path(strokeColor = self._color(self.foreground),
+                    strokeWidth = self.line_width)
+        path.moveTo (self._num(p1.x), self._num(self.height - p1.y))
+        path.curveTo(self._num(c1.x), self._num(self.height - c1.y),
+                     self._num(c2.x), self._num(self.height - c2.y),
+                     self._num(p2.x), self._num(self.height - p2.y))
+        self.drawing.add(path)
