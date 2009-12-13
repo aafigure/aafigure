@@ -1121,7 +1121,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     )
 
     parser.add_option("-l", "--linewidth",
-        dest = "linewidth",
+        dest = "line_width",
         action = "store",
         type = 'float',
         help = "set width, svg only",
@@ -1187,7 +1187,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     # explicit copying of parameters to the options dictionary
     options_dict = {}
     for key in ('widechars', 'textual', 'proportional',
-                'linewidth', 'aspect', 'scale',
+                'line_width', 'aspect', 'scale',
                 'format', 'debug'):
         options_dict[key] = getattr(options, key)
     # ensure all color parameters start with a '#'
