@@ -17,7 +17,6 @@ class SVGOutputVisitor:
         self.options = options
         self.file_like = options['file_like']
         self.scale = options['scale']*7
-        self.unit = 'px'
         self.line_width = options['line_width']
         self.foreground = options['foreground']
         self.background = options['background']
@@ -33,12 +32,8 @@ class SVGOutputVisitor:
                 self.font = 'monospace'
 
     def _num(self, number):
-        """helper to format numbers with scale and unit for svg output"""
-        return "%d%s" % (number*self.scale, self.unit)
-
-    def _unit(self, number):
-        """helper to format numbers with unit for svg output"""
-        return "%d%s" % (number, self.unit)
+        """helper to scale numbers for svg output"""
+        return number * self.scale
 
     def get_size_attrs(self):
         """get image size as svg text"""
@@ -91,14 +86,14 @@ class SVGOutputVisitor:
     def _line(self, x1, y1, x2, y2, thick):
         """Draw a line, coordinates given as four decimal numbers"""
         self.file_like.write(
-            """%s<line x1="%s" y1="%s" x2="%s" y2="%s" style="stroke:%s; stroke-width:%s;" />\n""" % (
+            """%s<line x1="%s" y1="%s" x2="%s" y2="%s" stroke="%s" stroke-width="%s" />\n""" % (
             self.indent,
             self._num(x1),
             self._num(y1),
             self._num(x2),
             self._num(y2),
             self.foreground,
-            self._unit(self.line_width*(1+bool(thick)))))
+            self.line_width*(1+bool(thick))))
 
     def _rectangle(self, x1, y1, x2, y2, style=''):
         """Draw a rectangle, coordinates given as four decimal numbers.
@@ -107,7 +102,7 @@ class SVGOutputVisitor:
         if x1 > x2: x1, x2 = x2, x1
         if y1 > y2: y1, y2 = y2, y1
         self.file_like.write("""\
-%s<rect x="%s" y="%s" width="%s" height="%s" style="stroke:%s; fill:%s; stroke-width:%s; %s" />
+%s<rect x="%s" y="%s" width="%s" height="%s" stroke="%s" fill="%s" stroke-width="%s" style="%s" />
 """ % (
             self.indent,
             self._num(x1), self._num(y1),
@@ -115,7 +110,7 @@ class SVGOutputVisitor:
             #~ self.foreground, #stroke:%s;
             self.fillcolor, #stroke:%s;
             self.fillcolor,
-            self._unit(self.line_width),
+            self.line_width,
             style
         ))
 
@@ -123,13 +118,13 @@ class SVGOutputVisitor:
 
     def visit_point(self, point):
         self.file_like.write("""\
-%s<circle cx="%s" cy="%s" r="%s" style="fill:%s; stroke:%s; stroke-width:%s;" />
+%s<circle cx="%s" cy="%s" r="%s" fill="%s" stroke="%s" stroke-width="%s" />
 """ % (
         self.indent,
         self._num(point.x), self._num(point.y),
         self._num(0.2),
         self.foreground, self.foreground,
-        self._unit(self.line_width)))
+        self.line_width))
 
     def visit_line(self, line):
         x1, x2 = line.start.x, line.end.x
@@ -145,19 +140,19 @@ class SVGOutputVisitor:
 
     def visit_circle(self, circle):
         self.file_like.write("""\
-%s<circle cx="%s" cy="%s" r="%s" style="stroke:%s; stroke-width:%s;fill:%s" />
+%s<circle cx="%s" cy="%s" r="%s" stroke="%s" stroke-width="%s" fill="%s" />
 """ % (
         self.indent,
         self._num(circle.center.x), self._num(circle.center.y),
         self._num(circle.radius),
         self.foreground,
-        self._unit(self.line_width),
+        self.line_width,
         self.fillcolor))
 
     def visit_label(self, label):
         #  font-weight="bold"   style="stroke:%s"
         self.file_like.write("""\
-%s<text x="%s" y="%s" font-family="%s" font-size="%s" style="fill:%s" >
+%s<text x="%s" y="%s" font-family="%s" font-size="%s" fill="%s" >
   %s
 %s</text>
 """ % (
@@ -178,3 +173,18 @@ class SVGOutputVisitor:
         self.indent = old_indent
         self.file_like.write("</g>\n")
 
+    def visit_arc(self, arc):
+        p1, p2 = arc.start, arc.end
+        c1 = arc.start_control_point()
+        c2 = arc.end_control_point()
+        self.file_like.write("""\
+%s<path d="M%s,%s C%s,%s %s,%s %s,%s" fill="none" stroke="%s" stroke-width="%s" />
+""" % (
+        self.indent,
+        self._num(p1.x), self._num(p1.y),
+        self._num(c1.x), self._num(c1.y),
+        self._num(c2.x), self._num(c2.y),
+        self._num(p2.x), self._num(p2.y),
+        self.foreground,
+        self.line_width
+        ))

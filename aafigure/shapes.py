@@ -8,6 +8,8 @@
 # This intentionally is no doc comment to make it easier to include the module
 # in Sphinx ``.. automodule::``
 
+import math
+
 def point(object):
     """return a Point instance.
        - if object is already a Point instance it's returned as is
@@ -42,6 +44,14 @@ class Point:
 
     def __repr__(self):
         return 'Point(%r, %r)' % (self.x, self.y)
+
+    def distance(self, other):
+        return math.sqrt( (self.x - other.x)**2 +
+                          (self.y - other.y)**2 )
+
+    def midpoint(self, other):
+        return Point( (self.x + other.x)/2,
+                      (self.y + other.y)/2 )
 
 
 class Line:
@@ -90,3 +100,46 @@ class Group:
         self.shapes = shapes
     def __repr__(self):
         return 'Group(%r)' % (self.shapes,)
+
+
+class Arc:
+    """A smooth arc between two points"""
+    def __init__(self, start, start_angle, end, end_angle, start_curve=True, end_curve=True):
+        self.start = point(start)
+        self.end   = point(end)
+        self.start_angle = start_angle
+        self.end_angle   = end_angle
+        self.start_curve = start_curve
+        self.end_curve   = end_curve
+    def __repr__(self):
+        return 'Arc(%r, %r, %r, %r, %r, %r)' % (self.start,       self.start_angle,
+                                                self.end,         self.end_angle,
+                                                self.start_curve, self.end_curve)
+
+    def start_angle_rad(self):
+        return self.start_angle * math.pi / 180
+
+    def end_angle_rad(self):
+        return self.end_angle   * math.pi / 180
+
+    def __tension(self):
+        return self.start.distance( self.end )/3
+
+    # assumptions: x increases going right, y increases going down
+    def start_control_point(self):
+        if self.start_curve:
+            dd = self.__tension()
+            angle = self.start_angle_rad()
+            return Point(self.start.x + dd * math.cos(angle),
+                         self.start.y - dd * math.sin(angle))
+        else:
+            return self.start
+
+    def end_control_point(self):
+        if self.end_curve:
+            dd = self.__tension()
+            angle = self.end_angle_rad()
+            return Point(self.end.x + dd * math.cos(angle),
+                         self.end.y - dd * math.sin(angle))
+        else:
+            return self.end

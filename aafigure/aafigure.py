@@ -781,28 +781,38 @@ class AsciiArtImage:
         result = []
         if self.get(x, y) == '/':
             # rounded rectangles
-            # XXX return Arc shapes, not Lines
             if (self.get(x + 1, y) == '-' and self.get(x, y + 1) == '|'):
-                result.append(Line(
-                    Point(self.hcenter(x), self.bottom(y)),
-                    Point(self.right(x), self.vcenter(y))
+                # upper left corner
+                result.append(Arc(
+                    Point(self.hcenter(x), self.bottom(y)), 90,
+                    Point(self.right(x), self.vcenter(y)),  180
                 ))
             if self.get(x - 1, y) == '-' and self.get(x, y - 1) == '|':
-                result.append(Line(
-                    Point(self.hcenter(x), self.top(y)),
-                    Point(self.left(x), self.vcenter(y))
+                # lower right corner
+                result.append(Arc(
+                    Point(self.hcenter(x), self.top(y)),  -90,
+                    Point(self.left(x), self.vcenter(y)), 0
                 ))
             if not result:
                 # if used as diagonal line
                 p1 = p2 = None
+                a1 = a2 = 0
+                arc = c1 = c2 = False
                 if self.get(x + 1, y - 1) == '|':
                     p1 = Point(self.hcenter(x + 1), self.top(y))
+                    a1 = -90
+                    arc = c1 = True
                 elif self.get(x + 1, y - 1) == '+':
                     p1 = Point(self.hcenter(x + 1), self.vcenter(y - 1))
+                    a1 = -135
                 elif self.get(x + 1, y - 1) == '-':
                     p1 = Point(self.right(x), self.vcenter(y - 1))
+                    a1 = 180
+                    arc = c1 = True
                 elif self.get(x + 1, y - 1) == '/':
                     p1 = Point(self.right(x), self.top(y))
+                    a1 = -135
+                    c1 = True
                 elif self.get(x + 1, y) == '|':
                     p1 = Point(self.hcenter(x + 1), self.top(y))
                 elif self.get(x, y - 1) == '-':
@@ -810,12 +820,19 @@ class AsciiArtImage:
 
                 if self.get(x - 1, y + 1) == '|':
                     p2 = Point(self.hcenter(x - 1), self.top(y + 1))
+                    a2 = 90
+                    arc = c2 = True
                 elif self.get(x - 1, y + 1) == '+':
                     p2 = Point(self.hcenter(x - 1), self.vcenter(y + 1))
+                    a2 = 45
                 elif self.get(x - 1, y + 1) == '-':
                     p2 = Point(self.left(x), self.vcenter(y + 1))
+                    a2 = 0
+                    arc = c2 = True
                 elif self.get(x - 1, y + 1) == '/':
                     p2 = Point(self.left(x), self.bottom(y))
+                    a2 = 45
+                    c2 = True
                 elif self.get(x - 1, y) == '|':
                     p2 = Point(self.hcenter(x - 1), self.bottom(y))
                 elif self.get(x, y + 1) == '-':
@@ -826,30 +843,44 @@ class AsciiArtImage:
                         p1 = Point(self.right(x), self.top(y))
                     if not p2:
                         p2 = Point(self.left(x), self.bottom(y))
-                    result.append(Line(p1, p2))
+                    if arc:
+                        result.append(Arc(p1, a1, p2, a2, c1, c2))
+                    else:
+                        result.append(Line(p1, p2))
         else: # '\'
             # rounded rectangles
             if self.get(x-1, y) == '-' and self.get(x, y + 1) == '|':
-                result.append(Line(
-                    Point(self.hcenter(x), self.bottom(y)),
-                    Point(self.left(x), self.vcenter(y))
+                # upper right corner
+                result.append(Arc(
+                    Point(self.hcenter(x), self.bottom(y)), 90,
+                    Point(self.left(x), self.vcenter(y)),   0
                 ))
             if self.get(x+1, y) == '-' and self.get(x, y - 1) == '|':
-                result.append(Line(
-                    Point(self.hcenter(x), self.top(y)),
-                    Point(self.right(x), self.vcenter(y))
+                # lower left corner
+                result.append(Arc(
+                    Point(self.hcenter(x), self.top(y)),   -90,
+                    Point(self.right(x), self.vcenter(y)), 180
                 ))
             if not result:
                 # if used as diagonal line
                 p1 = p2 = None
+                a1 = a2 = 0
+                arc = c1 = c2 = False
                 if self.get(x - 1, y - 1) == '|':
                     p1 = Point(self.hcenter(x-1), self.top(y))
+                    a1 = -90
+                    arc = c1 = True
                 elif self.get(x - 1, y - 1) == '+':
                     p1 = Point(self.hcenter(x-1), self.vcenter(y - 1))
+                    a1 = -45
                 elif self.get(x - 1, y - 1) == '-':
                     p1 = Point(self.left(x), self.vcenter(y-1))
+                    a1 = 0
+                    arc = c1 = True
                 elif self.get(x - 1, y - 1) == '\\':
                     p1 = Point(self.left(x), self.top(y))
+                    a1 = -45
+                    c1 = True
                 elif self.get(x - 1, y) == '|':
                     p1 = Point(self.hcenter(x-1), self.top(y))
                 elif self.get(x, y - 1) == '-':
@@ -857,12 +888,19 @@ class AsciiArtImage:
 
                 if self.get(x + 1, y + 1) == '|':
                     p2 = Point(self.hcenter(x+1), self.top(y + 1))
+                    a2 = 90
+                    arc = c2 = True
                 elif self.get(x + 1, y + 1) == '+':
                     p2 = Point(self.hcenter(x+1), self.vcenter(y + 1))
+                    a2 = 135
                 elif self.get(x + 1, y + 1) == '-':
                     p2 = Point(self.right(x), self.vcenter(y + 1))
+                    a2 = 180
+                    arc = c2 = True
                 elif self.get(x + 1, y + 1) == '\\':
                     p2 = Point(self.right(x), self.bottom(y))
+                    a2 = 135
+                    c2 = True
                 elif self.get(x + 1, y) == '|':
                     p2 = Point(self.hcenter(x+1), self.bottom(y))
                 elif self.get(x, y + 1) == '-':
@@ -873,7 +911,10 @@ class AsciiArtImage:
                         p1 = Point(self.left(x), self.top(y))
                     if not p2:
                         p2 = Point(self.right(x), self.bottom(y))
-                    result.append(Line(p1, p2))
+                    if arc:
+                        result.append(Arc(p1, a1, p2, a2, c1, c2))
+                    else:
+                        result.append(Line(p1, p2))
         if result:
             self.tag([(x, y)], CLASS_JOIN)
         return group(result)
@@ -1080,7 +1121,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     )
 
     parser.add_option("-l", "--linewidth",
-        dest = "linewidth",
+        dest = "line_width",
         action = "store",
         type = 'float',
         help = "set width, svg only",
@@ -1146,7 +1187,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     # explicit copying of parameters to the options dictionary
     options_dict = {}
     for key in ('widechars', 'textual', 'proportional',
-                'linewidth', 'aspect', 'scale',
+                'line_width', 'aspect', 'scale',
                 'format', 'debug'):
         options_dict[key] = getattr(options, key)
     # ensure all color parameters start with a '#'
