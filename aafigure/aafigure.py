@@ -1043,7 +1043,7 @@ def main():
     parser = optparse.OptionParser(
         usage = "%prog [options] [file]",
         version = """\
-%prog 0.3
+%prog 0.5
 
 Copyright (C) 2006-2009 aafigure-team
 
