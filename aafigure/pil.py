@@ -11,15 +11,16 @@ import sys
 from error import UnsupportedFormatError
 PIL_OK = False
 try:
-    import Image, ImageDraw, ImageFont
+    import Image, ImageDraw
     PIL_OK = True
 except ImportError:
     pass
 if PIL_OK is False:
     try:
-        from PIL import Image, ImageDraw, ImageFont
+        from PIL import Image, ImageDraw
     except ImportError:
         raise UnsupportedFormatError('please install PIL to get bitmaps output support')
+import PILhelper
 
 
 class PILOutputVisitor:
@@ -34,16 +35,6 @@ class PILOutputVisitor:
         self.foreground = options['foreground']
         self.background = options['background']
         self.fillcolor = options['fill']
-        # if front is given explicit, use it instead of textual/proportional flags
-        if 'font' in options:
-            self.font = options['font']
-        else:
-            # XXX find a good way to locate font files... as the following does not
-            # work on all platforms
-            if options['proportional']:
-                self.font = 'Arial.ttf'
-            else:
-                self.font = 'Courier_New.ttf'
 
     def _num(self, number):
         return number * self.scale
@@ -55,6 +46,15 @@ class PILOutputVisitor:
         self.aa_image = aa_image        # save for later XXX not optimal to do it here
         self.width = (aa_image.width+1)*aa_image.nominal_size*aa_image.aspect_ratio
         self.height = (aa_image.height+1)*aa_image.nominal_size
+
+        # if font is given explicit, use it instead of proportional flag
+        font_size = int(self._num(self.aa_image.nominal_size*1.1))
+        if 'font' in self.options:
+            self.font = PILhelper.font_by_name(self.options['font'], font_size)
+        else:
+            self.font = PILhelper.font_by_type(self.options['proportional'], font_size)
+        if self.font is None:
+            sys.stderr.write("WARNING: font not found, using PIL default font\n")
 
         self.image = Image.new(
             'RGB',
@@ -151,7 +151,7 @@ class PILOutputVisitor:
             (self._num(label.position.x), self._num(label.position.y-self.aa_image.nominal_size*1.1)),
             label.text,
             fill=self.foreground,
-            font=ImageFont.truetype(self.font, int(self._num(self.aa_image.nominal_size*1.1)))
+            font=self.font
         )
 
     def _bezier(self, p1, c1, c2, p2, level=1):
