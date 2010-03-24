@@ -1,3 +1,9 @@
+aafigure (0.5) karmic; urgency=low
+
+  * bugfix release (PIL font and 5 minor bugs, see CHANGES.txt for details)
+
+ -- Chris Liechti <cliechti@gmx.net>  Wed, 24 Mar 2010 19:23:15 +0100
+
 aafigure (0.4) jaunty; urgency=low
 
   * package new release (bugfix, internal API update)

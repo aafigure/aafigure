@@ -2,6 +2,15 @@
  Change history for aafigure
 =============================
 
+aafigure 0.5    2010-03-24
+    Bugs fixed (launchpad.net IDs):
+    - #392949 aafigure fails to run examples : missing font files cause breakage
+    - #411253 KeyError is raised for PDF rendering with -O font= option
+    - #411255 Importing PIL fails on some installation
+    - #411257 East-asian wideglyphs breaks alignment
+    - #462593 KeyError: 'format' when using through MoinMoin parser "aafig"
+    - #529409 aafigured SVGs are not rendered by evince, nautilus-thumbnailer, zim and perhaps others
+
 aafigure 0.4    2009-07-04
     Internal code cleanups, add "process" function to external API.
     Improved setup.py and MANIFEST.in for a more complete source distribution.

@@ -1045,7 +1045,7 @@ def main():
         version = """\
 %prog 0.5
 
-Copyright (C) 2006-2009 aafigure-team
+Copyright (C) 2006-2010 aafigure-team
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted under the terms of the BSD License.
