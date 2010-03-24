@@ -27,17 +27,20 @@ working copy).
 For a release:
 1. Make sure the branch is up-to date.
 2. Ensure the version is incremented:
-   - setup.py  must be updated
-   - aafigure/aafigure.py  must be updated, see version at end of file
-   - CHANGES.txt  must contain a summary of the changes
-   - debian/changes  must be updated (may use ``dch -v 0.3``)
+   - ``setup.py``  must be updated
+   - ``aafigure/aafigure.py``  must be updated, see version at end of file
+   - ``CHANGES.txt``  must contain a summary of the changes
+   - ``debian/changes``  must be updated (may use ``dch -v 0.3``)
+   - ``documentation/conf.py``  must be updated (version)
 3. Make sure all changes are committed, including the version number changes.
-4. Tag the sources.
-5. Build a source package: ``bzr builddeb -S``.
-6. Upload to PPA: ``dput aafigure-ppa ./aafigure_0.2_source.changes``.
-7. Wait... Then check https://launchpad.net/~aafigure-team/+archive/ppa
-8. Don't forget to ``bzr push``.
-9. PyPi release done?
+4. Check the documentation, ``cd docuementation; make html``
+   Then see ``_build/html/index.html``.
+5. Tag the sources ``bzr tag aafigure_0.3``.
+6. Build a source package: ``bzr builddeb -S``.
+7. Upload to PPA: ``dput aafigure-ppa ./aafigure_0.2_source.changes``.
+8. Wait... Then check https://launchpad.net/~aafigure-team/+archive/ppa
+9. Don't forget to ``bzr push``.
+10. PyPi release done?
 
 For a local test, ``debuild`` respectively ``debuild -S`` can be run in the
 ``aafigure`` directory. The resulting Debian package is placed in the parent
