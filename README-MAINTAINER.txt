@@ -54,6 +54,10 @@ See Debian package release and ensure that version numbers are correct.
 1. ``python setup.py register``
 2. ``python setup.py sdist upload``
 
+Upload to packages.python.org:
+1. ``cd documentation; make html zip``
+2. go to http://pypi.python.org/pypi?%3Aaction=pkg_edit&name=aafigure and
+   upload the zip
 
 dput settings
 =============
