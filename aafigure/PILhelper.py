@@ -33,7 +33,7 @@ def font_by_name(name, size):
         font = ImageFont.truetype(name, size)
     except IOError:
         # PIL upto 1.1.7b1 only tries absolute paths for win32
-        if sys.platform.startswith('linux'):
+        if os.name == 'posix':
             font_path = _find_file(name, '/usr/share/fonts')
             if font_path:
                 try:

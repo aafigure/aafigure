@@ -1,3 +1,9 @@
+aafigure (0.5ubuntu1) karmic; urgency=low
+
+  * Closes: #546834: font lookup code disabled on non-Linux unices
+
+ -- Oliver Joos <oliver.joos@hispeed.ch>  Tue, 06 Apr 2010 14:43:14 +0200
+
 aafigure (0.5) karmic; urgency=low
 
   * bugfix release (PIL font and 5 minor bugs, see CHANGES.txt for details)
