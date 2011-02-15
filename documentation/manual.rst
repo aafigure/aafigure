@@ -38,9 +38,10 @@ There are of course also a lot of other tools doing text to image conversions
 of some sort. One of the main differences is typically that other tools use a
 description language to generate images from rules. This is a major difference
 to aafigure which aims to convert good looking diagrams/images etc. in text
-files to better looking images as bitmap or vector graphics.
+files to better looking images as bitmap or vector graphics. Here are some
+examples (by no means a complete list):
 
-Graphviz
+Graphviz_
     Graphviz is a very popular tool that is excellent for displaying graphs and
     networks. It does this by reading a list of relations between nodes and it
     automatically finds the best way to place all the nodes in a visually
@@ -49,6 +50,17 @@ Graphviz
     This is quite different from aafigure and both have their strengths.
     Graphviz is very well suited to document state machines, class hierarchies
     and other graphs.
+
+Mscgen_
+    A tool that is specialized for sequence diagrams (used to describe
+    software, UML).
+
+ditaa_
+    Convert diagrams to images.
+
+.. _Graphviz: http://www.graphviz.org/
+.. _mscgen: http://www.mcternan.me.uk/mscgen/
+.. _ditaa: http://ditaa.sourceforge.net/
 
 
 Installation

@@ -198,6 +198,7 @@ a list of of shapes. The different output modules can walk through a list of
 shapes and write image files.
 
 
+
 TODO
 ----
 
@@ -241,6 +242,31 @@ TODO
   line could be used.
 
 
+3rd party integration of aafigure
+=================================
+There are also other projects that integrate aafigure. The following items are
+maintained by other developers.
+
+MediaWiki Plug-in
+-----------------
+MediaWiki_ is a popular implementation of a WikiWikiWeb_ which is also used for
+WikiPedia_. A plug-in can be found here:
+http://www.mediawiki.org/wiki/Extension:Aafigure
+
+.. _MediaWiki: http://www.mediawiki.org
+.. _WikiWikiWeb: http://c2.com/cgi/wiki?WikiWikiWeb
+.. _WikiPedia: http://www.wikipedia.org/
+
+AsciiDoc Plug-in
+----------------
+AsciiDoc_ is a plain text documentation format that can be converted into
+several formats such as HTML or PDF.  A plug-in to use aafigure drawings in
+such documents can be found here:
+http://code.google.com/p/asciidoc-aafigure-filter/
+
+.. _AsciiDoc: http://www.methods.co.nz/asciidoc/
+
+
 Authors and Contact
 ===================
 
@@ -253,7 +279,7 @@ It should be used to report bugs and feature requests.
 
 License
 =======
-Copyright (c) 2006-2009 aafigure-team
+Copyright (c) 2006-2011 aafigure-team
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
