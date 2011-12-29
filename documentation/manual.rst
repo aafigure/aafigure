@@ -125,8 +125,6 @@ Sphinx plug-in
 sphinxcontrib-aafig_ is a plug-in similar to the Docutils_ plug-in, but it
 automatically selects the image format depending on the output format.
 
-XXX elaborate
-
 .. _sphinxcontrib-aafig: http://pypi.python.org/pypi/sphinxcontrib-aafig
 
 

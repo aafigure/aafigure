@@ -7,7 +7,7 @@ This is the main module that contains the parser.
 
 See svg.py and aa.py for output modules, that can render the parsed structure.
 
-(C) 2006-2009 Chris Liechti <cliechti@gmx.net>
+(C) 2006-2011 Chris Liechti <cliechti@gmx.net> and the aafigure-team
 
 This is open source software under the BSD license. See LICENSE.txt for more
 details.
@@ -44,18 +44,19 @@ DEFAULT_OPTIONS = dict(
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 class AsciiArtImage:
-    """This class hold a ASCII art figure and has methods to parse it.
-       The resulting list of shapes is also stored here.
+    """\
+    This class hold a ASCII art figure and has methods to parse it.
+    The resulting list of shapes is also stored here.
 
-       The image is parsed in 2 steps:
+    The image is parsed in 2 steps:
 
-       1. horizontal string detection.
-       2. generic shape detection.
+    1. horizontal string detection.
+    2. generic shape detection.
 
-       Each character that is used in a shape or string is tagged. So that
-       further searches don't include it again (e.g. text in a string touching
-       a fill), respectively can use it correctly (e.g. join characters when
-       two or more lines hit).
+    Each character that is used in a shape or string is tagged. So that
+    further searches don't include it again (e.g. text in a string touching
+    a fill), respectively can use it correctly (e.g. join characters when
+    two or more lines hit).
     """
 
     QUOTATION_CHARACTERS = list('"\'`')
@@ -101,9 +102,10 @@ class AsciiArtImage:
         return '\n'.join([self.image[y] for y in range(self.height)])
 
     def get(self, x, y):
-        """Get character from image. Gives no error for access out of
-           bounds, just returns a space. This simplifies the scanner
-           functions.
+        """\
+        Get character from image. Gives no error for access out of
+        bounds, just returns a space. This simplifies the scanner
+        functions.
         """
         if 0 <= x < self.width and 0 <= y < self.height:
             return self.image[y][x]
@@ -116,7 +118,7 @@ class AsciiArtImage:
             self.classification[y][x] = classification
 
     def cls(self, x, y):
-        """get tag at coordinate"""
+        """Get tag at coordinate"""
         try:
             return self.classification[y][x]
         except IndexError:
@@ -142,7 +144,7 @@ class AsciiArtImage:
         return (y + 1)*NOMINAL_SIZE
 
     def recognize(self):
-        """
+        """\
         Try to convert ASCII art to vector graphics. The result is stored in
         ``self.shapes``.
         """
@@ -215,8 +217,9 @@ class AsciiArtImage:
 
     # - - - - - - - - - arrows - - - - - - - - -
     def _standard_arrow(self, p1, p2):
-        """-->
-           return a possibly modified starting point and a list of shapes
+        """\
+        -->
+        Return a possibly modified starting point and a list of shapes.
         """
         direction_vector = p1 - p2
         direction_vector /= abs(direction_vector)
@@ -296,7 +299,7 @@ class AsciiArtImage:
     ARROW_HEADS = list('<>AVv^oO#')
 
     def get_arrow(self, character, dx, dy):
-        """return arrow drawing function or None"""
+        """Return arrow drawing function or None."""
         for head, ddx, ddy, function_name in self.ARROW_TYPES:
             if character == head and dx == ddx and dy == ddy:
                 return getattr(self, function_name)
@@ -336,7 +339,7 @@ class AsciiArtImage:
                self._n_hatch_diagonal(x, y, 3, False)
 
     def _n_hatch_diagonal(self, x, y, n, left=False):
-        """hatch generator function"""
+        """Hatch pattern generator function."""
         d = 1/float(n)
         result = []
         if left:
@@ -388,7 +391,7 @@ class AsciiArtImage:
                self._n_hatch_straight(x, y, 3, False)
 
     def _n_hatch_straight(self, x, y, n, vertical=False):
-        """hatch generator function"""
+        """Hatch pattern generator function."""
         d = 1/float(n)
         offset = 1.0/(n+1)
         result = []
@@ -494,11 +497,11 @@ class AsciiArtImage:
     FILL_CHARACTERS = ''.join([t+t.lower() for (t, f) in FILL_TYPES])
 
     def get_fill(self, character):
-        """return fill function"""
+        """Return fill function based on character."""
         for head, function_name in self.FILL_TYPES:
             if character == head:
                 return getattr(self, function_name)
-        raise ValueError('no such fill type')
+        raise ValueError('no such fill type: %r' % (character,))
 
     # - - - - - - - - - fixed characters and their shapes - - - - - - - - -
 
@@ -539,16 +542,16 @@ class AsciiArtImage:
     FIXED_CHARACTERS = ''.join([t for (t, f) in FIXED_TYPES])
 
     def get_fixed_character(self, character):
-        """return fill function"""
+        """Return fixed character function."""
         for head, function_name in self.FIXED_TYPES:
             if character == head:
                 return getattr(self, function_name)
-        raise ValueError('no such character')
+        raise ValueError('no such character: %r' % (character,))
 
     # - - - - - - - - - helper function for shape recognition - - - - - - - - -
 
     def _follow_vertical_line(self, x, y):
-        """find a vertical line with optional arrow heads"""
+        """Find a vertical line with optional arrow heads."""
         # follow line to the bottom
         _, end_y, line_end_style = self._follow_line(x, y, dy=1, line_character='|')
         # follow line to the top
@@ -575,7 +578,7 @@ class AsciiArtImage:
         return group(shapes)
 
     def _follow_horizontal_line(self, x, y, thick=False):
-        """find a horizontal line with optional arrow heads"""
+        """Find a horizontal line with optional arrow heads."""
         if thick:
             line_character = '='
         else:
@@ -604,10 +607,11 @@ class AsciiArtImage:
         return group(shapes)
 
     def _follow_lower_horizontal_line(self, x, y):
-        """find a horizontal line, the line is aligned to the bottom and a bit
-           wider, so that it can be used for shapes like this:
-              ___
-           __|   |___
+        """\
+        Find a horizontal line, the line is aligned to the bottom and a bit
+        wider, so that it can be used for shapes like this:
+           ___
+        __|   |___
         """
         # follow line to the right
         end_x, _, line_end_style = self._follow_line(x, y, dx=1, line_character='_', arrows=False)
@@ -620,11 +624,12 @@ class AsciiArtImage:
         return [Line(p1, p2)]
 
     def _follow_upper_horizontal_line(self, x, y):
-        """find a horizontal line, the line is aligned to the bottom and a bit
-           wider, so that it can be used for shapes like this:
+        """\
+        Find a horizontal line, the line is aligned to the bottom and a bit
+        wider, so that it can be used for shapes like this:
 
-             |~~~|
-           ~~     ~~~
+          |~~~|
+        ~~     ~~~
         """
         # follow line to the right
         end_x, _, line_end_style = self._follow_line(x, y, dx=1, line_character='~', arrows=False)
@@ -637,7 +642,7 @@ class AsciiArtImage:
         return [Line(p1, p2)]
 
     def _follow_line(self, x, y, dx=0, dy=0, line_character=None, arrows=True):
-        """helper function for all the line functions"""
+        """Helper function for all the line functions."""
         # follow line in the given direction
         while 0 <= x < self.width and 0<= y < self.height and self.get(x+dx, y+dy) == line_character:
             x += dx
@@ -657,12 +662,13 @@ class AsciiArtImage:
         return x, y, line_end_style
 
     def _plus_joiner(self, x, y):
-        """adjacent '+' signs are connected with a line from center to center
-           required for images like these:
+        """\
+        Adjacent '+' signs are connected with a line from center to center
+        required for images like these:
 
-              +---+         The box should be closed on all sides
-              |   +--->     and the arrow start should touch the box
-              +---+
+           +---+         The box should be closed on all sides
+           |   +--->     and the arrow start should touch the box.
+           +---+
         """
         result = []
         #~ for dx, dy in ((1,0), (-1,0), (0,1), (0,-1)):
@@ -679,8 +685,9 @@ class AsciiArtImage:
 
 
     def _follow_fill(self, character, start_x, start_y):
-        """fill shapes like the ones below with a pattern. when the character is
-           upper case, draw a border too.
+        """\
+        Fill shapes like the ones below with a pattern. when the character is
+        upper case, draw a border too.
 
             XXX  aaa  BB
            XXX    a
@@ -728,13 +735,14 @@ class AsciiArtImage:
         return group(result)
 
     def _follow_horizontal_string(self, start_x, y, accept_anything=False, quoted=False):
-        """find a string. may contain single spaces, but the detection is
-           aborted after more than one space.
+        """\
+        Find a string. may contain single spaces, but the detection is
+        aborted after more than one space.
 
               Text one   "Text two"
 
-           accept_anything means that all non space characters are interpreted
-           as text.
+        accept_anything means that all non space characters are interpreted
+        as text.
         """
         # follow line from left to right
         if quoted:
@@ -776,7 +784,8 @@ class AsciiArtImage:
             return []
 
     def _follow_rounded_edge(self, x, y):
-        """check for rounded edges:
+        """\
+        Check for rounded edges:
             /-    |     -\-    |   and also \    /  etc.
             |    -/      |     \-            -  |
         """
@@ -972,7 +981,7 @@ def process(input, visitor_class, options=None):
 
 
 def render(input, output=None, options=None):
-    """
+    """\
     Render an ASCII art figure to a file or file-like.
 
     :param input: If ``input`` is a basestring subclass (str or unicode), the
@@ -1047,7 +1056,7 @@ def main():
         version = """\
 %prog 0.5
 
-Copyright (C) 2006-2010 aafigure-team
+Copyright (C) 2006-2011 aafigure-team
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted under the terms of the BSD License.
