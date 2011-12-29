@@ -209,6 +209,7 @@ between option and value.  Supported options are:
     - ``scale=<float>``
     - ``aspect=<float>``
     - ``textual``
+    - ``textual_strict``
     - ``proportional``
     - ``linewidth=<float>``
     - ``foreground=#rrggbb``

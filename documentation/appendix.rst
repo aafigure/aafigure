@@ -43,11 +43,11 @@ Valid keys (and their defaults) are:
 Defining the output:
 
     ``file_like`` <str>:
-        use the given file like object to write the output. The object
+        Use the given file like object to write the output. The object
         needs to support a ``.write(data)`` method.
 
     ``format`` <str>:
-        choose backend/output format: 'svg', 'pdf', 'png' and all bitmap
+        Choose backend/output format: 'svg', 'pdf', 'png' and all bitmap
         formats that PIL supports can be used but only few make sense. Line
         drawings have a good compression and better quality when saved as
         PNG rather than a JPEG. The best quality will be achieved with SVG,
@@ -57,11 +57,14 @@ Defining the output:
 Options influencing how an image is parsed:
 
     ``textual`` <bool>:
-        disables horizontal fill detection. Fills are only detected when
+        Disables horizontal fill detection. Fills are only detected when
         they are vertically at least 2 characters high (default: ``False``).
 
+    ``textual_strict`` <bool>:
+        Disables fill detection completely. (default: ``False``).
+
     ``proportional`` <bool>:
-        use a proportional font. Proportional fonts are general better
+        Use a proportional font. Proportional fonts are general better
         looking than monospace fonts but they can mess the figure if you
         need them to look as similar as possible to the ASCII art (default:
         ``False``).
@@ -69,25 +72,25 @@ Options influencing how an image is parsed:
 Visual properties:
 
     ``background`` <str>:
-        background color in the form ``#rgb`` or ``#rrggbb``, *not* for SVG
+        Background color in the form ``#rgb`` or ``#rrggbb``, *not* for SVG
         output (default: ``#000000``).
 
     ``foreground`` <str>:
-        foreground color in the form ``#rgb`` or ``#rrggbb`` (default:
+        Foreground color in the form ``#rgb`` or ``#rrggbb`` (default:
         ``#ffffff``).
 
     ``fill`` <str>:
-        fill color in the form ``#rgb`` or ``#rrggbb`` (default: same as
+        Fill color in the form ``#rgb`` or ``#rrggbb`` (default: same as
         ``foreground`` color).
 
     ``line_width`` <float>:
-        change line with, SVG only currently (default: ``2.0``).
+        Change line with, SVG only currently (default: ``2.0``).
 
     ``scale`` <float>:
-        enlarge or shrink image (default: ``1.0``).
+        Enlarge or shrink image (default: ``1.0``).
 
     ``aspect`` <float>:
-        change aspect ratio. Effectively it is the width of the image that
+        Change aspect ratio. Effectively it is the width of the image that
         is multiplied by this factor. The default setting ``1`` is useful
         when shapes must have the same look when drawn horizontally or
         vertically.  However, 0.5 looks more like the original ASCII and
@@ -101,8 +104,9 @@ Visual properties:
 Miscellaneous options:
 
     ``debug`` <bool>:
-        for now, it only prints the original ASCII art figure text
+        For now, it only prints the original ASCII art figure text
         (default: ``False``).
+
 
 Visitors
 --------

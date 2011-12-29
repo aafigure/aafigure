@@ -91,6 +91,7 @@ AAFigureDirective.options = {
     'fill': str,
     'aspect': float,
     'textual': flag,
+    'textual_strict': flag,
     'proportional': flag,
 }
 
