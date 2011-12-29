@@ -27,17 +27,18 @@ CLASS_JOIN = 'join'
 CLASS_FIXED = 'fixed'
 
 DEFAULT_OPTIONS = dict(
-    background   = '#ffffff',
-    foreground   = '#000000',
-    line_width   = 2.0,
-    scale        = 1.0,
-    aspect       = 1.0,
-    format       = 'svg',
-    debug        = False,
-    textual      = False,
-    proportional = False,
-    encoding     = 'utf-8',
-    widechars     = 'F,W',
+    background     = '#ffffff',
+    foreground     = '#000000',
+    line_width     = 2.0,
+    scale          = 1.0,
+    aspect         = 1.0,
+    format         = 'svg',
+    debug          = False,
+    textual        = False,
+    textual_strict = False,
+    proportional   = False,
+    encoding       = 'utf-8',
+    widechars      = 'F,W',
 )
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -59,10 +60,11 @@ class AsciiArtImage:
 
     QUOTATION_CHARACTERS = list('"\'`')
 
-    def __init__(self, text, aspect_ratio=1, textual=False, widechars='F,W'):
+    def __init__(self, text, aspect_ratio=1, textual=False, textual_strict=False, widechars='F,W'):
         """Take a ASCII art figure and store it, prepare for ``recognize``"""
         self.aspect_ratio = float(aspect_ratio)
         self.textual = textual
+        self.textual_strict = textual_strict
         # XXX TODO tab expansion
         # detect size of input image, store as list of lines
         self.image = []
@@ -186,7 +188,7 @@ class AsciiArtImage:
                     elif character in self.FIXED_CHARACTERS:
                         self.shapes.extend(self.get_fixed_character(character)(x, y))
                         self.tag([(x, y)], CLASS_FIXED)
-                    elif character in self.FILL_CHARACTERS:
+                    elif not self.textual_strict and character in self.FILL_CHARACTERS:
                         if self.textual:
                             if self.get(x, y+1) == character:
                                 self.shapes.extend(self._follow_fill(character, x, y))
@@ -958,7 +960,7 @@ def process(input, visitor_class, options=None):
     if options['debug']:
         sys.stderr.write('%r\n' % (input,))
 
-    aaimg = AsciiArtImage(input, options['aspect'], options['textual'], options['widechars'])
+    aaimg = AsciiArtImage(input, options['aspect'], options['textual'], options['textual_strict'], options['widechars'])
 
     if options['debug']:
         sys.stderr.write('%s\n' % (aaimg,))
@@ -1104,6 +1106,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         default = DEFAULT_OPTIONS['textual'],
     )
 
+    parser.add_option("-S", "--textual-strict",
+        dest = "textual_strict",
+        action = "store_true",
+        help = "disable horizontal and vertical fill detection",
+        default = DEFAULT_OPTIONS['textual_strict'],
+    )
+
     parser.add_option("-s", "--scale",
         dest = "scale",
         action = "store",
@@ -1186,9 +1195,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     # explicit copying of parameters to the options dictionary
     options_dict = {}
-    for key in ('widechars', 'textual', 'proportional',
-                'line_width', 'aspect', 'scale',
-                'format', 'debug'):
+    for key in ('widechars', 'textual', 'textual_strict',
+                'proportional', 'line_width', 'aspect',
+                'scale', 'format', 'debug'):
         options_dict[key] = getattr(options, key)
     # ensure all color parameters start with a '#'
     # this is for the convenience of the user as typing the shell comment
