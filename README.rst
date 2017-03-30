@@ -2,7 +2,7 @@
  aafigure README
 =================
 
-aafigure is an ASCII art to image converter.
+aafigure is an ASCII art to image converter.::
 
     DD o--->
 
@@ -10,14 +10,11 @@ ASCII art figures can be parsed and output as SVG, PNG, JPEG, PDF and more.
 This project provides a Python package, a command line script as well as
 Docutils and MoinMoin plugins.
 
-An Ubuntu package is available:
-    https://launchpad.net/~aafigure-team/+archive/ppa
-
-The project is also registered in PyPi:
+The project is registered in PyPi:
     http://pypi.python.org/pypi/aafigure
 
 The project is managed in Launchpad (Answers, Bug Tracking and Code)
-    https://launchpad.net/aafigure
+    https://github.com/zsquareplusc/aafigure
 
 License:
     Simplified BSD License, see LICENSE.txt
@@ -35,4 +32,6 @@ Installation
 Detailed instructions about different install methods are described in the
 file documentation/manual.rst.
 
-Short version:  python setup.py install
+Short version::
+
+    python -m pip install aafigure
