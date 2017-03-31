@@ -1,13 +1,13 @@
-=================
- aafigure README
-=================
+================================
+ aafigure |build-status| |docs|
+================================
 
 aafigure is an ASCII art to image converter.::
 
     DD o--->
 
 ASCII art figures can be parsed and output as SVG, PNG, JPEG, PDF and more.
-This project provides a Python package, a command line script as well as
+This project provides a Python_ package, a command line script as well as
 Docutils and MoinMoin plugins.
 
 The project is registered in PyPi:
@@ -24,7 +24,7 @@ Documentation
 =============
 A manual can be found in the documentation directory. The .rst files can
 be looked at with a text editor or they can be compiled to HTML or PDF
-using Sphinx.
+using Sphinx_.
 
 
 Installation
@@ -35,3 +35,12 @@ file documentation/manual.rst.
 Short version::
 
     python -m pip install aafigure
+
+.. _Python: http://python.org/
+.. _Sphinx: http://sphinx-doc.org/
+.. |build-status| image:: https://travis-ci.org/zsquareplusc/aafigure.svg?branch=master
+   :target: https://travis-ci.org/zsquareplusc/aafigure
+   :alt: Build status
+.. |docs| image:: https://readthedocs.org/projects/aafigure/badge/?version=latest
+   :target: http://aafigure.readthedocs.io/
+   :alt: Documentation
