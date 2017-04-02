@@ -8,6 +8,7 @@ details.
 """
 
 import sys
+import codecs
 from xml.sax.saxutils import escape
 
 class SVGOutputVisitor:
@@ -15,7 +16,7 @@ class SVGOutputVisitor:
 
     def __init__(self, options):
         self.options = options
-        self.file_like = options['file_like']
+        self.file_like = codecs.getwriter('utf-8')(options['file_like'])
         self.scale = options['scale']*7
         self.line_width = options['line_width']
         self.foreground = options['foreground']

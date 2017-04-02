@@ -8,7 +8,7 @@ details.
 """
 
 import sys
-from error import UnsupportedFormatError
+from .error import UnsupportedFormatError
 PIL_OK = False
 try:
     import Image, ImageDraw
@@ -20,7 +20,7 @@ if PIL_OK is False:
         from PIL import Image, ImageDraw
     except ImportError:
         raise UnsupportedFormatError('please install PIL to get bitmaps output support')
-import PILhelper
+from . import PILhelper
 
 
 class PILOutputVisitor:

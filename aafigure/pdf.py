@@ -8,7 +8,7 @@ details.
 """
 
 import sys
-from error import UnsupportedFormatError
+from .error import UnsupportedFormatError
 try:
     import reportlab
     from reportlab.lib import colors

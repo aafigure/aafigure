@@ -18,6 +18,12 @@ from .shapes import *
 from unicodedata import east_asian_width
 import sys
 
+
+try:
+    basestring
+except NameError:
+    basestring = str
+
 NOMINAL_SIZE = 2
 
 CLASS_LINE = 'line'
@@ -1015,7 +1021,7 @@ def render(input, output=None, options=None):
         from io import StringIO
         options['file_like'] = StringIO()
     elif isinstance(output, basestring):
-        options['file_like'] = file(output, 'wb')
+        options['file_like'] = open(output, 'wb')
         close_output = True
     else:
         options['file_like'] = output
@@ -1192,15 +1198,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             options.format = os.path.splitext(options.output)[1][1:]
 
     if args:
-        _input = file(args[0])
+        input = open(args[0])
     else:
-        _input = sys.stdin
-    input = codecs.getreader(options.encoding)(_input)
+        input = sys.stdin
+    #~ input = codecs.getreader(options.encoding)(input)
 
     if options.output is None:
         output = sys.stdout
     else:
-        output = file(options.output, 'wb')
+        output = open(options.output, 'wb')
 
     # explicit copying of parameters to the options dictionary
     options_dict = {}

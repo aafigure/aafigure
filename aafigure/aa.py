@@ -71,12 +71,12 @@ class AsciiOutputVisitor:
         y1, y2 = rectangle.p1.y*self.scale, rectangle.p2.y*self.scale
         if x1 > x2: x1, x2 = x2, x1
         if y1 > y2: y1, y2 = y2, y1
-        for y in range(y1, y2):
-            for x in range(x1, x2):
+        for y in range(int(y1), int(y2)):
+            for x in range(int(x1), int(x2)):
                 self.image[x,y] = '#'
 
     def visit_label(self, label):
-        x, y = label.position.x*self.scale, label.position.y*self.scale
+        x, y = int(label.position.x*self.scale), int(label.position.y*self.scale)
         for character in label.text:
             self.image[x, y] = character
             x += 1
