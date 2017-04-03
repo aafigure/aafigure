@@ -12,7 +12,7 @@ See svg.py and aa.py for output modules, that can render the parsed structure.
 This is open source software under the BSD license. See LICENSE.txt for more
 details.
 """
-import codecs
+# import codecs
 from .error import UnsupportedFormatError
 from .shapes import *
 from unicodedata import east_asian_width
@@ -33,21 +33,22 @@ CLASS_JOIN = 'join'
 CLASS_FIXED = 'fixed'
 
 DEFAULT_OPTIONS = dict(
-    background     = '#ffffff',
-    foreground     = '#000000',
-    line_width     = 2.0,
-    scale          = 1.0,
-    aspect         = 1.0,
-    format         = 'svg',
-    debug          = False,
-    textual        = False,
-    textual_strict = False,
-    proportional   = False,
-    encoding       = 'utf-8',
-    widechars      = 'F,W',
+    background='#ffffff',
+    foreground='#000000',
+    line_width=2.0,
+    scale=1.0,
+    aspect=1.0,
+    format='svg',
+    debug=False,
+    textual=False,
+    textual_strict=False,
+    proportional=False,
+    encoding='utf-8',
+    widechars='F,W',
 )
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 
 class AsciiArtImage:
     """\
@@ -176,7 +177,7 @@ class AsciiArtImage:
         # search for standard shapes
         for y in range(self.height):
             for x in range(self.width):
-                #if not yet classified, check for a line
+                # if not yet classified, check for a line
                 character = self.image[y][x]
                 if self.classification[y][x] is None:
                     if character == '-':
@@ -276,7 +277,7 @@ class AsciiArtImage:
     # line is coming. this table maps line direction (dx,dy) and the arrow
     # character to a arrow drawing function
     ARROW_TYPES = [
-        #chr  dx  dy  arrow type
+        # chr  dx  dy  arrow type
         ('>',  1,  0, '_standard_arrow'),
         ('<', -1,  0, '_standard_arrow'),
         ('^',  0, -1, '_standard_arrow'),
@@ -650,7 +651,7 @@ class AsciiArtImage:
     def _follow_line(self, x, y, dx=0, dy=0, line_character=None, arrows=True):
         """Helper function for all the line functions."""
         # follow line in the given direction
-        while 0 <= x < self.width and 0<= y < self.height and self.get(x+dx, y+dy) == line_character:
+        while 0 <= x < self.width and 0 <= y < self.height and self.get(x+dx, y+dy) == line_character:
             x += dx
             y += dy
         if arrows:
@@ -702,7 +703,6 @@ class AsciiArtImage:
         border = character.isupper()
         result = []
         # flood fill algorithm, searching for similar characters
-        coordinates = []
         to_scan = [(start_x, start_y)]
         while to_scan:
             x, y = to_scan.pop()
@@ -864,7 +864,7 @@ class AsciiArtImage:
                         result.append(Arc(p1, a1, p2, a2, c1, c2))
                     else:
                         result.append(Line(p1, p2))
-        else: # '\'
+        else:  # '\'
             # rounded rectangles
             if self.get(x-1, y) == '-' and self.get(x, y + 1) == '|':
                 # upper right corner
@@ -1058,8 +1058,8 @@ def main():
     import os.path
 
     parser = optparse.OptionParser(
-        usage = "%prog [options] [file]",
-        version = """\
+        usage="%prog [options] [file]",
+        version="""\
 %prog 0.5
 
 Copyright (C) 2006-2011 aafigure-team
@@ -1078,112 +1078,112 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """,
-    description = "ASCII art to image (SVG, PNG, JPEG, PDF and more) converter."
+    description="ASCII art to image (SVG, PNG, JPEG, PDF and more) converter."
     )
 
     parser.add_option("-e", "--encoding",
-        dest = "encoding",
-        action = "store",
-        help = "character encoding of input text",
-        default = DEFAULT_OPTIONS['encoding'],
+        dest="encoding",
+        action="store",
+        help="character encoding of input text",
+        default=DEFAULT_OPTIONS['encoding'],
     )
 
     parser.add_option("-w", "--wide-chars",
-        dest = "widechars",
-        action = "store",
-        help = "unicode properties to be treated as wide glyph (e.g. 'F,W,A')",
-        default = DEFAULT_OPTIONS['widechars'],
+        dest="widechars",
+        action="store",
+        help="unicode properties to be treated as wide glyph (e.g. 'F,W,A')",
+        default=DEFAULT_OPTIONS['widechars'],
     )
 
     parser.add_option("-o", "--output",
-        dest = "output",
-        metavar = "FILE",
-        help = "write output to FILE"
+        dest="output",
+        metavar="FILE",
+        help="write output to FILE"
     )
 
     parser.add_option("-t", "--type",
-        dest = "format",
-        help = "filetype: png, jpg, svg (by default autodetect from filename)",
-        default = None,
+        dest="format",
+        help="filetype: png, jpg, svg (by default autodetect from filename)",
+        default=None,
     )
 
     parser.add_option("-D", "--debug",
-        dest = "debug",
-        action = "store_true",
-        help = "enable debug outputs",
-        default = DEFAULT_OPTIONS['debug'],
+        dest="debug",
+        action="store_true",
+        help="enable debug outputs",
+        default=DEFAULT_OPTIONS['debug'],
     )
 
     parser.add_option("-T", "--textual",
-        dest = "textual",
-        action = "store_true",
-        help = "disable horizontal fill detection",
-        default = DEFAULT_OPTIONS['textual'],
+        dest="textual",
+        action="store_true",
+        help="disable horizontal fill detection",
+        default=DEFAULT_OPTIONS['textual'],
     )
 
     parser.add_option("-S", "--textual-strict",
-        dest = "textual_strict",
-        action = "store_true",
-        help = "disable horizontal and vertical fill detection",
-        default = DEFAULT_OPTIONS['textual_strict'],
+        dest="textual_strict",
+        action="store_true",
+        help="disable horizontal and vertical fill detection",
+        default=DEFAULT_OPTIONS['textual_strict'],
     )
 
     parser.add_option("-s", "--scale",
-        dest = "scale",
-        action = "store",
-        type = 'float',
-        help = "set scale",
-        default = DEFAULT_OPTIONS['scale'],
+        dest="scale",
+        action="store",
+        type='float',
+        help="set scale",
+        default=DEFAULT_OPTIONS['scale'],
     )
 
     parser.add_option("-a", "--aspect",
-        dest = "aspect",
-        action = "store",
-        type = 'float',
-        help = "set aspect ratio",
-        default = DEFAULT_OPTIONS['aspect'],
+        dest="aspect",
+        action="store",
+        type='float',
+        help="set aspect ratio",
+        default=DEFAULT_OPTIONS['aspect'],
     )
 
     parser.add_option("-l", "--linewidth",
-        dest = "line_width",
-        action = "store",
-        type = 'float',
-        help = "set width, svg only",
-        default = DEFAULT_OPTIONS['line_width'],
+        dest="line_width",
+        action="store",
+        type='float',
+        help="set width, svg only",
+        default=DEFAULT_OPTIONS['line_width'],
     )
 
     parser.add_option("--proportional",
-        dest = "proportional",
-        action = "store_true",
-        help = "use proportional font instead of fixed width",
-        default = DEFAULT_OPTIONS['proportional'],
+        dest="proportional",
+        action="store_true",
+        help="use proportional font instead of fixed width",
+        default=DEFAULT_OPTIONS['proportional'],
     )
 
     parser.add_option("-f", "--foreground",
-        dest = "foreground",
-        action = "store",
-        help = "foreground color default=%default",
-        default = DEFAULT_OPTIONS['foreground'],
+        dest="foreground",
+        action="store",
+        help="foreground color default=%default",
+        default=DEFAULT_OPTIONS['foreground'],
     )
 
     parser.add_option("-x", "--fill",
-        dest = "fill",
-        action = "store",
-        help = "foreground color default=foreground",
-        default = None,
+        dest="fill",
+        action="store",
+        help="foreground color default=foreground",
+        default=None,
     )
 
     parser.add_option("-b", "--background",
-        dest = "background",
-        action = "store",
-        help = "foreground color default=%default",
-        default = DEFAULT_OPTIONS['background'],
+        dest="background",
+        action="store",
+        help="foreground color default=%default",
+        default=DEFAULT_OPTIONS['background'],
     )
 
     parser.add_option("-O", "--option",
-        dest = "_extra_options",
-        action = "append",
-        help = "pass special options to backends (expert user)",
+        dest="_extra_options",
+        action="append",
+        help="pass special options to backends (expert user)",
     )
 
     (options, args) = parser.parse_args()

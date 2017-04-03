@@ -10,6 +10,7 @@
 
 import math
 
+
 def point(object):
     """return a Point instance.
        - if object is already a Point instance it's returned as is
@@ -18,7 +19,6 @@ def point(object):
     """
     if isinstance(object, Point):
         return object
-    #~ print type(object), object.__class__
     if type(object) is complex:
         return Point(object.real, object.imag)
     if type(object) is tuple and len(object) == 2:
@@ -46,12 +46,12 @@ class Point:
         return 'Point(%r, %r)' % (self.x, self.y)
 
     def distance(self, other):
-        return math.sqrt( (self.x - other.x)**2 +
-                          (self.y - other.y)**2 )
+        return math.sqrt((self.x - other.x)**2 +
+                         (self.y - other.y)**2)
 
     def midpoint(self, other):
-        return Point( (self.x + other.x)/2,
-                      (self.y + other.y)/2 )
+        return Point((self.x + other.x)/2,
+                     (self.y + other.y)/2)
 
 
 class Line:
@@ -70,6 +70,7 @@ class Rectangle:
     def __init__(self, p1, p2):
         self.p1 = point(p1)
         self.p2 = point(p2)
+
     def __repr__(self):
         return 'Rectangle(%r, %r)' % (self.p1, self.p2)
 
@@ -89,6 +90,7 @@ class Label:
     def __init__(self, position, text):
         self.position = position
         self.text = text
+
     def __repr__(self):
         return 'Label(%r, %r)' % (self.position, self.text)
 
@@ -96,8 +98,10 @@ class Label:
 class Group:
     """A group of shapes"""
     def __init__(self, shapes=None):
-        if shapes is None: shapes = []
+        if shapes is None:
+            shapes = []
         self.shapes = shapes
+
     def __repr__(self):
         return 'Group(%r)' % (self.shapes,)
 
@@ -106,11 +110,12 @@ class Arc:
     """A smooth arc between two points"""
     def __init__(self, start, start_angle, end, end_angle, start_curve=True, end_curve=True):
         self.start = point(start)
-        self.end   = point(end)
+        self.end = point(end)
         self.start_angle = start_angle
-        self.end_angle   = end_angle
+        self.end_angle = end_angle
         self.start_curve = start_curve
-        self.end_curve   = end_curve
+        self.end_curve = end_curve
+
     def __repr__(self):
         return 'Arc(%r, %r, %r, %r, %r, %r)' % (self.start,       self.start_angle,
                                                 self.end,         self.end_angle,
@@ -120,10 +125,10 @@ class Arc:
         return self.start_angle * math.pi / 180
 
     def end_angle_rad(self):
-        return self.end_angle   * math.pi / 180
+        return self.end_angle * math.pi / 180
 
     def __tension(self):
-        return self.start.distance( self.end )/3
+        return self.start.distance(self.end) / 3
 
     # assumptions: x increases going right, y increases going down
     def start_control_point(self):

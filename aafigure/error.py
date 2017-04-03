@@ -9,4 +9,3 @@ details.
 
 class UnsupportedFormatError(Exception):
     """Error message when an unknown format is specified"""
-
