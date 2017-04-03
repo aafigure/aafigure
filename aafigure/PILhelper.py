@@ -7,7 +7,6 @@ This is open source software under the BSD license. See LICENSE.txt for more
 details.
 """
 
-import sys
 import os
 from PIL import ImageFont
 
@@ -22,6 +21,7 @@ def _find_file(name, top_dir):
         if name in filenames:
             return os.path.join(dirpath, name)
     return None
+
 
 def font_by_name(name, size):
     """Get a PIL ImageFont instance by font name and size. If name is not an
@@ -42,6 +42,7 @@ def font_by_name(name, size):
                     pass
     return font
 
+
 def font_by_type(proportional, size):
     """Get a PIL ImageFont instance by font type and size. If <proportional> is
        not True, a mono-spaced font is returned. If no suitable font is found,
@@ -56,4 +57,3 @@ def font_by_type(proportional, size):
         if font is None:
             font = font_by_name('Courier_New.ttf', size)
     return font
-

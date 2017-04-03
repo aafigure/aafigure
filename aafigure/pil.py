@@ -74,13 +74,13 @@ class PILOutputVisitor:
         self.visit_shapes(aa_image.shapes)
         del self.draw
         file_type = self.options['format'].lower()
-        if file_type == 'jpg': file_type = 'jpeg' # alias
+        if file_type == 'jpg':
+            file_type = 'jpeg'  # alias
         try:
             if 'file_like' in self.options:
                 self.image.save(self.options['file_like'], file_type)
         except KeyError:
-            raise UnsupportedFormatError("PIL doesn't support image format %r" %
-                    file_type)
+            raise UnsupportedFormatError("PIL doesn't support image format %r" % file_type)
 
     def visit_shapes(self, shapes):
         for shape in shapes:
@@ -89,8 +89,7 @@ class PILOutputVisitor:
             if hasattr(self, visitor_name):
                 getattr(self, visitor_name)(shape)
             else:
-                sys.stderr.write("WARNING: don't know how to handle shape %r\n"
-                    % shape)
+                sys.stderr.write("WARNING: don't know how to handle shape %r\n" % shape)
 
     def visit_group(self, group):
         self.visit_shapes(group.shapes)
@@ -100,7 +99,7 @@ class PILOutputVisitor:
         """Draw a line, coordinates given as four decimal numbers"""
         self.draw.line((self._num(x1), self._num(y1),
                         self._num(x2), self._num(y2)),
-                       fill=self.foreground) #self.line_width
+                       fill=self.foreground)  # self.line_width
 
     def _rectangle(self, x1, y1, x2, y2):
         """Draw a rectangle, coordinates given as four decimal numbers.
@@ -109,7 +108,7 @@ class PILOutputVisitor:
         self.draw.rectangle((self._num(x1), self._num(y1),
                              self._num(x2), self._num(y2)),
                             fill=self.fillcolor,
-                            outline=self.foreground) #self.line_width
+                            outline=self.foreground)  # self.line_width
 
     # - - - - - - visitor function for the different shape types - - - - - - -
 
@@ -133,7 +132,6 @@ class PILOutputVisitor:
             rectangle.p1.x, rectangle.p1.y,
             rectangle.p2.x, rectangle.p2.y,
         )
-
 
     def visit_circle(self, circle):
         self.draw.ellipse(
@@ -170,7 +168,7 @@ class PILOutputVisitor:
             rp1 = lp2
             self._bezier(lp1, lc1, lc2, lp2, level + 1)
             self._bezier(rp1, rc1, rc2, rp2, level + 1)
-        
+
     def visit_arc(self, arc):
         p1, p2 = arc.start, arc.end
         c1 = arc.start_control_point()

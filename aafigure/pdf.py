@@ -10,12 +10,12 @@ details.
 import sys
 from .error import UnsupportedFormatError
 try:
-    import reportlab
+    # import reportlab
     from reportlab.lib import colors
     from reportlab.graphics.shapes import *
     from reportlab.graphics import renderPDF
     from reportlab.pdfbase import pdfmetrics
-    from reportlab.pdfbase.ttfonts import  TTFont
+    from reportlab.pdfbase.ttfonts import TTFont
 except ImportError:
     raise UnsupportedFormatError('please install Reportlab to get PDF output support')
 
@@ -81,38 +81,39 @@ class PDFOutputVisitor:
             if hasattr(self, visitor_name):
                 getattr(self, visitor_name)(shape)
             else:
-                sys.stderr.write("WARNING: don't know how to handle shape %r\n"
-                    % shape)
+                sys.stderr.write("WARNING: don't know how to handle shape %r\n" % shape)
 
     # - - - - - - PDF drawing helpers - - - - - - -
     def _line(self, x1, y1, x2, y2, thick):
         """Draw a line, coordinates given as four decimal numbers"""
         self.drawing.add(Line(
-            self._num(x1),  self._num(self.height - y1),
-            self._num(x2),  self._num(self.height - y2),
-            strokeColor = self._color(self.foreground),
-            strokeWidth = self.line_width*(1 + 0.5*bool(thick))
+            self._num(x1), self._num(self.height - y1),
+            self._num(x2), self._num(self.height - y2),
+            strokeColor=self._color(self.foreground),
+            strokeWidth=self.line_width*(1 + 0.5*bool(thick))
         ))
 
     def _rectangle(self, x1, y1, x2, y2, style=''):
         """Draw a rectangle, coordinates given as four decimal numbers."""
-        if x1 > x2: x1, x2 = x2, x1
-        if y1 > y2: y1, y2 = y2, y1
+        if x1 > x2:
+            x1, x2 = x2, x1
+        if y1 > y2:
+            y1, y2 = y2, y1
         self.drawing.add(Rect(
-            self._num(x1),  self._num(self.height - y2),
-            self._num(x2-x1),  self._num(y2 - y1),
-            fillColor = self._color(self.fillcolor),
-            strokeWidth = self.line_width
+            self._num(x1), self._num(self.height - y2),
+            self._num(x2-x1), self._num(y2 - y1),
+            fillColor=self._color(self.fillcolor),
+            strokeWidth=self.line_width
         ))
 
     # - - - - - - visitor function for the different shape types - - - - - - -
 
     def visit_point(self, point):
         self.drawing.add(Circle(
-            self._num(point.x),  self._num(self.height - point.y),
+            self._num(point.x), self._num(self.height - point.y),
             self._num(0.2),
-            fillColor = self._color(self.foreground),
-            strokeWidth = self.line_width
+            fillColor=self._color(self.foreground),
+            strokeWidth=self.line_width
         ))
 
     def visit_line(self, line):
@@ -126,14 +127,13 @@ class PDFOutputVisitor:
             rectangle.p2.x, rectangle.p2.y
         )
 
-
     def visit_circle(self, circle):
         self.drawing.add(Circle(
             self._num(circle.center.x), self._num(self.height - circle.center.y),
             self._num(circle.radius),
-            strokeColor = self._color(self.foreground),
-            fillColor = self._color(self.fillcolor),
-            strokeWidth = self.line_width
+            strokeColor=self._color(self.foreground),
+            fillColor=self._color(self.fillcolor),
+            strokeWidth=self.line_width
         ))
 
     def visit_label(self, label):
@@ -141,9 +141,9 @@ class PDFOutputVisitor:
         self.drawing.add(String(
             self._num(label.position.x), self._num(self.height - label.position.y + self.aa_image.nominal_size*0.2),
             label.text,
-            fontSize = self._num(self.aa_image.nominal_size),
-            fontName = self.font,
-            fillColor = self._color(self.foreground),
+            fontSize=self._num(self.aa_image.nominal_size),
+            fontName=self.font,
+            fillColor=self._color(self.foreground),
         ))
 
     def visit_group(self, group):
@@ -154,9 +154,9 @@ class PDFOutputVisitor:
         p1, p2 = arc.start, arc.end
         c1 = arc.start_control_point()
         c2 = arc.end_control_point()
-        path = Path(strokeColor = self._color(self.foreground),
-                    strokeWidth = self.line_width)
-        path.moveTo (self._num(p1.x), self._num(self.height - p1.y))
+        path = Path(strokeColor=self._color(self.foreground),
+                    strokeWidth=self.line_width)
+        path.moveTo(self._num(p1.x), self._num(self.height - p1.y))
         path.curveTo(self._num(c1.x), self._num(self.height - c1.y),
                      self._num(c2.x), self._num(self.height - c2.y),
                      self._num(p2.x), self._num(self.height - p2.y))
