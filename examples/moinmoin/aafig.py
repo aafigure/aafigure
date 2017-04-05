@@ -19,6 +19,7 @@
 import aafigure
 from MoinMoin.action import cache
 
+
 def sanitizte_color(value):
     """clean string for color codes. the sting is inserted directly in the SVG
        and it must be ensured that the user can not insert arbitrary code"""
@@ -27,6 +28,7 @@ def sanitizte_color(value):
     raise ValueError('invalid color')
 
 Dependencies = ["page"]
+
 
 class Parser:
     """aafigure parser"""
@@ -79,7 +81,7 @@ class Parser:
         # XXX this currently only works for HTML, obviously...
         return formatter.rawHTML('<object type="image/svg+xml" data="%s" %s></object>' % (
             cache.url(self.request, key),
-            cache._get_datafile(self.request, key+'_size').read() # XXX no way to directly read cache?
+            cache._get_datafile(self.request, key+'_size').read()  # XXX no way to directly read cache?
         ))
 
     def format(self, formatter):
@@ -87,5 +89,3 @@ class Parser:
         self.request.write(self.formatter.div(1, css_class="aafigure"))
         self.request.write(self.render(formatter))
         self.request.write(self.formatter.div(0))
-
-

@@ -27,7 +27,7 @@ aaimg.recognize()
 
 # For fun, output the ASCII version in the console.
 print(u" output ".center(78, '='))
-aav = aafigure.aa.AsciiOutputVisitor({'file_like':sys.stdout, 'scale':2})
+aav = aafigure.aa.AsciiOutputVisitor({'file_like': sys.stdout, 'scale': 2})
 aav.visit_image(aaimg)
 print(u"="*78)
 
@@ -36,7 +36,7 @@ print(u"="*78)
 
 # A stringIO object is returned for the output when the output parameter is not
 # given. If it were, the output would be directly written to that object.
-visitor, output = aafigure.render(ascii_art, options={'format':'svg'})
+visitor, output = aafigure.render(ascii_art, options={'format': 'svg'})
 
 # The process method can be used for a lower level access. The visitor class
 # has to be specified by the user in this case.  To get output, a file like
