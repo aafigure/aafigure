@@ -30,7 +30,8 @@ Command::
 
     aafigure test.txt -t svg -o test.svg
 
-Please see README.txt for examples.
+Please see documentation for examples.
+http://aafigure.readthedocs.io/
 """,
     author = 'Chris Liechti',
     author_email = 'cliechti@gmx.net',
