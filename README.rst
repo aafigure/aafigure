@@ -14,7 +14,7 @@ The project is registered in PyPi:
     http://pypi.python.org/pypi/aafigure
 
 The project is managed in Launchpad (Answers, Bug Tracking and Code)
-    https://github.com/zsquareplusc/aafigure
+    https://github.com/aafigure/aafigure
 
 License:
     Simplified BSD License, see LICENSE.txt
@@ -38,8 +38,8 @@ Short version::
 
 .. _Python: http://python.org/
 .. _Sphinx: http://sphinx-doc.org/
-.. |build-status| image:: https://travis-ci.org/zsquareplusc/aafigure.svg?branch=master
-   :target: https://travis-ci.org/zsquareplusc/aafigure
+.. |build-status| image:: https://travis-ci.org/aafigure/aafigure.svg?branch=master
+   :target: https://travis-ci.org/aafigure/aafigure
    :alt: Build status
 .. |docs| image:: https://readthedocs.org/projects/aafigure/badge/?version=latest
    :target: http://aafigure.readthedocs.io/
