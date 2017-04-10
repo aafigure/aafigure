@@ -283,7 +283,7 @@ It should be used to report bugs and feature requests.
 
 License
 =======
-Copyright (c) 2006-2011 aafigure-team
+Copyright (c) 2006-2017 aafigure-team
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

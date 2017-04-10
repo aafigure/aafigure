@@ -12,10 +12,12 @@ The text files can be converted with aafigure, for example::
 
     aafigure fill.txt -o fill.svg
 
+
 aafigure as library
 ===================
 ``demo.py`` is a short example on how the module can be used from other Python
 programs. The MoinMoin plug-in is of course an other example showing this.
+
 
 MoinMoin plug-in
 ================
