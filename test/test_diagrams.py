@@ -41,6 +41,13 @@ class TestDiagrams(unittest.TestCase):
     def test_render_api(self):
         visitor, output = aafigure.render(ascii_art, options={'format': 'svg'})
 
+    def test_process_api(self):
+        output = BytesIO()
+        visitor = aafigure.process(
+            ascii_art,
+            aafigure.svg.SVGOutputVisitor,
+            options={'file_like': output})
+
 
 if __name__ == '__main__':
     sys.stdout.write(__doc__)
