@@ -23,7 +23,7 @@ class AsciiOutputVisitor:
 
     def visit_image(self, aa_image):
         self.visit_shapes(aa_image.shapes)
-        self.options['file_like'].write(str(self))
+        self.options['file_like'].write(self.create_image())
 
     def visit_shapes(self, shapes):
         for shape in shapes:
@@ -86,6 +86,9 @@ class AsciiOutputVisitor:
             x += 1
 
     def __str__(self):
+        return self.create_image()
+
+    def create_image(self):
         """return a cropped image"""
         # find out size
         min_x = min_y = 1000000
@@ -102,4 +105,4 @@ class AsciiOutputVisitor:
             for x in range(min_x, max_x+1):
                 line.append(self.image.get((x, y), '.'))
             result.append(''.join(line))
-        return '%s\n' % '\n'.join(result)
+        return u'{}\n'.format('\n'.join(result))

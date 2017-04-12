@@ -1018,8 +1018,8 @@ def render(input, output=None, options=None):
 
     close_output = False
     if output is None:
-        from io import StringIO
-        options['file_like'] = StringIO()
+        from io import BytesIO
+        options['file_like'] = BytesIO()
     elif isinstance(output, basestring):
         options['file_like'] = open(output, 'wb')
         close_output = True
@@ -1062,7 +1062,7 @@ def main():
         version="""\
 %prog 0.5
 
-Copyright (C) 2006-2011 aafigure-team
+Copyright (C) 2006-2017 aafigure-team
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted under the terms of the BSD License.
