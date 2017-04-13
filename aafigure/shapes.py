@@ -12,10 +12,11 @@ import math
 
 
 def point(object):
-    """return a Point instance.
-       - if object is already a Point instance it's returned as is
-       - complex numbers are converted to Points
-       - a tuple with two elements (x,y)
+    """\
+    return a Point instance.
+    - if object is already a Point instance it's returned as is
+    - complex numbers are converted to Points
+    - a tuple with two elements (x,y)
     """
     if isinstance(object, Point):
         return object
@@ -35,8 +36,9 @@ def group(list_of_shapes):
 
 
 class Point:
-    """A single point. This class primary use is to represent coordinates
-       for the other shapes.
+    """\
+    A single point. This class primary use is to represent coordinates
+    for the other shapes.
     """
     def __init__(self, x, y):
         self.x = x

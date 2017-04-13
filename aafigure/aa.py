@@ -12,8 +12,9 @@ import sys
 
 
 class AsciiOutputVisitor:
-    """Render a list of shapes as ASCII art.
-       Scaled, think of it as a low resolution black and white image.
+    """\
+    Render a list of shapes as ASCII art.
+    Scaled, think of it as a low resolution black and white image.
     """
 
     def __init__(self, options):
