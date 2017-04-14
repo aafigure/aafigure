@@ -1,5 +1,10 @@
 #! /usr/bin/env python
 # -*- coding: iso-8859-1 -*-
+#
+# This file is part of aafigure. https://github.com/aafigure/aafigure
+# (C) 2009 Chris Liechti <cliechti@gmx.net>
+#
+# SPDX-License-Identifier:    BSD-3-Clause
 """
     MoinMoin - aafigure
 

@@ -1,11 +1,12 @@
+#!python
+#
+# This file is part of aafigure. https://github.com/aafigure/aafigure
+# (C) 2006 Chris Liechti <cliechti@gmx.net>
+#
+# SPDX-License-Identifier:    BSD-3-Clause
 """\
 Simple ASCII output of the rendered image.  Think of it as a low resolution
 black and white image.
-
-(C) 2006 Chris Liechti <cliechti@gmx.net>
-
-This is open source software under the BSD license. See LICENSE.txt for more
-details.
 """
 
 import sys

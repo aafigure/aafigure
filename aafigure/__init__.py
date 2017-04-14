@@ -1,8 +1,11 @@
+#!python
+#
+# This file is part of aafigure. https://github.com/aafigure/aafigure
+# (C) 2007 Chris Liechti <cliechti@gmx.net>
+#
+# SPDX-License-Identifier:    BSD-3-Clause
 """
-AAFigure directive for reStructuredText.
-
-This is open source software under the BSD license. See LICENSE.txt for more
-details.
+AAFigure package.
 """
 
 from .aafigure import process, render, UnsupportedFormatError, AsciiArtImage

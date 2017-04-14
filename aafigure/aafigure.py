@@ -1,16 +1,15 @@
 #!/usr/bin/env python
-
+#
+# This file is part of aafigure. https://github.com/aafigure/aafigure
+# (C) 2006-2011 Chris Liechti <cliechti@gmx.net> and the aafigure-team
+#
+# SPDX-License-Identifier:    BSD-3-Clause
 """\
 ASCII art to image converter.
 
 This is the main module that contains the parser.
 
 See svg.py and aa.py for output modules, that can render the parsed structure.
-
-(C) 2006-2011 Chris Liechti <cliechti@gmx.net> and the aafigure-team
-
-This is open source software under the BSD license. See LICENSE.txt for more
-details.
 """
 # import codecs
 from .error import UnsupportedFormatError

@@ -1,10 +1,11 @@
+#!python
+#
+# This file is part of aafigure. https://github.com/aafigure/aafigure
+# (C) 2010 Chris Liechti <cliechti@gmx.net>, Oliver Joos <oliver.joos@hispeed.ch>
+#
+# SPDX-License-Identifier:    BSD-3-Clause
 """\
 Helper objects for bitmap renderer of the aafigure package.
-
-(C) 2010 Chris Liechti <cliechti@gmx.net>, Oliver Joos <oliver.joos@hispeed.ch>
-
-This is open source software under the BSD license. See LICENSE.txt for more
-details.
 """
 
 import os

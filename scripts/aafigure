@@ -1,7 +1,11 @@
 #!/usr/bin/env python
+#
+# This file is part of aafigure. https://github.com/aafigure/aafigure
+# (C) 2007 Chris Liechti <cliechti@gmx.net>
+#
+# SPDX-License-Identifier:    BSD-3-Clause
 
 # command line stub for aafigure
-# https://launchpad.net/aafigure
 
 import aafigure.aafigure
 aafigure.aafigure.main()

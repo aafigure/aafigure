@@ -1,13 +1,12 @@
 # Common shapes for the aafigure package.
 #
+# This file is part of aafigure. https://github.com/aafigure/aafigure
 # (C) 2009 Chris Liechti <cliechti@gmx.net>
 #
-# This is open source software under the BSD license. See LICENSE.txt for more
-# details.
+# SPDX-License-Identifier:    BSD-3-Clause
 #
 # This intentionally is no doc comment to make it easier to include the module
 # in Sphinx ``.. automodule::``
-
 import math
 
 
