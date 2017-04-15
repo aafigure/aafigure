@@ -26,16 +26,16 @@ class PDFOutputVisitor:
 
     def __init__(self, options):
         """\
-            Dual use as PDF file writer or as Reportlab Drawing generator.
+        Dual use as PDF file writer or as Reportlab Drawing generator.
 
-            files: file_like or filname is given in the options:
-                The PDF file is written there.
+        files: file_like or filname is given in the options:
+            The PDF file is written there.
 
-            Drawing: file_like and filname are missing in the options:
-                No output is generated. The Drawing can be used for example::
+        Drawing: file_like and filname are missing in the options:
+            No output is generated. The Drawing can be used for example::
 
-                    visitor = PDFOutputVisitor(None, ...)
-                    do_something(renderPDF.GraphicsFlowable(visitor.drawing))
+                visitor = PDFOutputVisitor(None, ...)
+                do_something(renderPDF.GraphicsFlowable(visitor.drawing))
         """
         self.options = options
         self.scale = 4*options['scale']
@@ -63,8 +63,9 @@ class PDFOutputVisitor:
         return colors.HexColor(color)
 
     def visit_image(self, aa_image):
-        """Process the given ASCIIArtFigure and output the shapes in
-           the PDF file
+        """
+        Process the given ASCIIArtFigure and output the shapes in
+        the PDF file
         """
         self.aa_image = aa_image        # save for later XXX not optimal to do it here
         self.width = (aa_image.width)*aa_image.nominal_size*aa_image.aspect_ratio

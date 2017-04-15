@@ -48,8 +48,9 @@ class SVGOutputVisitor:
         )
 
     def visit_image(self, aa_image, xml_header=True):
-        """Process the given ASCIIArtFigure and output the shapes in
-           the SVG file
+        """\
+        Process the given ASCIIArtFigure and output the shapes in
+        the SVG file
         """
         self.aa_image = aa_image        # save for later XXX not optimal to do it here
         self.width = (aa_image.width+1)*aa_image.nominal_size*aa_image.aspect_ratio
@@ -95,8 +96,9 @@ class SVGOutputVisitor:
                 self.line_width*(1+bool(thick))))
 
     def _rectangle(self, x1, y1, x2, y2, style=''):
-        """Draw a rectangle, coordinates given as four decimal numbers.
-           ``style`` is inserted in the SVG. It could be e.g. "fill:yellow"
+        """\
+        Draw a rectangle, coordinates given as four decimal numbers.
+        ``style`` is inserted in the SVG. It could be e.g. "fill:yellow"
         """
         if x1 > x2:
             x1, x2 = x2, x1
