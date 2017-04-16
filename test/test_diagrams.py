@@ -39,8 +39,17 @@ class TestDiagrams(unittest.TestCase):
         aav = aafigure.aa.AsciiOutputVisitor({'file_like': output, 'scale': 2})
         aav.visit_image(aaimg)
 
-    def test_render_api(self):
+    def test_render_api_svg(self):
         visitor, output = aafigure.render(ascii_art, options={'format': 'svg'})
+        self.assertTrue(b'<svg' in output.getvalue())
+
+    def test_render_api_pil(self):
+        visitor, output = aafigure.render(ascii_art, options={'format': 'png'})
+        self.assertTrue(b'PNG' in output.getvalue())
+
+    def test_render_api_pdf(self):
+        visitor, output = aafigure.render(ascii_art, options={'format': 'pdf'})
+        self.assertTrue(b'%PDF' in output.getvalue())
 
     def test_process_api(self):
         output = BytesIO()
@@ -48,6 +57,7 @@ class TestDiagrams(unittest.TestCase):
             ascii_art,
             aafigure.svg.SVGOutputVisitor,
             options={'file_like': output})
+        self.assertTrue(b'<svg' in output.getvalue())
 
 
 if __name__ == '__main__':
