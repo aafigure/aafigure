@@ -11,4 +11,5 @@ python:
 
 script:
   - python setup.py install
+  - python -m pip install -r requirements.txt
   - cd test && python test_diagrams.py
