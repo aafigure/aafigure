@@ -10,17 +10,10 @@ Bitmap renderer for the aafigure package, using the Python Imaging Library.
 
 import sys
 from .error import UnsupportedFormatError
-PIL_OK = False
 try:
-    import Image, ImageDraw
-    PIL_OK = True
+    from PIL import Image, ImageDraw
 except ImportError:
-    pass
-if PIL_OK is False:
-    try:
-        from PIL import Image, ImageDraw
-    except ImportError:
-        raise UnsupportedFormatError('please install PIL to get bitmaps output support')
+    raise UnsupportedFormatError('please install PIL to get bitmaps output support')
 from . import PILhelper
 
 

@@ -18,6 +18,14 @@ import aafigure.aa
 import aafigure.svg
 from io import BytesIO, StringIO
 
+
+try:
+    import PIL
+except ImportError:
+    pil_available = False
+else:
+    pil_available = True
+
 try:
     import reportlab
 except ImportError:
@@ -51,6 +59,7 @@ class TestDiagrams(unittest.TestCase):
         visitor, output = aafigure.render(ascii_art, options={'format': 'svg'})
         self.assertTrue(b'<svg' in output.getvalue())
 
+    @unittest.skipUnless(pil_available, 'requires PIL or Pillow')
     def test_render_api_pil(self):
         visitor, output = aafigure.render(ascii_art, options={'format': 'png'})
         self.assertTrue(b'PNG' in output.getvalue())
