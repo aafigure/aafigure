@@ -51,8 +51,8 @@ class Point:
                          (self.y - other.y)**2)
 
     def midpoint(self, other):
-        return Point((self.x + other.x)/2,
-                     (self.y + other.y)/2)
+        return Point((self.x + other.x) / 2,
+                     (self.y + other.y) / 2)
 
 
 class Line:

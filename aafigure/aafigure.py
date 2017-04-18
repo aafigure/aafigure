@@ -51,7 +51,7 @@ DEFAULT_OPTIONS = dict(
 
 class AsciiArtImage:
     """\
-    This class hold a ASCII art figure and has methods to parse it.
+    This class holds a ASCII art figure and has methods to parse it.
     The resulting list of shapes is also stored here.
 
     The image is parsed in 2 steps:
@@ -132,22 +132,22 @@ class AsciiArtImage:
 
     # Coordinate conversion and shifting
     def left(self, x):
-        return x*NOMINAL_SIZE*self.aspect_ratio
+        return x * NOMINAL_SIZE * self.aspect_ratio
 
     def hcenter(self, x):
-        return (x + 0.5)*NOMINAL_SIZE*self.aspect_ratio
+        return (x + 0.5) * NOMINAL_SIZE * self.aspect_ratio
 
     def right(self, x):
-        return (x + 1)*NOMINAL_SIZE*self.aspect_ratio
+        return (x + 1)*NOMINAL_SIZE * self.aspect_ratio
 
     def top(self, y):
-        return y*NOMINAL_SIZE
+        return y * NOMINAL_SIZE
 
     def vcenter(self, y):
-        return (y + 0.5)*NOMINAL_SIZE
+        return (y + 0.5) * NOMINAL_SIZE
 
     def bottom(self, y):
-        return (y + 1)*NOMINAL_SIZE
+        return (y + 1) * NOMINAL_SIZE
 
     def recognize(self):
         """\
@@ -198,10 +198,10 @@ class AsciiArtImage:
                         self.tag([(x, y)], CLASS_FIXED)
                     elif not self.textual_strict and character in self.FILL_CHARACTERS:
                         if self.textual:
-                            if self.get(x, y+1) == character:
+                            if self.get(x, y + 1) == character:
                                 self.shapes.extend(self._follow_fill(character, x, y))
                         else:
-                            if (self.get(x+1, y) == character or self.get(x, y+1) == character):
+                            if (self.get(x + 1, y) == character or self.get(x, y + 1) == character):
                                 self.shapes.extend(self._follow_fill(character, x, y))
 
         # search for short strings too
@@ -230,24 +230,24 @@ class AsciiArtImage:
         direction_vector = p1 - p2
         direction_vector /= abs(direction_vector)
         return p1, [
-            Line(p1, p1-direction_vector*1.5+direction_vector*0.5j),
-            Line(p1, p1-direction_vector*1.5+direction_vector*-0.5j)
+            Line(p1, p1-direction_vector * 1.5 + direction_vector * 0.5j),
+            Line(p1, p1-direction_vector * 1.5 + direction_vector * -0.5j)
         ]
 
     def _reversed_arrow(self, p1, p2):
         """--<"""
         direction_vector = p1 - p2
         direction_vector /= abs(direction_vector)
-        return p1-direction_vector*2, [
-            Line(p1-direction_vector*2.0, p1+direction_vector*(-0.5+0.5j)),
-            Line(p1-direction_vector*2.0, p1+direction_vector*(-0.5-0.5j))
+        return p1-direction_vector * 2, [
+            Line(p1-direction_vector * 2.0, p1+direction_vector * (-0.5 + 0.5j)),
+            Line(p1-direction_vector * 2.0, p1+direction_vector * (-0.5 - 0.5j))
         ]
 
     def _circle_head(self, p1, p2, radius=0.5):
         """--o"""
         direction_vector = p1 - p2
         direction_vector /= abs(direction_vector)
-        return p1-direction_vector, [Circle(p1-direction_vector, radius)]
+        return p1-direction_vector, [Circle(p1 - direction_vector, radius)]
 
     def _large_circle_head(self, p1, p2):
         """--O"""
@@ -261,15 +261,15 @@ class AsciiArtImage:
             #~ Rectangle(p1-direction_vector-direction_vector*(0.707+0.707j),
                       #~ p1-direction_vector+direction_vector*(0.707+0.707j))
         #~ ]
-        return p1-direction_vector*1.707, [
-            Line(p1-direction_vector-direction_vector*(0.707+0.707j),
-                 p1-direction_vector-direction_vector*(0.707-0.707j)),
-            Line(p1-direction_vector+direction_vector*(0.707+0.707j),
-                 p1-direction_vector+direction_vector*(0.707-0.707j)),
-            Line(p1-direction_vector-direction_vector*(0.707+0.707j),
-                 p1-direction_vector+direction_vector*(0.707-0.707j)),
-            Line(p1-direction_vector-direction_vector*(0.707-0.707j),
-                 p1-direction_vector+direction_vector*(0.707+0.707j)),
+        return p1-direction_vector * 1.707, [
+            Line(p1-direction_vector-direction_vector * (0.707 + 0.707j),
+                 p1-direction_vector-direction_vector * (0.707 - 0.707j)),
+            Line(p1-direction_vector+direction_vector * (0.707 + 0.707j),
+                 p1-direction_vector+direction_vector * (0.707 - 0.707j)),
+            Line(p1-direction_vector-direction_vector * (0.707 + 0.707j),
+                 p1-direction_vector+direction_vector * (0.707 - 0.707j)),
+            Line(p1-direction_vector-direction_vector * (0.707 - 0.707j),
+                 p1-direction_vector+direction_vector * (0.707 + 0.707j)),
         ]
 
     # the same character can mean a different thing, depending from where the
@@ -351,19 +351,19 @@ class AsciiArtImage:
         if left:
             for i in range(n):
                 result.append(Line(
-                    Point(self.left(x), self.top(y+d*i)),
-                    Point(self.right(x-d*i), self.bottom(y))
+                    Point(self.left(x), self.top(y + d * i)),
+                    Point(self.right(x - d * i), self.bottom(y))
                 ))
                 if n:
                     result.append(Line(
-                        Point(self.right(x-d*i), self.top(y)),
-                        Point(self.right(x), self.top(y+d*i))
+                        Point(self.right(x - d * i), self.top(y)),
+                        Point(self.right(x), self.top(y + d * i))
                     ))
         else:
             for i in range(n):
-                result.append(Line(Point(self.left(x), self.top(y+d*i)), Point(self.left(x+d*i), self.top(y))))
+                result.append(Line(Point(self.left(x), self.top(y + d * i)), Point(self.left(x + d * i), self.top(y))))
                 if n:
-                    result.append(Line(Point(self.left(x+d*i), self.bottom(y)), Point(self.right(x), self.top(y+d*i))))
+                    result.append(Line(Point(self.left(x + d * i), self.bottom(y)), Point(self.right(x), self.top(y + d * i))))
         return result
 
     def _hatch_v(self, x, y):
@@ -398,15 +398,15 @@ class AsciiArtImage:
 
     def _n_hatch_straight(self, x, y, n, vertical=False):
         """Hatch pattern generator function."""
-        d = 1/float(n)
-        offset = 1.0/(n+1)
+        d = 1 / float(n)
+        offset = 1.0 / (n + 1)
         result = []
         if vertical:
             for i in range(n):
                 i = i + offset
                 result.append(Line(
-                    Point(self.left(x+d*i), self.top(y)),
-                    Point(self.left(x+d*i), self.bottom(y))
+                    Point(self.left(x + d * i), self.top(y)),
+                    Point(self.left(x + d * i), self.bottom(y))
                 ))
                 #~ if n:
                     #~ result.append(Line(Point(self.right(x-d*i), self.top(y)), Point(self.right(x), self.top(y+d*i))))
@@ -414,8 +414,8 @@ class AsciiArtImage:
             for i in range(n):
                 i = i + offset
                 result.append(Line(
-                    Point(self.left(x), self.top(y+d*i)),
-                    Point(self.right(x), self.top(y+d*i))
+                    Point(self.left(x), self.top(y + d * i)),
+                    Point(self.right(x), self.top(y + d * i))
                 ))
                 #~ if n:
                     #~ result.append(Line(Point(self.left(x+d*i), self.bottom(y)), Point(self.right(x), self.top(y+d*i))))
@@ -424,12 +424,12 @@ class AsciiArtImage:
     def _fill_trail(self, x, y):
         return [
             Line(
-                Point(self.left(x+0.707), self.top(y)),
-                Point(self.right(x), self.bottom(y-0.707))
+                Point(self.left(x + 0.707), self.top(y)),
+                Point(self.right(x), self.bottom(y - 0.707))
             ),
             Line(
-                Point(self.left(x), self.top(y+0.707)),
-                Point(self.right(x-0.707), self.bottom(y))
+                Point(self.left(x), self.top(y + 0.707)),
+                Point(self.right(x - 0.707), self.bottom(y))
             )
         ]
 
@@ -446,17 +446,17 @@ class AsciiArtImage:
 
     def _fill_small_circle(self, x, y):
         return [
-            Circle(Point(self.left(x+0.5), self.top(y+0.5)), 0.2)
+            Circle(Point(self.left(x + 0.5), self.top(y + 0.5)), 0.2)
         ]
 
     def _fill_medium_circle(self, x, y):
         return [
-            Circle(Point(self.left(x+0.5), self.top(y+0.5)), 0.4)
+            Circle(Point(self.left(x + 0.5), self.top(y + 0.5)), 0.4)
         ]
 
     def _fill_large_circle(self, x, y):
         return [
-            Circle(Point(self.left(x+0.5), self.top(y+0.5)), 0.9)
+            Circle(Point(self.left(x + 0.5), self.top(y + 0.5)), 0.9)
         ]
 
     def _fill_qmark(self, x, y):
@@ -466,9 +466,9 @@ class AsciiArtImage:
 
     def _fill_triangles(self, x, y):
         return [
-            Line(Point(self.left(x+0.5), self.top(y+0.2)), Point(self.left(x+0.75), self.top(y+0.807))),
-            Line(Point(self.left(x+0.7), self.top(y+0.807)), Point(self.left(x+0.25), self.top(y+0.807))),
-            Line(Point(self.left(x+0.25), self.top(y+0.807)), Point(self.left(x+0.5), self.top(y+0.2))),
+            Line(Point(self.left(x + 0.5), self.top(y + 0.2)), Point(self.left(x + 0.75), self.top(y + 0.807))),
+            Line(Point(self.left(x + 0.7), self.top(y + 0.807)), Point(self.left(x + 0.25), self.top(y + 0.807))),
+            Line(Point(self.left(x + 0.25), self.top(y + 0.807)), Point(self.left(x + 0.5), self.top(y + 0.2))),
         ]
 
     FILL_TYPES = [
@@ -536,7 +536,7 @@ class AsciiArtImage:
 
     def _circle(self, x, y):
         return [
-            Circle(Point(self.hcenter(x), self.vcenter(y)), NOMINAL_SIZE/2.0)
+            Circle(Point(self.hcenter(x), self.vcenter(y)), NOMINAL_SIZE / 2.0)
         ]
 
 
@@ -623,10 +623,10 @@ class AsciiArtImage:
         end_x, _, line_end_style = self._follow_line(x, y, dx=1, line_character='_', arrows=False)
         # follow line to the left
         start_x, _, line_start_style = self._follow_line(x, y, dx=-1, line_character='_', arrows=False)
-        self.tag([(x, y) for x in range(start_x, end_x+1)], CLASS_LINE)
+        self.tag([(x, y) for x in range(start_x, end_x + 1)], CLASS_LINE)
         # return the new shape object with arrows etc.
-        p1 = complex(self.hcenter(start_x-1), self.bottom(y))
-        p2 = complex(self.hcenter(end_x+1), self.bottom(y))
+        p1 = complex(self.hcenter(start_x - 1), self.bottom(y))
+        p2 = complex(self.hcenter(end_x + 1), self.bottom(y))
         return [Line(p1, p2)]
 
     def _follow_upper_horizontal_line(self, x, y):
@@ -641,10 +641,10 @@ class AsciiArtImage:
         end_x, _, line_end_style = self._follow_line(x, y, dx=1, line_character='~', arrows=False)
         # follow line to the left
         start_x, _, line_start_style = self._follow_line(x, y, dx=-1, line_character='~', arrows=False)
-        self.tag([(x, y) for x in range(start_x, end_x+1)], CLASS_LINE)
+        self.tag([(x, y) for x in range(start_x, end_x + 1)], CLASS_LINE)
         # return the new shape object with arrows etc.
-        p1 = complex(self.hcenter(start_x-1), self.top(y))
-        p2 = complex(self.hcenter(end_x+1), self.top(y))
+        p1 = complex(self.hcenter(start_x - 1), self.top(y))
+        p2 = complex(self.hcenter(end_x + 1), self.top(y))
         return [Line(p1, p2)]
 
     def _follow_line(self, x, y, dx=0, dy=0, line_character=None, arrows=True):
@@ -806,7 +806,7 @@ class AsciiArtImage:
             if self.get(x - 1, y) == '-' and self.get(x, y - 1) == '|':
                 # lower right corner
                 result.append(Arc(
-                    Point(self.hcenter(x), self.top(y)),  -90,
+                    Point(self.hcenter(x), self.top(y)), -90,
                     Point(self.left(x), self.vcenter(y)), 0
                 ))
             if not result:
@@ -869,12 +869,12 @@ class AsciiArtImage:
                 # upper right corner
                 result.append(Arc(
                     Point(self.hcenter(x), self.bottom(y)), 90,
-                    Point(self.left(x), self.vcenter(y)),   0
+                    Point(self.left(x), self.vcenter(y)), 0
                 ))
             if self.get(x+1, y) == '-' and self.get(x, y - 1) == '|':
                 # lower left corner
                 result.append(Arc(
-                    Point(self.hcenter(x), self.top(y)),   -90,
+                    Point(self.hcenter(x), self.top(y)), -90,
                     Point(self.right(x), self.vcenter(y)), 180
                 ))
             if not result:

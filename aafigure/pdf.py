@@ -38,8 +38,8 @@ class PDFOutputVisitor:
                 do_something(renderPDF.GraphicsFlowable(visitor.drawing))
         """
         self.options = options
-        self.scale = 4*options['scale']
-        self.line_width = 0.4*options['line_width']
+        self.scale = 4 * options['scale']
+        self.line_width = 0.4 * options['line_width']
         self.foreground = options['foreground']
         self.background = options['background']
         self.fillcolor = options['fill']
@@ -92,7 +92,7 @@ class PDFOutputVisitor:
             self._num(x1), self._num(self.height - y1),
             self._num(x2), self._num(self.height - y2),
             strokeColor=self._color(self.foreground),
-            strokeWidth=self.line_width*(1 + 0.5*bool(thick))
+            strokeWidth=self.line_width*(1 + 0.5 * bool(thick))
         ))
 
     def _rectangle(self, x1, y1, x2, y2, style=''):
@@ -141,7 +141,7 @@ class PDFOutputVisitor:
     def visit_label(self, label):
         #  font-weight="bold"   style="stroke:%s"
         self.drawing.add(String(
-            self._num(label.position.x), self._num(self.height - label.position.y + self.aa_image.nominal_size*0.2),
+            self._num(label.position.x), self._num(self.height - label.position.y + self.aa_image.nominal_size * 0.2),
             label.text,
             fontSize=self._num(self.aa_image.nominal_size),
             fontName=self.font,

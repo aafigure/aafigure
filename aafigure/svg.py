@@ -53,8 +53,8 @@ class SVGOutputVisitor:
         the SVG file
         """
         self.aa_image = aa_image        # save for later XXX not optimal to do it here
-        self.width = (aa_image.width+1)*aa_image.nominal_size*aa_image.aspect_ratio
-        self.height = (aa_image.height+1)*aa_image.nominal_size
+        self.width = (aa_image.width + 1) * aa_image.nominal_size * aa_image.aspect_ratio
+        self.height = (aa_image.height + 1) * aa_image.nominal_size
         if xml_header:
             self.file_like.write(u"""\
 <?xml version="1.0" standalone="no"?>
@@ -109,7 +109,7 @@ class SVGOutputVisitor:
 """ % (
             self.indent,
             self._num(x1), self._num(y1),
-            self._num(x2-x1), self._num(y2-y1),
+            self._num(x2 - x1), self._num(y2 - y1),
             self.fillcolor,  # stroke:%s;
             self.fillcolor,
             self.line_width,
@@ -158,7 +158,7 @@ class SVGOutputVisitor:
 %s</text>
 """ % (
             self.indent,
-            self._num(label.position.x), self._num(label.position.y-0.3),  # XXX static offset not good in all situations
+            self._num(label.position.x), self._num(label.position.y - 0.3),  # XXX static offset not good in all situations
             self.font,
             self._num(self.aa_image.nominal_size),
             self.foreground,

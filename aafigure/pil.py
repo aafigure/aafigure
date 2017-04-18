@@ -29,7 +29,7 @@ class PILOutputVisitor:
 
     def __init__(self, options):
         self.options = options
-        self.scale = options['scale']*8
+        self.scale = options['scale'] * 8
         self.debug = options['debug']
         self.line_width = options['line_width']
         self.foreground = options['foreground']
@@ -45,11 +45,11 @@ class PILOutputVisitor:
         the bitmap file
         """
         self.aa_image = aa_image        # save for later XXX not optimal to do it here
-        self.width = (aa_image.width+1)*aa_image.nominal_size*aa_image.aspect_ratio
-        self.height = (aa_image.height+1)*aa_image.nominal_size
+        self.width = (aa_image.width + 1) * aa_image.nominal_size * aa_image.aspect_ratio
+        self.height = (aa_image.height + 1) * aa_image.nominal_size
 
         # if font is given explicit, use it instead of proportional flag
-        font_size = int(self._num(self.aa_image.nominal_size*1.1))
+        font_size = int(self._num(self.aa_image.nominal_size * 1.1))
         if 'font' in self.options:
             self.font = PILhelper.font_by_name(self.options['font'], font_size)
         else:
@@ -118,8 +118,8 @@ class PILOutputVisitor:
         dotsize = 2
         self.draw.ellipse(
             (
-                self._num(point.x)-dotsize, self._num(point.y)-dotsize,
-                self._num(point.x)+dotsize, self._num(point.y)+dotsize
+                self._num(point.x) - dotsize, self._num(point.y) - dotsize,
+                self._num(point.x) + dotsize, self._num(point.y) + dotsize
             ),
             fill=self.foreground
         )
@@ -148,7 +148,7 @@ class PILOutputVisitor:
     def visit_label(self, label):
         #  font-weight="bold"
         self.draw.text(
-            (self._num(label.position.x), self._num(label.position.y-self.aa_image.nominal_size*1.1)),
+            (self._num(label.position.x), self._num(label.position.y-self.aa_image.nominal_size * 1.1)),
             label.text,
             fill=self.foreground,
             font=self.font
