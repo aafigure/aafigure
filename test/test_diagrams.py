@@ -18,6 +18,14 @@ import aafigure.aa
 import aafigure.svg
 from io import BytesIO, StringIO
 
+try:
+    import reportlab
+except ImportError:
+    reportlab_available = False
+else:
+    reportlab_available = True
+
+
 ascii_art = u"""\
     ---> | ^|   |
     <--- | || --+--
@@ -47,6 +55,7 @@ class TestDiagrams(unittest.TestCase):
         visitor, output = aafigure.render(ascii_art, options={'format': 'png'})
         self.assertTrue(b'PNG' in output.getvalue())
 
+    @unittest.skipUnless(reportlab_available, 'requires reportlab')
     def test_render_api_pdf(self):
         visitor, output = aafigure.render(ascii_art, options={'format': 'pdf'})
         self.assertTrue(b'%PDF' in output.getvalue())
