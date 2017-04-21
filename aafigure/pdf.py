@@ -57,7 +57,7 @@ class PDFOutputVisitor:
 
     def _num(self, number):
         """helper to format numbers with scale for PDF output"""
-        return number*self.scale
+        return number * self.scale
 
     def _color(self, color):
         return colors.HexColor(color)
@@ -68,8 +68,8 @@ class PDFOutputVisitor:
         the PDF file
         """
         self.aa_image = aa_image        # save for later XXX not optimal to do it here
-        self.width = (aa_image.width)*aa_image.nominal_size*aa_image.aspect_ratio
-        self.height = (aa_image.height)*aa_image.nominal_size
+        self.width = aa_image.width * aa_image.nominal_size * aa_image.aspect_ratio
+        self.height = aa_image.height * aa_image.nominal_size
         self.drawing = Drawing(self._num(self.width), self._num(self.height))
         self.visit_shapes(aa_image.shapes)
         # if file is given, write
@@ -79,11 +79,11 @@ class PDFOutputVisitor:
     def visit_shapes(self, shapes):
         for shape in shapes:
             shape_name = shape.__class__.__name__.lower()
-            visitor_name = 'visit_%s' % shape_name
+            visitor_name = 'visit_{}'.format(shape_name)
             if hasattr(self, visitor_name):
                 getattr(self, visitor_name)(shape)
             else:
-                sys.stderr.write("WARNING: don't know how to handle shape %r\n" % shape)
+                sys.stderr.write("WARNING: don't know how to handle shape {!r}\n".format(shape))
 
     # - - - - - - PDF drawing helpers - - - - - - -
     def _line(self, x1, y1, x2, y2, thick):
@@ -92,8 +92,7 @@ class PDFOutputVisitor:
             self._num(x1), self._num(self.height - y1),
             self._num(x2), self._num(self.height - y2),
             strokeColor=self._color(self.foreground),
-            strokeWidth=self.line_width*(1 + 0.5 * bool(thick))
-        ))
+            strokeWidth=self.line_width*(1 + 0.5 * bool(thick))))
 
     def _rectangle(self, x1, y1, x2, y2, style=''):
         """Draw a rectangle, coordinates given as four decimal numbers."""
@@ -103,10 +102,9 @@ class PDFOutputVisitor:
             y1, y2 = y2, y1
         self.drawing.add(Rect(
             self._num(x1), self._num(self.height - y2),
-            self._num(x2-x1), self._num(y2 - y1),
+            self._num(x2 - x1), self._num(y2 - y1),
             fillColor=self._color(self.fillcolor),
-            strokeWidth=self.line_width
-        ))
+            strokeWidth=self.line_width))
 
     # - - - - - - visitor function for the different shape types - - - - - - -
 
@@ -115,8 +113,7 @@ class PDFOutputVisitor:
             self._num(point.x), self._num(self.height - point.y),
             self._num(0.2),
             fillColor=self._color(self.foreground),
-            strokeWidth=self.line_width
-        ))
+            strokeWidth=self.line_width))
 
     def visit_line(self, line):
         x1, x2 = line.start.x, line.end.x
@@ -126,8 +123,7 @@ class PDFOutputVisitor:
     def visit_rectangle(self, rectangle):
         self._rectangle(
             rectangle.p1.x, rectangle.p1.y,
-            rectangle.p2.x, rectangle.p2.y
-        )
+            rectangle.p2.x, rectangle.p2.y)
 
     def visit_circle(self, circle):
         self.drawing.add(Circle(
@@ -135,8 +131,7 @@ class PDFOutputVisitor:
             self._num(circle.radius),
             strokeColor=self._color(self.foreground),
             fillColor=self._color(self.fillcolor),
-            strokeWidth=self.line_width
-        ))
+            strokeWidth=self.line_width))
 
     def visit_label(self, label):
         #  font-weight="bold"   style="stroke:%s"
@@ -145,8 +140,7 @@ class PDFOutputVisitor:
             label.text,
             fontSize=self._num(self.aa_image.nominal_size),
             fontName=self.font,
-            fillColor=self._color(self.foreground),
-        ))
+            fillColor=self._color(self.foreground)))
 
     def visit_group(self, group):
         # XXX could add a group to the PDF file
