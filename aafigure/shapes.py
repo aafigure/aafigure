@@ -10,20 +10,20 @@
 import math
 
 
-def point(object):
+def point(obj):
     """\
     return a Point instance.
     - if object is already a Point instance it's returned as is
     - complex numbers are converted to Points
     - a tuple with two elements (x,y)
     """
-    if isinstance(object, Point):
-        return object
-    if type(object) is complex:
-        return Point(object.real, object.imag)
-    if type(object) is tuple and len(object) == 2:
-        return Point(object[0], object[1])
-    raise ValueError('can not convert %r to a Point')
+    if isinstance(obj, Point):
+        return obj
+    if type(obj) is complex:
+        return Point(obj.real, obj.imag)
+    if type(obj) is tuple and len(obj) == 2:
+        return Point(obj[0], obj[1])
+    raise ValueError('can not convert {!r} to a Point'.format(obj))
 
 
 def group(list_of_shapes):
@@ -44,7 +44,7 @@ class Point:
         self.y = y
 
     def __repr__(self):
-        return 'Point(%r, %r)' % (self.x, self.y)
+        return 'Point({p.x!r}, {p.y!r})'.format(p=self)
 
     def distance(self, other):
         return math.sqrt((self.x - other.x)**2 +
@@ -63,7 +63,7 @@ class Line:
         self.end = point(end)
 
     def __repr__(self):
-        return 'Line(%r, %r)' % (self.start, self.end)
+        return 'Line({l.start!r}, {l.end!r})'.format(l=self)
 
 
 class Rectangle:
@@ -73,7 +73,7 @@ class Rectangle:
         self.p2 = point(p2)
 
     def __repr__(self):
-        return 'Rectangle(%r, %r)' % (self.p1, self.p2)
+        return 'Rectangle({r.p1!r}, {r.p2!r})'.format(r=self)
 
 
 class Circle:
@@ -83,7 +83,7 @@ class Circle:
         self.radius = radius
 
     def __repr__(self):
-        return 'Circle(%r, %r)' % (self.center, self.radius)
+        return 'Circle({c.center!r}, {c.radius!r})'.format(c=self)
 
 
 class Label:
@@ -93,7 +93,7 @@ class Label:
         self.text = text
 
     def __repr__(self):
-        return 'Label(%r, %r)' % (self.position, self.text)
+        return 'Label({t.position!r}, {t.text!r})'.format(t=self)
 
 
 class Group:
@@ -104,7 +104,7 @@ class Group:
         self.shapes = shapes
 
     def __repr__(self):
-        return 'Group(%r)' % (self.shapes,)
+        return 'Group({!r})'.format(self.shapes)
 
 
 class Arc:
@@ -118,9 +118,9 @@ class Arc:
         self.end_curve = end_curve
 
     def __repr__(self):
-        return 'Arc(%r, %r, %r, %r, %r, %r)' % (self.start,       self.start_angle,
-                                                self.end,         self.end_angle,
-                                                self.start_curve, self.end_curve)
+        return 'Arc({a.start!r}, {a.start_angle!r}, ' \
+               '{a.end!r}, {a.end_angle!r}, {a.start_curve!r}, ' \
+               '{a.end_curve!r})'.format(a=self)
 
     def start_angle_rad(self):
         return self.start_angle * math.pi / 180
