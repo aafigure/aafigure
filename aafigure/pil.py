@@ -13,7 +13,7 @@ from .error import UnsupportedFormatError
 try:
     from PIL import Image, ImageDraw
 except ImportError:
-    raise UnsupportedFormatError('please install PIL to get bitmaps output support')
+    raise UnsupportedFormatError('please install PIL or Pillow to get bitmap output support')
 from . import PILhelper
 
 
@@ -74,16 +74,16 @@ class PILOutputVisitor:
             if 'file_like' in self.options:
                 self.image.save(self.options['file_like'], file_type)
         except KeyError:
-            raise UnsupportedFormatError("PIL doesn't support image format %r" % file_type)
+            raise UnsupportedFormatError("PIL doesn't support image format {!r}".format(file_type))
 
     def visit_shapes(self, shapes):
         for shape in shapes:
             shape_name = shape.__class__.__name__.lower()
-            visitor_name = 'visit_%s' % shape_name
+            visitor_name = 'visit_{}'.format(shape_name)
             if hasattr(self, visitor_name):
                 getattr(self, visitor_name)(shape)
             else:
-                sys.stderr.write("WARNING: don't know how to handle shape %r\n" % shape)
+                sys.stderr.write("WARNING: don't know how to handle shape {!r}\n".format(shape))
 
     def visit_group(self, group):
         self.visit_shapes(group.shapes)
@@ -131,8 +131,8 @@ class PILOutputVisitor:
     def visit_circle(self, circle):
         self.draw.ellipse(
             (
-                self._num(circle.center.x-circle.radius), self._num(circle.center.y-circle.radius),
-                self._num(circle.center.x+circle.radius), self._num(circle.center.y+circle.radius)
+                self._num(circle.center.x - circle.radius), self._num(circle.center.y - circle.radius),
+                self._num(circle.center.x + circle.radius), self._num(circle.center.y + circle.radius)
             ),
             fill=self.fillcolor,
             outline=self.foreground,
@@ -141,7 +141,7 @@ class PILOutputVisitor:
     def visit_label(self, label):
         #  font-weight="bold"
         self.draw.text(
-            (self._num(label.position.x), self._num(label.position.y-self.aa_image.nominal_size * 1.1)),
+            (self._num(label.position.x), self._num(label.position.y - self.aa_image.nominal_size * 1.1)),
             label.text,
             fill=self.foreground,
             font=self.font

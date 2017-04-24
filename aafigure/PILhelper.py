@@ -17,7 +17,7 @@ from PIL import ImageFont
 def _find_file(name, top_dir):
     """\
     Find a file by its name in a directory or sub-directories (recursively).
-    Return absolut path of the file or None if not found.
+    Return absolute path of the file or None if not found.
     """
     for (dirpath, dirnames, filenames) in os.walk(top_dir):
         if name in filenames:
