@@ -68,7 +68,7 @@ UML
 No not really, yet. But you get the idea.
 
 .. aafig::
-    :scale: 0.8
+    :scale: 80
 
     +---------+  +---------+  +---------+
     |Object 1 |  |Object 2 |  |Object 3 |
@@ -92,7 +92,7 @@ No not really, yet. But you get the idea.
          |            |            |
 
 .. aafig::
-    :scale: 0.8
+    :scale: 80
 
     +---------+         +---------+     +---------+
     |  Shape  |         |  Line   |     |  Point  |
@@ -165,7 +165,7 @@ Here is a complete circuit with different parts:
 
 .. aafig::
     :fill: #fff
-    :scale: 0.8
+    :scale: 80
     :textual:
 
                          Q1  _  8MHz
@@ -206,7 +206,7 @@ Here is a complete circuit with different parts:
 Timing diagrams
 ---------------
 .. aafig::
-    :aspect: 0.5
+    :aspect: 50
 
       ^    ___     ___           ____
     A |___|   |___|   |_________|    |______
@@ -246,7 +246,7 @@ Benfords_ distribution of the sizes of files on my hard drive:
 
 .. aafig::
     :foreground: #ff1050
-    :aspect: 0.7
+    :aspect: 70
 
       |
     1 +------------------------------------------------------------> 31.59%

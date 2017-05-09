@@ -22,7 +22,7 @@ import sys, os
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinxcontrib.aafig']
+extensions = ['sphinx.ext.autodoc', 'aafigure.sphinxext']
 
 # ensure our local copy of the module is used, not a installed one on the system
 sys.path.insert(0, '..')
