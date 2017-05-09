@@ -94,6 +94,7 @@ class AafigDirective(images.Image):
         foreground   = str,
         fill         = str,
         aspect       = nonnegative_int,
+        scale        = nonnegative_int,
         textual      = flag,
         proportional = flag,
     )
