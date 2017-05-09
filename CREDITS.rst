@@ -2,9 +2,9 @@
  Credits
 =========
 
-- Chris Liechti (zsquareplusc)
-- Leandro Lucarella (llucax)
-- Oliver Joos
+- Chris Liechti (zsquareplusc) - creator
+- Leandro Lucarella (llucax) - contributor, sphinxcontrib-aafig
+- Oliver Joos - contributor
 - Jim Wisniewski
 - Florent Gallaire
 - ... not all names may be listed here, see also ``git log`` or online history_

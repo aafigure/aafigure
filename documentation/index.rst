@@ -12,6 +12,7 @@ aafigure Documentation
     manual
     shortintro
     examples
+    integrations
     appendix
 
 Indices and tables
