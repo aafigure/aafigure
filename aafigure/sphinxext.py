@@ -53,10 +53,7 @@ from sphinx.errors import SphinxError
 from sphinx.util import ensuredir, relative_uri
 from sphinx.util.compat import Directive
 
-try:
-    import aafigure
-except ImportError:
-    aafigure = None
+from . import aafigure
 
 
 DEFAULT_FORMATS = dict(html='svg', latex='pdf', text=None)
@@ -127,14 +124,8 @@ class AafigDirective(images.Image):
 def render_aafig_images(app, doctree):
     format_map = app.builder.config.aafig_format
     merge_dict(format_map, DEFAULT_FORMATS)
-    if aafigure is None:
-        app.builder.warn('aafigure module not installed, ASCII art images '
-                'will be redered as literal text')
     for img in doctree.traverse(nodes.image):
         if not hasattr(img, 'aafig'):
-            continue
-        if aafigure is None:
-            img.replace_self(nodes.literal_block(text, text))
             continue
         options = img.aafig['options']
         text = img.aafig['text']
@@ -171,10 +162,6 @@ def render_aafigure(app, text, options):
     """
     Render an ASCII art figure into the requested format output file.
     """
-
-    if aafigure is None:
-        raise AafigError('aafigure module not installed')
-
     fname = get_basename(text, options)
     fname = '%s.%s' % (get_basename(text, options), options['format'])
     if app.builder.format == 'html':
