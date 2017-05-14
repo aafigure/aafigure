@@ -145,7 +145,7 @@ def render_aafig_images(app, doctree):
             continue
         try:
             fname, outfn, id, extra = render_aafigure(app, text, options)
-        except AafigError, exc:
+        except AafigError as exc:
             app.builder.warn('aafigure error: ' + str(exc))
             img.replace_self(nodes.literal_block(text, text))
             continue
@@ -205,15 +205,14 @@ def render_aafigure(app, text, options):
     try:
         (visitor, output) = aafigure.render(text, outfn, options)
         output.close()
-    except aafigure.UnsupportedFormatError, e:
+    except aafigure.UnsupportedFormatError as e:
         raise AafigError(str(e))
 
     extra = None
     if options['format'].lower() == 'svg':
         extra = visitor.get_size_attrs()
-        f = file(metadata_fname, 'w')
-        f.write(extra)
-        f.close()
+        with open(metadata_fname, 'w') as f:
+            f.write(extra)
 
     return relfn, outfn, id, extra
 
