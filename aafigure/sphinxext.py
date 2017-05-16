@@ -13,31 +13,31 @@
 """
 
 # original license, copied from LICENSE file:
-## I don't like licenses, because I don't like having to worry about all this
-## legal stuff just for a simple piece of software I don't really mind anyone
-## using. But I also believe that it's important that people share and give back;
-## so I'm placing this work under the following license.
-##
-##
-## BOLA - Buena Onda License Agreement (v1.0)
-## ------------------------------------------
-##
-## This work is provided 'as-is', without any express or implied warranty. In no
-## event will the authors be held liable for any damages arising from the use of
-## this work.
-##
-## To all effects and purposes, this work is to be considered Public Domain.
-##
-##
-## However, if you want to be "buena onda", you should:
-##
-## 1. Not take credit for it, and give proper recognition to the authors.
-## 2. Share your modifications, so everybody benefits from them.
-## 3. Do something nice for the authors.
-## 4. Help someone who needs it.
-## 5. Don't waste. Anything, but specially energy that comes from natural
-##    non-renewable resources.
-## 6. Be tolerant. Everything that's good in nature comes from cooperation.
+# # I don't like licenses, because I don't like having to worry about all this
+# # legal stuff just for a simple piece of software I don't really mind anyone
+# # using. But I also believe that it's important that people share and give back;
+# # so I'm placing this work under the following license.
+# #
+# #
+# # BOLA - Buena Onda License Agreement (v1.0)
+# # ------------------------------------------
+# #
+# # This work is provided 'as-is', without any express or implied warranty. In no
+# # event will the authors be held liable for any damages arising from the use of
+# # this work.
+# #
+# # To all effects and purposes, this work is to be considered Public Domain.
+# #
+# #
+# # However, if you want to be "buena onda", you should:
+# #
+# # 1. Not take credit for it, and give proper recognition to the authors.
+# # 2. Share your modifications, so everybody benefits from them.
+# # 3. Do something nice for the authors.
+# # 4. Help someone who needs it.
+# # 5. Don't waste. Anything, but specially energy that comes from natural
+# #    non-renewable resources.
+# # 6. Be tolerant. Everything that's good in nature comes from cooperation.
 
 import posixpath
 from os import path
@@ -51,7 +51,6 @@ from docutils.parsers.rst.directives import images, nonnegative_int, flag
 
 from sphinx.errors import SphinxError
 from sphinx.util import ensuredir, relative_uri
-from sphinx.util.compat import Directive
 
 from . import aafigure
 
@@ -86,21 +85,20 @@ class AafigDirective(images.Image):
     has_content = True
     required_arguments = 0
     own_option_spec = dict(
-        line_width   = float,
-        background   = str,
-        foreground   = str,
-        fill         = str,
-        aspect       = nonnegative_int,
-        scale        = nonnegative_int,
-        textual      = flag,
-        proportional = flag,
+        line_width=float,
+        background=str,
+        foreground=str,
+        fill=str,
+        aspect=nonnegative_int,
+        scale=nonnegative_int,
+        textual=flag,
+        proportional=flag,
     )
     option_spec = images.Image.option_spec.copy()
     option_spec.update(own_option_spec)
 
     def run(self):
         aafig_options = dict()
-        image_attrs = dict()
         own_options_keys = self.own_option_spec.keys() + ['scale']
         for (k, v) in self.options.items():
             if k in own_options_keys:
@@ -189,7 +187,7 @@ def render_aafigure(app, text, options):
                 f = None
                 try:
                     try:
-                        f = file(metadata_fname, 'r')
+                        f = open(metadata_fname, 'r')
                         extra = f.read()
                     except:
                         raise AafigError()
