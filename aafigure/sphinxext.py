@@ -72,7 +72,7 @@ def get_basename(text, options, prefix='aafig'):
         del options['format']
     hashkey = text.encode('utf-8') + str(options)
     id = sha(hashkey).hexdigest()
-    return '%s-%s' % (prefix, id)
+    return '{}-{}'.format(prefix, id)
 
 
 class AafigError(SphinxError):
@@ -135,9 +135,9 @@ def render_aafig_images(app, doctree):
             options['format'] = format_map[format]
         else:
             app.builder.warn(
-                'unsupported builder format "%s", please '
+                'unsupported builder format "{}", please '
                 'add a custom entry in aafig_format config option '
-                'for this builder' % format)
+                'for this builder'.format(format))
             img.replace_self(nodes.literal_block(text, text))
             continue
         if options['format'] is None:
@@ -164,7 +164,7 @@ def render_aafigure(app, text, options):
     Render an ASCII art figure into the requested format output file.
     """
     fname = get_basename(text, options)
-    fname = '%s.%s' % (get_basename(text, options), options['format'])
+    fname = '{}.{}'.format(get_basename(text, options), options['format'])
     if app.builder.format == 'html':
         # HTML
         imgpath = relative_uri(app.builder.env.docname, '_images')
@@ -174,13 +174,13 @@ def render_aafigure(app, text, options):
         # Non-HTML
         if app.builder.format != 'latex':
             app.builder.warn(
-                'aafig: the builder format %s is not officially '
+                'aafig: the builder format {} is not officially '
                 'supported, aafigure images could not work. Please report '
                 'problems and working builder to avoid this warning in '
-                'the future' % app.builder.format)
+                'the future'.format(app.builder.format))
         relfn = fname
         outfn = path.join(app.builder.outdir, fname)
-    metadata_fname = '%s.aafig' % outfn
+    metadata_fname = '{}.aafig'.format(outfn)
 
     try:
         if path.isfile(outfn):

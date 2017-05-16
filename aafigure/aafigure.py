@@ -507,7 +507,7 @@ class AsciiArtImage:
         for head, function_name in self.FILL_TYPES:
             if character == head:
                 return getattr(self, function_name)
-        raise ValueError('no such fill type: %r' % (character,))
+        raise ValueError('no such fill type: {!r}'.format(character))
 
     # - - - - - - - - - fixed characters and their shapes - - - - - - - - -
 
@@ -552,7 +552,7 @@ class AsciiArtImage:
         for head, function_name in self.FIXED_TYPES:
             if character == head:
                 return getattr(self, function_name)
-        raise ValueError('no such character: %r' % (character,))
+        raise ValueError('no such character: {!r}'.format(character))
 
     # - - - - - - - - - helper function for shape recognition - - - - - - - - -
 
@@ -972,12 +972,12 @@ def process(input, visitor_class, options=None):
         input = input.read()
 
     if options['debug']:
-        sys.stderr.write('%r\n' % (input,))
+        sys.stderr.write('{!r}\n'.format(input))
 
     aaimg = AsciiArtImage(input, options['aspect'], options['textual'], options['textual_strict'], options['widechars'])
 
     if options['debug']:
-        sys.stderr.write('%s\n' % (aaimg,))
+        sys.stderr.write('{}\n'.format(aaimg))
     aaimg.recognize()
 
     visitor = visitor_class(options)
@@ -1220,7 +1220,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         value = getattr(options, color)
         if value is not None:
             if value[0] != '#':
-                options_dict[color] = '#%s' % value
+                options_dict[color] = '#{}'.format(value)
             else:
                 options_dict[color] = value
     # copy extra options
@@ -1229,17 +1229,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             try:
                 key, value = keyvalue.split('=')
             except ValueError:
-                parser.error('--option must be in the format <key>=<value> (not %r)' % (keyvalue,))
+                parser.error('--option must be in the format <key>=<value> (not {!r})'.format(keyvalue))
             options_dict[key] = value
 
     if options.debug:
-        sys.stderr.write('options=%r\n' % (options_dict,))
+        sys.stderr.write('options={!r}\n'.format(options_dict))
 
     try:
         (visitor, output) = render(input, output, options_dict)
         output.close()
     except UnsupportedFormatError as e:
-        print("ERROR: Can't output format '%s': %s" % (options.format, e))
+        print("ERROR: Can't output format '{}': {}".format(options.format, e))
 
 
 # when module is run, run the command line tool
