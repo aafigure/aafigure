@@ -30,21 +30,22 @@ class AsciiOutputVisitor:
     def visit_shapes(self, shapes):
         for shape in shapes:
             shape_name = shape.__class__.__name__.lower()
-            visitor_name = 'visit_%s' % shape_name
-            if hasattr(self, visitor_name):
-                getattr(self, visitor_name)(shape)
+            visitor_name = 'visit_{}'.format(shape_name)
+            function = getattr(self, visitor_name, None)
+            if function is not None:
+                function(shape)
             else:
-                sys.stderr.write("WARNING: don't know how to handle shape %r\n" % shape)
+                sys.stderr.write("WARNING: don't know how to handle shape {!r}\n".format(shape))
 
     def visit_group(self, group):
         self.visit_shapes(group.shapes)
 
     def visit_point(self, point):
-        self.image[point.x*self.scale, point.y*self.scale] = '#'
+        self.image[point.x * self.scale, point.y * self.scale] = '#'
 
     def visit_line(self, line):
-        x1, x2 = line.start.x*self.scale, line.end.x*self.scale
-        y1, y2 = line.start.y*self.scale, line.end.y*self.scale
+        x1, x2 = line.start.x * self.scale, line.end.x * self.scale
+        y1, y2 = line.start.y * self.scale, line.end.y * self.scale
         if x1 > x2:
             x1, x2 = x2, x1
         if y1 > y2:
@@ -54,16 +55,16 @@ class AsciiOutputVisitor:
         if dx > dy:
             y = y1
             if dx:
-                m = float(dy)/dx
+                m = float(dy) / dx
             else:
                 m = 0
-            for x in range(int(x1), int(x2+1)):
+            for x in range(int(x1), int(x2 + 1)):
                 self.image[x, int(y)] = '#'
             y += m
         else:
             x = x1
             if dy:
-                m = float(dx)/dy
+                m = float(dx) / dy
             else:
                 m = 0
             for y in range(int(y1), int(y2+1)):
@@ -71,8 +72,8 @@ class AsciiOutputVisitor:
             x += m
 
     def visit_rectangle(self, rectangle):
-        x1, x2 = rectangle.p1.x*self.scale, rectangle.p2.x*self.scale
-        y1, y2 = rectangle.p1.y*self.scale, rectangle.p2.y*self.scale
+        x1, x2 = rectangle.p1.x * self.scale, rectangle.p2.x * self.scale
+        y1, y2 = rectangle.p1.y * self.scale, rectangle.p2.y * self.scale
         if x1 > x2:
             x1, x2 = x2, x1
         if y1 > y2:
@@ -82,7 +83,7 @@ class AsciiOutputVisitor:
                 self.image[x, y] = '#'
 
     def visit_label(self, label):
-        x, y = int(label.position.x*self.scale), int(label.position.y*self.scale)
+        x, y = int(label.position.x * self.scale), int(label.position.y * self.scale)
         for character in label.text:
             self.image[x, y] = character
             x += 1

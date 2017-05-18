@@ -144,7 +144,7 @@ def render_aafig_images(app, doctree):
         try:
             fname, outfn, id, extra = render_aafigure(app, text, options)
         except AafigError as exc:
-            app.builder.warn('aafigure error: ' + str(exc))
+            app.builder.warn('aafigure error: {}'.format(exc))
             img.replace_self(nodes.literal_block(text, text))
             continue
         img['uri'] = fname
