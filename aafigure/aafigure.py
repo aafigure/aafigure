@@ -13,7 +13,7 @@ See svg.py and aa.py for output modules, that can render the parsed structure.
 """
 # import codecs
 from .error import UnsupportedFormatError
-from .shapes import *
+from .shapes import Line, Point, Circle, Label, Arc, Rectangle, group  # point
 from unicodedata import east_asian_width
 import sys
 
@@ -522,6 +522,7 @@ class AsciiArtImage:
                 Point(self.right(x), self.bottom(y))
             )
         ]
+
     def _open_triangle_right(self, x, y):
         return [
             Line(
@@ -539,12 +540,12 @@ class AsciiArtImage:
             Circle(Point(self.hcenter(x), self.vcenter(y)), NOMINAL_SIZE / 2.0)
         ]
 
-
     FIXED_TYPES = [
         ('{', '_open_triangle_left'),
         ('}', '_open_triangle_right'),
         ('*', '_circle'),
     ]
+
     FIXED_CHARACTERS = ''.join([t for (t, f) in FIXED_TYPES])
 
     def get_fixed_character(self, character):
@@ -688,7 +689,6 @@ class AsciiArtImage:
                 ))
         self.tag([(x, y)], CLASS_JOIN)
         return result
-
 
     def _follow_fill(self, character, start_x, start_y):
         """\
@@ -1077,57 +1077,65 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """,
-    description="ASCII art to image (SVG, PNG, JPEG, PDF and more) converter."
+        description="ASCII art to image (SVG, PNG, JPEG, PDF and more) converter."
     )
 
-    parser.add_option("-e", "--encoding",
+    parser.add_option(
+        "-e", "--encoding",
         dest="encoding",
         action="store",
         help="character encoding of input text",
         default=DEFAULT_OPTIONS['encoding'],
     )
 
-    parser.add_option("-w", "--wide-chars",
+    parser.add_option(
+        "-w", "--wide-chars",
         dest="widechars",
         action="store",
         help="unicode properties to be treated as wide glyph (e.g. 'F,W,A')",
         default=DEFAULT_OPTIONS['widechars'],
     )
 
-    parser.add_option("-o", "--output",
+    parser.add_option(
+        "-o", "--output",
         dest="output",
         metavar="FILE",
         help="write output to FILE"
     )
 
-    parser.add_option("-t", "--type",
+    parser.add_option(
+        "-t", "--type",
         dest="format",
         help="filetype: png, jpg, svg (by default autodetect from filename)",
         default=None,
     )
 
-    parser.add_option("-D", "--debug",
+    parser.add_option(
+        "-D", "--debug",
         dest="debug",
         action="store_true",
         help="enable debug outputs",
         default=DEFAULT_OPTIONS['debug'],
     )
 
-    parser.add_option("-T", "--textual",
+    parser.add_option(
+        "-T", "--textual",
         dest="textual",
         action="store_true",
         help="disable horizontal fill detection",
         default=DEFAULT_OPTIONS['textual'],
     )
 
-    parser.add_option("-S", "--textual-strict",
+    parser.add_option(
+        "-S", "--textual-strict",
         dest="textual_strict",
         action="store_true",
         help="disable horizontal and vertical fill detection",
         default=DEFAULT_OPTIONS['textual_strict'],
     )
 
-    parser.add_option("-s", "--scale",
+    parser.add_option(
+        "-s", "--scale",
         dest="scale",
         action="store",
         type='float',
@@ -1135,7 +1143,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         default=DEFAULT_OPTIONS['scale'],
     )
 
-    parser.add_option("-a", "--aspect",
+    parser.add_option(
+        "-a", "--aspect",
         dest="aspect",
         action="store",
         type='float',
@@ -1143,7 +1152,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         default=DEFAULT_OPTIONS['aspect'],
     )
 
-    parser.add_option("-l", "--linewidth",
+    parser.add_option(
+        "-l", "--linewidth",
         dest="line_width",
         action="store",
         type='float',
@@ -1151,35 +1161,40 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         default=DEFAULT_OPTIONS['line_width'],
     )
 
-    parser.add_option("--proportional",
+    parser.add_option(
+        "--proportional",
         dest="proportional",
         action="store_true",
         help="use proportional font instead of fixed width",
         default=DEFAULT_OPTIONS['proportional'],
     )
 
-    parser.add_option("-f", "--foreground",
+    parser.add_option(
+        "-f", "--foreground",
         dest="foreground",
         action="store",
         help="foreground color default=%default",
         default=DEFAULT_OPTIONS['foreground'],
     )
 
-    parser.add_option("-x", "--fill",
+    parser.add_option(
+        "-x", "--fill",
         dest="fill",
         action="store",
         help="foreground color default=foreground",
         default=None,
     )
 
-    parser.add_option("-b", "--background",
+    parser.add_option(
+        "-b", "--background",
         dest="background",
         action="store",
         help="foreground color default=%default",
         default=DEFAULT_OPTIONS['background'],
     )
 
-    parser.add_option("-O", "--option",
+    parser.add_option(
+        "-O", "--option",
         dest="_extra_options",
         action="append",
         help="pass special options to backends (expert user)",
