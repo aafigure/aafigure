@@ -89,7 +89,7 @@ class AsciiArtImage:
             line_len = sum(charwidths[east_asian_width(c)] for c in line)
             max_x = max(max_x, line_len)
             # pad a space for each wide glyph
-            padded_line = ''.join(c+' '*(charwidths[east_asian_width(c)]-1) for c in line)
+            padded_line = ''.join(c + ' ' * (charwidths[east_asian_width(c)] - 1) for c in line)
             self.image.append(padded_line)
             y += 1
         self.width = max_x
@@ -97,9 +97,9 @@ class AsciiArtImage:
         # make sure it's rectangular (extend short lines to max width)
         for y, line in enumerate(self.image):
             if len(line) < max_x:
-                self.image[y] = line + ' '*(max_x-len(line))
+                self.image[y] = line + ' ' * (max_x - len(line))
         # initialize other data structures
-        self.classification = [[None]*self.width for y in range(self.height)]
+        self.classification = [[None] * self.width for y in range(self.height)]
         self.shapes = []
         self.nominal_size = NOMINAL_SIZE
 
@@ -262,14 +262,14 @@ class AsciiArtImage:
                       #~ p1-direction_vector+direction_vector*(0.707+0.707j))
         #~ ]
         return p1-direction_vector * 1.707, [
-            Line(p1-direction_vector-direction_vector * (0.707 + 0.707j),
-                 p1-direction_vector-direction_vector * (0.707 - 0.707j)),
-            Line(p1-direction_vector+direction_vector * (0.707 + 0.707j),
-                 p1-direction_vector+direction_vector * (0.707 - 0.707j)),
-            Line(p1-direction_vector-direction_vector * (0.707 + 0.707j),
-                 p1-direction_vector+direction_vector * (0.707 - 0.707j)),
-            Line(p1-direction_vector-direction_vector * (0.707 - 0.707j),
-                 p1-direction_vector+direction_vector * (0.707 + 0.707j)),
+            Line(p1 - direction_vector - direction_vector * (0.707 + 0.707j),
+                 p1 - direction_vector - direction_vector * (0.707 - 0.707j)),
+            Line(p1 - direction_vector + direction_vector * (0.707 + 0.707j),
+                 p1 - direction_vector + direction_vector * (0.707 - 0.707j)),
+            Line(p1 - direction_vector - direction_vector * (0.707 + 0.707j),
+                 p1 - direction_vector + direction_vector * (0.707 - 0.707j)),
+            Line(p1 - direction_vector - direction_vector * (0.707 - 0.707j),
+                 p1 - direction_vector + direction_vector * (0.707 + 0.707j)),
         ]
 
     # the same character can mean a different thing, depending from where the
@@ -974,7 +974,10 @@ def process(input, visitor_class, options=None):
     if options['debug']:
         sys.stderr.write('{!r}\n'.format(input))
 
-    aaimg = AsciiArtImage(input, options['aspect'], options['textual'], options['textual_strict'], options['widechars'])
+    aaimg = AsciiArtImage(
+        input,
+        options['aspect'], options['textual'], options['textual_strict'],
+        options['widechars'])
 
     if options['debug']:
         sys.stderr.write('{}\n'.format(aaimg))

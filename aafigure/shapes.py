@@ -47,8 +47,8 @@ class Point:
         return 'Point({p.x!r}, {p.y!r})'.format(p=self)
 
     def distance(self, other):
-        return math.sqrt((self.x - other.x)**2 +
-                         (self.y - other.y)**2)
+        return math.sqrt((self.x - other.x) ** 2 +
+                         (self.y - other.y) ** 2)
 
     def midpoint(self, other):
         return Point((self.x + other.x) / 2,
