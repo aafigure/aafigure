@@ -44,6 +44,7 @@ DEFAULT_OPTIONS = dict(
     proportional=False,
     encoding='utf-8',
     widechars='F,W',
+    rounded=True,
 )
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -67,11 +68,12 @@ class AsciiArtImage:
 
     QUOTATION_CHARACTERS = list('"\'`')
 
-    def __init__(self, text, aspect_ratio=1, textual=False, textual_strict=False, widechars='F,W'):
+    def __init__(self, text, options):
         """Take a ASCII art figure and store it, prepare for ``recognize``"""
-        self.aspect_ratio = float(aspect_ratio)
-        self.textual = textual
-        self.textual_strict = textual_strict
+        self.aspect_ratio = float(options.get('aspect_ratio', 1))
+        self.textual = options.get('textual', False)
+        self.textual_strict = options.get('textual_strict', False)
+        self.rounded = options.get('rounded', False)
         # XXX TODO tab expansion
         # detect size of input image, store as list of lines
         self.image = []
@@ -80,7 +82,7 @@ class AsciiArtImage:
         # define character widths map
         charwidths = {}
         for key in ['F', 'H', 'W', 'Na', 'A', 'N']:
-            if key in widechars.split(','):
+            if key in options.get('widechars', 'F,W').split(','):
                 charwidths[key] = 2
             else:
                 charwidths[key] = 1
@@ -859,7 +861,7 @@ class AsciiArtImage:
                         p1 = Point(self.right(x), self.top(y))
                     if not p2:
                         p2 = Point(self.left(x), self.bottom(y))
-                    if arc:
+                    if arc and self.rounded:
                         result.append(Arc(p1, a1, p2, a2, c1, c2))
                     else:
                         result.append(Line(p1, p2))
@@ -927,7 +929,7 @@ class AsciiArtImage:
                         p1 = Point(self.left(x), self.top(y))
                     if not p2:
                         p2 = Point(self.right(x), self.bottom(y))
-                    if arc:
+                    if arc and self.rounded:
                         result.append(Arc(p1, a1, p2, a2, c1, c2))
                     else:
                         result.append(Line(p1, p2))
@@ -974,10 +976,7 @@ def process(input, visitor_class, options=None):
     if options['debug']:
         sys.stderr.write('{!r}\n'.format(input))
 
-    aaimg = AsciiArtImage(
-        input,
-        options['aspect'], options['textual'], options['textual_strict'],
-        options['widechars'])
+    aaimg = AsciiArtImage(input, options)
 
     if options['debug']:
         sys.stderr.write('{}\n'.format(aaimg))
@@ -1194,6 +1193,14 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         action="store",
         help="foreground color default=%default",
         default=DEFAULT_OPTIONS['background'],
+    )
+
+    parser.add_option(
+        "--rounded",
+        dest="rounded",
+        action="store_true",
+        help="use arcs for rounded edges instead of straight lines",
+        default=DEFAULT_OPTIONS['proportional'],
     )
 
     parser.add_option(

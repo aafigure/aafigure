@@ -93,6 +93,7 @@ class AafigDirective(images.Image):
         scale=nonnegative_int,
         textual=flag,
         proportional=flag,
+        rounded=flag,
     )
     option_spec = images.Image.option_spec.copy()
     option_spec.update(own_option_spec)

@@ -47,6 +47,7 @@ def AAFigureDirective(name, arguments, options, content, lineno,
     if not options.has_key('format'): options['format'] = DEFAULT_FORMAT
     if not options.has_key('aspect'): options['aspect'] = 1
     if not options.has_key('proportional'): options['proportional'] = False
+    if not options.has_key('rounded'): options['rounded'] = False
     if not options.has_key('name'):
         options['name'] = 'aafigure-%i' % aafigure_counter
         aafigure_counter += 1
@@ -99,6 +100,7 @@ AAFigureDirective.options = {
     'textual': flag,
     'textual_strict': flag,
     'proportional': flag,
+    'rounded': flag,
 }
 
 def register():
