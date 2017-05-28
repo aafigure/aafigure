@@ -35,9 +35,32 @@ though. Not all cases work as expected.
       |  -  +   |  -  +   |  -  +   \               -
                                      +
 
+With ``rounded`` flag:
+
+.. aafig::
+    :rounded:
+
+                                     +
+      |  -  +   |  -  +   |  -  +   /               -
+     /  /  /   /  /  /   /  /  /   /     --     |/| /    +
+    |  |  |   +  +  +   -  -  -   /     /  \        -   \|/  |\
+                                 +     +    +          +-+-+ | +
+    |  |  |   +  +  +   -  -  -   \     \  /        -   /|\  |/
+     \  \  \   \  \  \   \  \  \   \     --     |\| \    +
+      |  -  +   |  -  +   |  -  +   \               -
+                                     +
+
 And drawing longer diagonal lines with different angles looks ugly...
 
 .. aafig::
+
+    +      |
+     \    /
+      \  /
+       --
+
+.. aafig::
+    :rounded:
 
     +      |
      \    /

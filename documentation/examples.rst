@@ -93,6 +93,7 @@ No not really, yet. But you get the idea.
 
 .. aafig::
     :scale: 80
+    :rounded:
 
     +---------+         +---------+     +---------+
     |  Shape  |         |  Line   |     |  Point  |
@@ -109,6 +110,7 @@ No not really, yet. But you get the idea.
                         +---------+
 
 .. aafig::
+    :rounded:
 
                              /-----------\     yes /----------\
                           -->| then this |--->*--->| and this |

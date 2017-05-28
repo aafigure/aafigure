@@ -69,9 +69,11 @@ The ``aafig`` directive has the following options:
   The stretching is done before drawing arrows or circles, so that they are
   still good looking.
 
-- ``:proportional: <flag>``  use a proportional font instead of a mono-spaced
+- ``:proportional:``  use a proportional font instead of a mono-spaced
 
-- ``:textual: <flag>``  prefer to detect text instead of fills
+- ``:textual:``  prefer to detect text instead of fills
+
+- ``:rounded:``  use arcs instead of straight lines for many diagonals
 
 - ``:scale:`` and ``:aspect:`` options are specified using percentages
   (without the *%* sign), to match the reStructuredText_ image directive.

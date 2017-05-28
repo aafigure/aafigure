@@ -42,6 +42,7 @@ The ``aafigure`` directive has the following options:
 - ``:proportional: <flag>``  use a proportional font instead of a mono-spaced
   one.
 
+
 Docutils plug-in
 ================
 The docutils-aafigure_ extension depends on the aafigure package also requires
