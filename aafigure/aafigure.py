@@ -68,8 +68,9 @@ class AsciiArtImage:
 
     QUOTATION_CHARACTERS = list('"\'`')
 
-    def __init__(self, text, options):
+    def __init__(self, text, options=None):
         """Take a ASCII art figure and store it, prepare for ``recognize``"""
+        if options is None: options = {}
         self.aspect_ratio = float(options.get('aspect_ratio', 1))
         self.textual = options.get('textual', False)
         self.textual_strict = options.get('textual_strict', False)
