@@ -44,7 +44,7 @@ DEFAULT_OPTIONS = dict(
     proportional=False,
     encoding='utf-8',
     widechars='F,W',
-    rounded=True,
+    rounded=False,
 )
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
