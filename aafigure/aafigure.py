@@ -1050,7 +1050,8 @@ def render(input, output=None, options=None):
     finally:
         if close_output:
             options['file_like'].close()
-    return (visitor, options['file_like'])
+    file_like = options.pop('file_like')
+    return (visitor, file_like)
 
 
 def main():
