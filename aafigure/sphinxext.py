@@ -69,7 +69,7 @@ def get_basename(text, options, prefix='aafig'):
     options = options.copy()
     if 'format' in options:
         del options['format']
-    hashkey = text.encode('utf-8') + str(options)
+    hashkey = (text + str(options)).encode('utf-8')
     id = sha(hashkey).hexdigest()
     return '{}-{}'.format(prefix, id)
 
@@ -100,8 +100,8 @@ class AafigDirective(images.Image):
 
     def run(self):
         aafig_options = dict()
-        own_options_keys = self.own_option_spec.keys() + ['scale']
-        for (k, v) in self.options.items():
+        own_options_keys = self.own_option_spec.keys()
+        for (k, v) in list(self.options.items()):
             if k in own_options_keys:
                 # convert flags to booleans
                 if v is None:
