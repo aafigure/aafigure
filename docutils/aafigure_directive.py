@@ -41,7 +41,7 @@ def AAFigureDirective(name, arguments, options, content, lineno,
     # ensure that options are present and initialized with defaults if not given
     if not options.has_key('background'): options['background'] = '#ffffff'
     if not options.has_key('foreground'): options['foreground'] = '#000000'
-    if not options.has_key('fill'): options['fill'] = options['foreground'] # fill = fore by default
+    if not options.has_key('fill'): options['fill'] = options['foreground']  # fill = fore by default
     if not options.has_key('scale'): options['scale'] = 1
     if not options.has_key('line_width'): options['line_width'] = 2
     if not options.has_key('format'): options['format'] = DEFAULT_FORMAT

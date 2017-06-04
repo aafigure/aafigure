@@ -12,3 +12,4 @@ debian/python-aafigure.substvars
 build-stamp
 MANIFEST
 documentation/_build
+aafigure.egg-info
