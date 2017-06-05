@@ -6,7 +6,11 @@
 # This is open source software under the BSD license. See LICENSE.txt for more
 # details.
 
-from distutils.core import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
+
 
 setup(
     name = 'aafigure',
