@@ -143,19 +143,12 @@ def render_aafig_images(app, doctree):
             img.replace_self(nodes.literal_block(text, text))
             continue
         try:
-            fname, outfn, id, extra = render_aafigure(app, text, options)
+            fname, outfn = render_aafigure(app, text, options)
         except AafigError as exc:
             app.builder.warn('aafigure error: {}'.format(exc))
             img.replace_self(nodes.literal_block(text, text))
             continue
         img['uri'] = fname
-        # FIXME: find some way to avoid this hack in aafigure
-        if extra:
-            (width, height) = [x.split('"')[1] for x in extra.split()]
-            if not img.has_key('width'):
-                img['width'] = width
-            if not img.has_key('height'):
-                img['height'] = height
 
 
 def render_aafigure(app, text, options):
@@ -183,19 +176,7 @@ def render_aafigure(app, text, options):
 
     try:
         if path.isfile(outfn):
-            extra = None
-            if options['format'].lower() == 'svg':
-                f = None
-                try:
-                    try:
-                        f = open(metadata_fname, 'r')
-                        extra = f.read()
-                    except:
-                        raise AafigError()
-                finally:
-                    if f is not None:
-                        f.close()
-            return relfn, outfn, id, extra
+            return relfn, outfn
     except AafigError:
         pass
 
@@ -207,13 +188,7 @@ def render_aafigure(app, text, options):
     except aafigure.UnsupportedFormatError as e:
         raise AafigError(str(e))
 
-    extra = None
-    if options['format'].lower() == 'svg':
-        extra = visitor.get_size_attrs()
-        with open(metadata_fname, 'w') as f:
-            f.write(extra)
-
-    return relfn, outfn, id, extra
+    return relfn, outfn
 
 
 def setup(app):
