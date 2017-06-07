@@ -172,7 +172,6 @@ def render_aafigure(app, text, options):
                 'the future'.format(app.builder.format))
         relfn = fname
         outfn = path.join(app.builder.outdir, fname)
-    metadata_fname = '{}.aafig'.format(outfn)
 
     try:
         if path.isfile(outfn):
